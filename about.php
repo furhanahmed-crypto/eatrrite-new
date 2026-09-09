@@ -1,5 +1,6 @@
 <?php
-$pageTitle = 'About Eat Rrite | Nutrition and Holistic Wellness';
+$pageTitle = 'About Mukta Patil | Founder, Eat Rrite Nutrition Coaching';
+$pageDescription = 'Meet Mukta Patil — nutritionist, speaker and founder of Eat Rrite. The personal story and philosophy behind 8 years of holistic, judgment-free nutrition coaching.';
 $currentPage = 'about';
 $bannerTitle = 'About Us';
 include __DIR__ . '/includes/header.php';

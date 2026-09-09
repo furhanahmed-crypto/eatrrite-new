@@ -1,28 +1,63 @@
-<section class="section section-cream">
-    <div class="container" style="text-align:center;">
-        <p class="eyebrow">FAQs</p>
-        <h2 class="section-title split-title" style="margin-left:auto;margin-right:auto;">Answers to common nutrition questions</h2>
-        <div class="faq-wrap">
-            <article class="faq-item is-open">
-                <button class="faq-question" type="button">How long until I notice meaningful results?</button>
-                <div class="faq-answer">Most clients begin to feel better energy, digestion and routine within the first few weeks. Lasting fat loss and lab improvements come from consistent habits, not crash diets.</div>
-            </article>
-            <article class="faq-item">
-                <button class="faq-question" type="button">What should I bring to the first appointment?</button>
-                <div class="faq-answer">Bring recent lab reports if you have them, a list of medications or supplements, and a simple note of your typical meals, sleep and activity.</div>
-            </article>
-            <article class="faq-item">
-                <button class="faq-question" type="button">Do you create customized meal plans?</button>
-                <div class="faq-answer">Yes. Every Eat Rrite program is personalized around your culture, family food, medical needs and lifestyle. We do not use one generic chart for everyone.</div>
-            </article>
-            <article class="faq-item">
-                <button class="faq-question" type="button">Will the plan fit a busy lifestyle?</button>
-                <div class="faq-answer">That is the point. We design plans that can live inside your real day, including work, travel, celebrations and family meals.</div>
-            </article>
-            <article class="faq-item">
-                <button class="faq-question" type="button">Do you support PCOD, thyroid, diabetes and gut issues?</button>
-                <div class="faq-answer">Yes. Eat Rrite offers dedicated programs for hormone health, diabetes management and reversal, gut health, celiac and Crohn's, sports nutrition, pregnancy and postnatal care.</div>
-            </article>
+<section class="section faq-section" id="faqs">
+    <div class="container">
+        <div class="faq-panel">
+            <div class="faq-layout">
+                <div class="faq-intro">
+                    <span class="pill-label"><span class="pill-dot"></span> FAQs</span>
+                    <h2 class="section-title split-title">Frequently asked questions</h2>
+                    <div class="faq-illustration">
+                        <img src="assets/images/faq/faq-illustration.png" alt="FAQ illustration">
+                    </div>
+                </div>
+                <div class="faq-divider" aria-hidden="true"></div>
+                <div class="faq-wrap">
+                    <article class="faq-item is-open">
+                        <button class="faq-question" type="button">
+                            <span>How do I book a consultation with Eat Rrite?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer__inner">Book your ₹800 consultation call via the appointment page on this site, or message us on WhatsApp at +91 96398 77483. The consultation is a considered first step before choosing a 30, 90 or 180-day program.</div>
+                        </div>
+                    </article>
+                    <article class="faq-item">
+                        <button class="faq-question" type="button">
+                            <span>Are consultations online, in-person, or both?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer__inner">All Eat Rrite consultations and programs are conducted online, so you can work with Mukta from anywhere — she's based between Hyderabad, Telangana and Dehradun, Uttarakhand.</div>
+                        </div>
+                    </article>
+                    <article class="faq-item">
+                        <button class="faq-question" type="button">
+                            <span>What are your program prices?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer__inner">Every live program is available as a 30-Day Foundation (₹7,499), 90-Day Journey (₹21,999) or 180-Day Commitment (₹41,999). See the <a href="pricing.php">Pricing</a> page for full details.</div>
+                        </div>
+                    </article>
+                    <article class="faq-item">
+                        <button class="faq-question" type="button">
+                            <span>How soon can I expect results?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer__inner">Every body is different, so we never promise a fixed timeline — some clients notice weight loss first, others notice inch loss or general health improvements before the scale moves. As a general pattern, it takes about 12 weeks for nutrition, movement and mindset to fully align, though most people start feeling better within the first 4 weeks.</div>
+                        </div>
+                    </article>
+                    <article class="faq-item">
+                        <button class="faq-question" type="button">
+                            <span>Do you work with specific ages or conditions that need a doctor?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer__inner">We work with adults 18 and older, across weight loss and hormone health concerns for women of all ages. If your reports show discrepancies beyond nutrition, we loop in a doctor — either one you already have, or one we can refer you to. If a case is outside our expertise, we'll tell you honestly and refer you elsewhere.</div>
+                        </div>
+                    </article>
+                </div>
+            </div>
         </div>
     </div>
 </section>

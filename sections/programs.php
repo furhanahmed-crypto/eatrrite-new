@@ -1,51 +1,26 @@
-<section class="section">
+<section class="section section-mint programs-section">
     <div class="container">
-        <p class="eyebrow">Our Programs</p>
-        <h2 class="section-title split-title">Nutrition success stories start with the right program</h2>
-        <p class="section-lead">We offer a variety of specialized packages designed to meet your unique needs and circumstances.</p>
-        <div class="programs-grid">
+        <div class="section-heading is-center">
+            <span class="pill-label"><span class="pill-dot"></span> Our Programs</span>
+            <h2 class="section-title split-title">Nutrition programs built around you</h2>
+            <p class="section-lead" style="margin-left:auto;margin-right:auto;text-align:center;">Every program starts with a consultation call that looks at your reports, history and lifestyle — then we build a 30, 90 or 180-day plan around food you already eat.</p>
+        </div>
+        <div class="programs-grid programs-grid--four">
+            <?php foreach ($programsLive as $program): ?>
             <article class="card program-card">
                 <div class="img-wrap">
-                    <img src="assets/images/services/weight.jpg" alt="Weight & Lifestyle Management">
+                    <img src="<?php echo htmlspecialchars($program['image']); ?>" alt="<?php echo htmlspecialchars($program['short']); ?>">
                 </div>
-                <h3>Weight & Lifestyle Management</h3>
-                <p>Sustainable fat loss and everyday eating patterns that last.</p>
+                <h3><?php echo htmlspecialchars($program['short']); ?></h3>
+                <p><?php echo htmlspecialchars($program['summary']); ?></p>
+                <a class="program-link" href="program.php?slug=<?php echo urlencode($program['slug']); ?>">Learn More <i class="fa-solid fa-arrow-right"></i></a>
             </article>
-            <article class="card program-card">
-                <div class="img-wrap">
-                    <img src="assets/images/services/celiac.jpg" alt="Celiac & Crohn's Care">
-                </div>
-                <h3>Celiac & Crohn's Care</h3>
-                <p>Gentle, precise nutrition for sensitive digestive conditions.</p>
-            </article>
-            <article class="card program-card">
-                <div class="img-wrap">
-                    <img src="assets/images/services/oncology.jpg" alt="Oncology Nutrition">
-                </div>
-                <h3>Oncology Nutrition</h3>
-                <p>Supportive nutrition during and after cancer treatment.</p>
-            </article>
-            <article class="card program-card">
-                <div class="img-wrap">
-                    <img src="assets/images/services/mom.png" alt="NutriCare for Mom-to-Be">
-                </div>
-                <h3>NutriCare for Mom-to-Be</h3>
-                <p>Nourishment through pregnancy for mother and baby.</p>
-            </article>
-            <article class="card program-card">
-                <div class="img-wrap">
-                    <img src="assets/images/services/postnatal.png" alt="Postnatal NutriCare">
-                </div>
-                <h3>Postnatal NutriCare</h3>
-                <p>Recovery, energy and healthy weight after birth.</p>
-            </article>
-            <article class="card program-card">
-                <div class="img-wrap">
-                    <img src="assets/images/services/sports.png" alt="Enduro Sports Nutrition">
-                </div>
-                <h3>Enduro Sports Nutrition</h3>
-                <p>Fueling endurance, training and recovery with food.</p>
-            </article>
+            <?php endforeach; ?>
+        </div>
+        <p class="programs-coming-note">Coming soon: Oncology Nutrition, Enduro Sports Nutrition, NutriCare for Mom-to-Be, and Post-Natal NutriCare.</p>
+        <div class="section-cta-row">
+            <a class="btn btn-primary" href="pricing.php">View Pricing</a>
+            <a class="btn btn-outline" href="appointment.php">Book Your Consultation</a>
         </div>
     </div>
 </section>

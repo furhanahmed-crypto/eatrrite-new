@@ -9,17 +9,50 @@
         });
     }
 
-    /* FAQ accordion */
+    /* FAQ accordion with smooth height animation */
     var faqs = document.querySelectorAll(".faq-item");
+
+    function setFaqHeight(item, open) {
+        var answer = item.querySelector(".faq-answer");
+        if (!answer) return;
+        if (open) {
+            answer.style.height = answer.scrollHeight + "px";
+        } else {
+            answer.style.height = "0px";
+        }
+    }
+
     faqs.forEach(function (item) {
         var button = item.querySelector(".faq-question");
         if (!button) return;
+
+        /* Initialize open item height */
+        if (item.classList.contains("is-open")) {
+            setFaqHeight(item, true);
+        }
+
         button.addEventListener("click", function () {
-            var open = item.classList.contains("is-open");
+            var willOpen = !item.classList.contains("is-open");
+
             faqs.forEach(function (other) {
+                if (other === item) return;
                 other.classList.remove("is-open");
+                setFaqHeight(other, false);
             });
-            if (!open) item.classList.add("is-open");
+
+            if (willOpen) {
+                item.classList.add("is-open");
+                setFaqHeight(item, true);
+            } else {
+                item.classList.remove("is-open");
+                setFaqHeight(item, false);
+            }
+        });
+    });
+
+    window.addEventListener("resize", function () {
+        faqs.forEach(function (item) {
+            if (item.classList.contains("is-open")) setFaqHeight(item, true);
         });
     });
 
@@ -115,7 +148,7 @@
         var line = document.createElement("div");
         line.className = "split-line";
 
-        text.split(/\s+/).forEach(function (word) {
+        text.split(/\s+/).forEach(function (word, index, words) {
             var wordEl = document.createElement("span");
             wordEl.className = "split-word";
 
@@ -127,7 +160,7 @@
             });
 
             line.appendChild(wordEl);
-            line.appendChild(document.createTextNode(" "));
+            /* Do not add an extra space node — spacing comes from CSS gap only */
         });
 
         el.appendChild(line);
@@ -135,43 +168,108 @@
         el.classList.add("is-ready");
     }
 
-    function revealUp(elements, options) {
+    /* Animate only when enough of the element is actually on screen */
+    var VIEW_THRESHOLD = 0.28; /* ~28% of the element must be visible */
+    var VIEW_ROOT_MARGIN = "0px 0px -20% 0px"; /* ignore bottom 20% of viewport */
+
+    function viewThresholds(minRatio) {
+        var steps = [0, minRatio, 0.4, 0.55, 0.7, 1];
+        return steps.filter(function (v, i, arr) {
+            return arr.indexOf(v) === i;
+        });
+    }
+
+    function revealOnEnter(elements, options) {
+        if (typeof gsap === "undefined") return;
+
+        var opts = options || {};
+        var minRatio = opts.threshold != null ? opts.threshold : VIEW_THRESHOLD;
         var list = gsap.utils.toArray(elements).filter(function (el) {
             return el && el.dataset.revealed !== "1";
         });
         if (!list.length) return;
 
-        list.forEach(function (el) {
-            el.dataset.revealed = "1";
-        });
+        if (typeof IntersectionObserver === "undefined") {
+            list.forEach(function (el) {
+                el.dataset.revealed = "1";
+                gsap.set(el, { autoAlpha: 1, y: 0 });
+            });
+            return;
+        }
 
-        var opts = options || {};
-        gsap.fromTo(
-            list,
-            {
-                autoAlpha: 0,
-                y: opts.y != null ? opts.y : 40
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    if (entry.intersectionRatio < minRatio) return;
+
+                    var el = entry.target;
+                    if (el.dataset.revealed === "1") return;
+                    el.dataset.revealed = "1";
+                    observer.unobserve(el);
+
+                    gsap.to(el, {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: opts.duration || 0.85,
+                        ease: "power3.out",
+                        clearProps: "transform"
+                    });
+                });
             },
             {
-                autoAlpha: 1,
-                y: 0,
-                duration: opts.duration || 0.8,
-                ease: "power3.out",
-                stagger: opts.stagger != null ? opts.stagger : 0.1,
-                clearProps: "transform",
-                scrollTrigger: {
-                    trigger: opts.trigger || list[0],
-                    start: opts.start || "top 90%",
-                    toggleActions: "play none none none",
-                    once: true
-                }
+                threshold: viewThresholds(minRatio),
+                rootMargin: opts.rootMargin || VIEW_ROOT_MARGIN
             }
         );
+
+        list.forEach(function (el) {
+            gsap.set(el, {
+                autoAlpha: 0,
+                y: opts.y != null ? opts.y : 48
+            });
+            observer.observe(el);
+        });
+    }
+
+    function revealSplitTitle(heading, chars) {
+        if (typeof IntersectionObserver === "undefined") {
+            gsap.set(chars, { yPercent: 0, autoAlpha: 1 });
+            return;
+        }
+
+        gsap.set(chars, { yPercent: 110, autoAlpha: 0 });
+
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    if (entry.intersectionRatio < VIEW_THRESHOLD) return;
+                    if (heading.dataset.revealed === "1") return;
+                    heading.dataset.revealed = "1";
+                    observer.unobserve(heading);
+
+                    gsap.to(chars, {
+                        yPercent: 0,
+                        autoAlpha: 1,
+                        duration: 0.7,
+                        ease: "power3.out",
+                        stagger: 0.022,
+                        clearProps: "transform"
+                    });
+                });
+            },
+            {
+                threshold: viewThresholds(VIEW_THRESHOLD),
+                rootMargin: VIEW_ROOT_MARGIN
+            }
+        );
+
+        observer.observe(heading);
     }
 
     function initGsapAnimations() {
         if (typeof gsap === "undefined") {
-            /* If CDN failed, make sure nothing stays hidden */
             document.querySelectorAll(".split-title.is-ready .split-char").forEach(function (c) {
                 c.style.opacity = "1";
                 c.style.transform = "none";
@@ -189,29 +287,24 @@
             var chars = heading.querySelectorAll(".split-char");
             if (!chars.length) return;
 
-            var isHero = heading.classList.contains("hero-title");
+            if (heading.classList.contains("hero-title")) {
+                gsap.fromTo(
+                    chars,
+                    { yPercent: 110, autoAlpha: 0 },
+                    {
+                        yPercent: 0,
+                        autoAlpha: 1,
+                        duration: 0.7,
+                        ease: "power3.out",
+                        stagger: 0.022,
+                        delay: 0.15,
+                        clearProps: "transform"
+                    }
+                );
+                return;
+            }
 
-            gsap.fromTo(
-                chars,
-                { yPercent: 100, autoAlpha: 0 },
-                {
-                    yPercent: 0,
-                    autoAlpha: 1,
-                    duration: 0.65,
-                    ease: "power3.out",
-                    stagger: 0.02,
-                    delay: isHero ? 0.15 : 0,
-                    clearProps: "transform",
-                    scrollTrigger: isHero
-                        ? undefined
-                        : {
-                              trigger: heading,
-                              start: "top 88%",
-                              toggleActions: "play none none none",
-                              once: true
-                          }
-                }
-            );
+            revealSplitTitle(heading, chars);
         });
 
         /* ---------- Hero content ---------- */
@@ -232,50 +325,64 @@
             );
         }
 
-        /* ---------- Labels / leads (each triggers on its own) ---------- */
-        document.querySelectorAll(".pill-label, .eyebrow, .section-lead").forEach(function (el) {
+        /* ---------- Labels / leads ---------- */
+        document.querySelectorAll(".pill-label, .eyebrow, .section-lead, .blog-heading__lead").forEach(function (el) {
             if (el.closest(".hero-content") || el.closest(".hero-slider")) return;
-            revealUp(el, { trigger: el, y: 24, stagger: 0, duration: 0.7 });
+            revealOnEnter(el, { y: 24, duration: 0.7, threshold: 0.35 });
         });
 
-        /* ---------- Card grids ---------- */
+        /* ---------- Cards — each waits until enough of THAT card is visible ---------- */
         [
-            [".services-nourio-grid", ".svc-card"],
-            [".services-grid", ".card"],
-            [".why-grid", ".card"],
-            [".programs-grid", ".card, .program-card"],
-            [".process-grid", ".process-card"],
-            [".testimonial-grid", ".testimonial-card"],
-            [".faq-wrap", ".faq-item"]
-        ].forEach(function (pair) {
-            document.querySelectorAll(pair[0]).forEach(function (grid) {
-                revealUp(grid.querySelectorAll(pair[1]), {
-                    trigger: grid,
-                    y: 48,
-                    stagger: 0.12,
-                    duration: 0.85,
-                    start: "top 92%"
-                });
+            ".svc-card",
+            ".feature-card",
+            ".process-card",
+            ".program-card",
+            ".faq-item",
+            ".blog-card",
+            ".testimonial-card",
+            ".services-grid .card",
+            ".pricing-card"
+        ].forEach(function (selector) {
+            revealOnEnter(document.querySelectorAll(selector), {
+                y: 56,
+                duration: 0.9,
+                threshold: 0.3
             });
         });
 
+        /* ---------- FAQ illustration ---------- */
+        revealOnEnter(document.querySelectorAll(".faq-illustration"), {
+            y: 40,
+            duration: 0.95,
+            threshold: 0.3
+        });
+
         /* ---------- About / split media ---------- */
-        document.querySelectorAll(".about-photos").forEach(function (media) {
-            revealUp(media, { trigger: media, y: 36, duration: 0.95 });
+        revealOnEnter(document.querySelectorAll(".about-photos"), {
+            y: 40,
+            duration: 0.95,
+            threshold: 0.28
         });
         document.querySelectorAll(".split > div:not(.about-photos)").forEach(function (copy) {
-            var bits = copy.querySelectorAll("p:not(.eyebrow), .mini-list, .btn, .mini-item");
-            revealUp(bits, { trigger: copy, y: 28, stagger: 0.08, start: "top 85%" });
+            revealOnEnter(copy.querySelectorAll("p:not(.eyebrow), .mini-list, .btn, .mini-item"), {
+                y: 28,
+                duration: 0.8,
+                threshold: 0.35
+            });
         });
 
         /* ---------- CTA ---------- */
-        document.querySelectorAll(".cta-box").forEach(function (box) {
-            revealUp(box, { trigger: box, y: 40, duration: 0.9 });
+        revealOnEnter(document.querySelectorAll(".cta-box"), {
+            y: 48,
+            duration: 0.95,
+            threshold: 0.3
         });
 
-        /* ---------- Forms ---------- */
-        document.querySelectorAll(".contact-grid > *").forEach(function (col) {
-            revealUp(col, { trigger: col, y: 32, duration: 0.85 });
+        /* ---------- Forms / appointment ---------- */
+        revealOnEnter(document.querySelectorAll(".contact-grid > *, .appointment-layout > *"), {
+            y: 36,
+            duration: 0.85,
+            threshold: 0.3
         });
 
         /* ---------- Page banner ---------- */
@@ -297,30 +404,31 @@
         /* ---------- Footer ---------- */
         var footerGrid = document.querySelector(".footer-grid");
         if (footerGrid) {
-            revealUp(footerGrid.children, {
-                trigger: footerGrid,
+            revealOnEnter(footerGrid.children, {
                 y: 28,
-                stagger: 0.08,
-                start: "top 95%"
+                duration: 0.8,
+                threshold: 0.25,
+                rootMargin: "0px 0px -8% 0px"
             });
         }
 
-        /* Failsafe: only force-show elements already in/near the viewport if stuck */
+        /* Failsafe: only force-show elements that are clearly already on screen */
         setTimeout(function () {
-            var selectors =
-                ".card, .svc-card, .process-card, .testimonial-card, .faq-item, .cta-box, .section-lead, .about-photos, .pill-label, .eyebrow, .contact-grid > *, .footer-grid > *, .split-char";
-            document.querySelectorAll(selectors).forEach(function (el) {
-                var rect = el.getBoundingClientRect();
-                var nearView = rect.top < window.innerHeight && rect.bottom > 0;
-                if (!nearView) return;
-                if (parseFloat(getComputedStyle(el).opacity) === 0) {
+            document
+                .querySelectorAll(
+                    ".svc-card, .feature-card, .process-card, .program-card, .testimonial-card, .blog-card, .faq-item, .cta-box, .pricing-card, .split-char"
+                )
+                .forEach(function (el) {
+                    if (el.dataset.revealed === "1") return;
+                    var rect = el.getBoundingClientRect();
+                    var vh = window.innerHeight || 1;
+                    var visible = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+                    var ratio = visible / Math.max(rect.height, 1);
+                    if (ratio < VIEW_THRESHOLD || rect.top > vh * 0.7) return;
+                    el.dataset.revealed = "1";
                     gsap.set(el, { autoAlpha: 1, y: 0, yPercent: 0, clearProps: "transform" });
-                }
-            });
-            if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
-        }, 2000);
-
-        if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+                });
+        }, 4000);
     }
 
     if (document.readyState === "loading") {

@@ -1,0 +1,4 @@
+.env
+.DS_Store
+appointment-form/data/*.json
+!appointment-form/data/.gitkeep

@@ -1,21 +1,35 @@
 <section class="hero-slider">
     <div class="hero-slide active" style="background-image: url('assets/images/hero/carousel-1.png');"></div>
-    <div class="hero-slide" style="background-image: url('assets/images/hero/carousel-2.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('assets/images/hero/carousel-2.png');"></div>
     <div class="hero-overlay"></div>
+    <div class="hero-shape hero-shape--1"></div>
+    <div class="hero-shape hero-shape--2"></div>
     <div class="container">
         <div class="hero-content">
-            <p class="eyebrow" style="color: var(--color-accent);">Nutrition Care You Can Trust</p>
-            <h1 class="hero-title split-title">Eat Healthy Live Life Better</h1>
-            <p class="hero-text">Our personalized nutrition plans and expert dietitian guidance help you build lifelong healthy habits, bridging the gap between knowing and doing.</p>
+            <span class="pill-label pill-label--hero"><span class="pill-dot"></span> Holistic Nutrition Coaching</span>
+            <h1 class="hero-title split-title">Lose Weight Without Losing Your Dal-Chawal.</h1>
+            <p class="hero-text">Real nutrition isn't about starvation or fear — it's about learning how to Eat Rrite. Science-backed, rooted in the food you already love, and built to last longer than 30 days.</p>
             <div class="hero-actions">
-                <a class="btn btn-primary" href="appointment.php">Book Appointment</a>
-                <a class="btn btn-outline-light" href="about.php">About Eat Rrite</a>
-                <div class="hero-play-wrap">
-                    <button type="button" class="play-btn js-open-video" aria-label="Watch video">
-                        <i class="fa-solid fa-play"></i>
-                    </button>
-                    <span>Watch Video</span>
+                <a class="btn btn-accent" href="appointment.php">Book Your Consultation</a>
+                <a class="btn btn-outline-light" href="programs.php">View Our Programs</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <strong>8</strong>
+                    <span>Years of Practice</span>
                 </div>
+                <div class="hero-stat">
+                    <strong>500+</strong>
+                    <span>Lives Transformed</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>4.8★</strong>
+                    <span>Google Rating</span>
+                </div>
+                <a class="hero-stat hero-stat--link" href="#testimonials">
+                    <strong>Stories</strong>
+                    <span>Real Client Stories</span>
+                </a>
             </div>
         </div>
     </div>

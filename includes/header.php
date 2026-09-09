@@ -9,11 +9,10 @@ $currentPage = $currentPage ?? 'home';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
-    <meta name="description" content="Eat Rrite is a nutrition and holistic wellness platform offering personalized diet programs, yoga, and lifestyle guidance.">
+    <meta name="description" content="<?php echo htmlspecialchars($pageDescription ?? 'Eat Rrite is a nutrition and holistic wellness platform offering personalised diet programs, yoga, and lifestyle guidance.'); ?>">
     <link rel="icon" href="assets/images/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Fonts from Nourio reference theme -->
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -22,9 +21,8 @@ $currentPage = $currentPage ?? 'home';
     <div class="topbar">
         <div class="container topbar-inner">
             <span><i class="fa-regular fa-clock"></i> <?php echo htmlspecialchars($site['hours']); ?></span>
-            <span>
+            <span class="topbar-links">
                 <a href="<?php echo htmlspecialchars($site['email_href']); ?>"><i class="fa-regular fa-envelope"></i> <?php echo htmlspecialchars($site['email']); ?></a>
-                &nbsp;·&nbsp;
                 <a href="<?php echo htmlspecialchars($site['phone_href']); ?>"><i class="fa-solid fa-phone"></i> <?php echo htmlspecialchars($site['phone']); ?></a>
             </span>
         </div>
@@ -39,8 +37,17 @@ $currentPage = $currentPage ?? 'home';
             <nav class="site-nav">
                 <a href="index.php" class="<?php echo $currentPage === 'home' ? 'is-active' : ''; ?>">Home</a>
                 <a href="about.php" class="<?php echo $currentPage === 'about' ? 'is-active' : ''; ?>">About</a>
-                <a href="index.php#services">Services</a>
+                <a href="programs.php" class="<?php echo $currentPage === 'programs' ? 'is-active' : ''; ?>">Programs</a>
+                <a href="pricing.php" class="<?php echo $currentPage === 'pricing' ? 'is-active' : ''; ?>">Pricing</a>
+                <a href="index.php#blog">Blog</a>
                 <a href="contact.php" class="<?php echo $currentPage === 'contact' ? 'is-active' : ''; ?>">Contact</a>
+                <a class="header-call" href="<?php echo htmlspecialchars($site['phone_href']); ?>">
+                    <span class="header-call__icon"><i class="fa-solid fa-phone"></i></span>
+                    <span class="header-call__text">
+                        <small>Call Anytime</small>
+                        <strong><?php echo htmlspecialchars($site['phone']); ?></strong>
+                    </span>
+                </a>
                 <a class="btn btn-primary" href="appointment.php">Book Appointment</a>
             </nav>
         </div>

@@ -1,27 +1,39 @@
-<section class="section">
+<section class="section section-mint" id="why-choose">
     <div class="container">
-        <p class="eyebrow">Why Choose Us</p>
-        <h2 class="section-title split-title">Evidence based nutrition for long-term health</h2>
-        <div class="why-grid">
-            <article class="card">
-                <div class="icon-dot">01</div>
-                <h3>Food as Medicine</h3>
-                <p>No crash diets or shortcuts. We use traditional food wisdom with modern nutrition science.</p>
+        <div class="section-heading is-center">
+            <span class="pill-label"><span class="pill-dot"></span> Why Choose Us</span>
+            <h2 class="section-title split-title">Where food becomes medicine</h2>
+        </div>
+        <div class="why-grid why-grid--five">
+            <article class="feature-card">
+                <div class="feature-card__icon"><i class="fa-solid fa-bowl-food"></i></div>
+                <span class="feature-card__num">01</span>
+                <h3>Where Food Becomes Medicine</h3>
+                <p>No crash diets, no starvation. You keep eating your own traditional cuisine — idli-dosa-sambar, rice, paratha and sabzi — we just teach you how to balance it.</p>
             </article>
-            <article class="card">
-                <div class="icon-dot">02</div>
-                <h3>Personalized Plans</h3>
-                <p>Every program is crafted around your culture, family meals, reports and daily routine.</p>
+            <article class="feature-card">
+                <div class="feature-card__icon"><i class="fa-solid fa-heart"></i></div>
+                <span class="feature-card__num">02</span>
+                <h3>Built for Life, Not 30 Days</h3>
+                <p>We don't fight against time to hit a number on the scale — we help you reprogram how you think about food. Learn to Eat Rrite, for life, starting in 30 days.</p>
             </article>
-            <article class="card">
-                <div class="icon-dot">03</div>
-                <h3>Yoga & Counselling</h3>
-                <p>Physical change lasts longer when the mind, habits and movement are supported together.</p>
+            <article class="feature-card">
+                <div class="feature-card__icon"><i class="fa-solid fa-flask"></i></div>
+                <span class="feature-card__num">03</span>
+                <h3>Science First, Always</h3>
+                <p>We don't suggest a food or strategy just because it's "ancient wisdom" or trending. Everything we recommend has both traditional grounding and science behind it.</p>
             </article>
-            <article class="card">
-                <div class="icon-dot">04</div>
-                <h3>Award-Winning Care</h3>
-                <p>In 2024, Eat Rrite was honored with the Global Sustainability Award under SDG 3.</p>
+            <article class="feature-card">
+                <div class="feature-card__icon"><i class="fa-solid fa-spa"></i></div>
+                <span class="feature-card__num">04</span>
+                <h3>Whole-Person Wellbeing</h3>
+                <p>Nutrition is your foundation, yoga and movement build physical wellbeing, and counselling helps you unburden your mind. All three pillars have to align.</p>
+            </article>
+            <article class="feature-card">
+                <div class="feature-card__icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                <span class="feature-card__num">05</span>
+                <h3>No Guesswork, Ever</h3>
+                <p>No client is onboarded without proper tests. We look at what's actually happening in your body, coordinate with a doctor when needed, and refer you if you don't have one.</p>
             </article>
         </div>
     </div>

@@ -1,82 +1,35 @@
 <section class="section services-section" id="services">
     <div class="container">
         <div class="section-heading is-center">
-            <span class="pill-label"><span class="pill-dot"></span> Services</span>
-            <h2 class="section-title split-title">Healthy eating solutions tailored to your unique lifestyle</h2>
+            <span class="pill-label"><span class="pill-dot"></span> Programs</span>
+            <h2 class="section-title split-title">Built around your reports, not a template</h2>
+            <p class="section-lead" style="margin-left:auto;margin-right:auto;text-align:center;">Whether it's weight loss, diabetes reversal, gut health or hormonal balance — every Eat Rrite program starts with a consultation. Choose a 30-day reset, a 90-day journey, or a 180-day commitment.</p>
         </div>
 
         <div class="services-nourio-grid">
+            <?php foreach ($programsLive as $i => $program): ?>
             <article class="svc-card">
-                <img class="svc-card__bg" src="assets/images/services/weight.jpg" alt="">
+                <img class="svc-card__bg" src="<?php echo htmlspecialchars($program['image']); ?>" alt="">
                 <div class="svc-card__overlay"></div>
                 <div class="svc-card__content">
                     <div class="svc-card__top">
                         <div class="svc-icon">
-                            <i class="fa-solid fa-spa"></i>
+                            <i class="fa-solid <?php echo ['fa-plate-wheat', 'fa-droplet', 'fa-leaf', 'fa-venus'][$i] ?? 'fa-heart'; ?>"></i>
                         </div>
-                        <h3>Holistic Wellness</h3>
-                        <p>Develop simple, sustainable daily habits that support better nutrition and lasting lifestyle change.</p>
-                        <a class="svc-arrow" href="appointment.php" aria-label="Learn more"><i class="fa-solid fa-arrow-right"></i></a>
+                        <h3><?php echo htmlspecialchars($program['short']); ?></h3>
+                        <p><?php echo htmlspecialchars($program['summary']); ?></p>
+                        <a class="svc-arrow" href="program.php?slug=<?php echo urlencode($program['slug']); ?>" aria-label="Learn more about <?php echo htmlspecialchars($program['short']); ?>"><i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                     <div class="svc-card__img">
-                        <img src="assets/images/services/weight.jpg" alt="Holistic Wellness">
+                        <img src="<?php echo htmlspecialchars($program['image']); ?>" alt="<?php echo htmlspecialchars($program['short']); ?>">
                     </div>
                 </div>
             </article>
+            <?php endforeach; ?>
+        </div>
 
-            <article class="svc-card">
-                <img class="svc-card__bg" src="assets/images/services/gut.jpg" alt="">
-                <div class="svc-card__overlay"></div>
-                <div class="svc-card__content">
-                    <div class="svc-card__top">
-                        <div class="svc-icon">
-                            <i class="fa-solid fa-clipboard-list"></i>
-                        </div>
-                        <h3>Health Monitoring</h3>
-                        <p>Track progress with personalized plans that fit your goals, labs and daily routine.</p>
-                        <a class="svc-arrow" href="appointment.php" aria-label="Learn more"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <div class="svc-card__img">
-                        <img src="assets/images/services/gut.jpg" alt="Health Monitoring">
-                    </div>
-                </div>
-            </article>
-
-            <article class="svc-card">
-                <img class="svc-card__bg" src="assets/images/services/hormone.jpg" alt="">
-                <div class="svc-card__overlay"></div>
-                <div class="svc-card__content">
-                    <div class="svc-card__top">
-                        <div class="svc-icon">
-                            <i class="fa-solid fa-heart-pulse"></i>
-                        </div>
-                        <h3>Healthy Habits</h3>
-                        <p>Build routines around food, movement and mindset that become part of your lifestyle.</p>
-                        <a class="svc-arrow" href="appointment.php" aria-label="Learn more"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <div class="svc-card__img">
-                        <img src="assets/images/services/hormone.jpg" alt="Healthy Habits">
-                    </div>
-                </div>
-            </article>
-
-            <article class="svc-card">
-                <img class="svc-card__bg" src="assets/images/services/diabetes.jpg" alt="">
-                <div class="svc-card__overlay"></div>
-                <div class="svc-card__content">
-                    <div class="svc-card__top">
-                        <div class="svc-icon">
-                            <i class="fa-solid fa-bowl-food"></i>
-                        </div>
-                        <h3>Digestive Wellness</h3>
-                        <p>Gut-first nutrition for comfort, energy and a healthier relationship with food.</p>
-                        <a class="svc-arrow" href="appointment.php" aria-label="Learn more"><i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <div class="svc-card__img">
-                        <img src="assets/images/services/diabetes.jpg" alt="Digestive Wellness">
-                    </div>
-                </div>
-            </article>
+        <div class="section-cta-row">
+            <a class="btn btn-primary" href="programs.php">Explore Our Programs</a>
         </div>
     </div>
 </section>

@@ -1,17 +1,18 @@
 <section class="section">
     <div class="container split">
         <div class="about-photos">
-            <img class="main" src="assets/images/about/about-eatrrite.png" alt="Eat Rrite">
-            <img class="side" src="assets/images/hero/salad.jpg" alt="Fresh nutrition">
+            <img class="main" src="assets/images/about/founder.jpeg" alt="Mukta Patil">
+            <img class="side" src="assets/images/hero/healthy-plate.jpg" alt="Traditional Indian meal">
         </div>
         <div>
-            <p class="eyebrow">About Eat Rrite</p>
-            <h2 class="section-title split-title">A nutrition and holistic wellness platform</h2>
-            <p><em>It is time to strike a balance between comfort, celebration, food and fitness to make healthy living an effortless routine.</em></p>
-            <p>Eat Rrite holds true to the values of wholesome eating and healthy living. We promote healthy fat loss and monitor your eating patterns so that you not only lose weight, but also maintain yourself in order to lead a healthy lifestyle.</p>
-            <p>There is often a disconnect when it comes to living a healthy lifestyle; we know what is good for our bodies, but we don’t always act accordingly. Eat Rrite aims to mend the gap between knowing and doing by catering to each individual's unique circumstances.</p>
-            <p>Whether it is weight loss or weight management, managing a dietary condition, or developing a healthy relationship with food, Eat Rrite offers a variety of services and packages designed to meet your needs.</p>
-            <p>Our core values are based on the principles of traditions, minimalism and sustainability in terms of nutrition and fitness.</p>
+            <p class="eyebrow">About Us</p>
+            <h1 class="section-title split-title">The Story Behind Eat Rrite</h1>
+            <p><em>Mukta Patil didn't set out to become a nutritionist. She became one because she had to.</em></p>
+            <p>During the birth of her second child, complications led to heavy medication and steroids to stabilise her health — and by the time she left the hospital, her weight had risen to 98kg.</p>
+            <p>What followed wasn't support, but body-shaming, much of it from her own family, despite everyone knowing exactly what she had been through. She was also diagnosed with postpartum depression, while the steroids had taken their own toll on her skin, hair, gut and overall health.</p>
+            <p>Like most people in that position, her first attempts at "fixing" things led her straight into crash diets and nutritionists who shamed rather than supported her. None of it worked, because none of it addressed the real problem. So she started studying it herself.</p>
+            <p>A science student whose formal education had been interrupted by an early marriage, she saw this as her chance to pick up where she'd left off. Slowly, the first 10 kilos came off — not through willpower alone, but through understanding. She enrolled in professional nutrition education, found a handful of coaches who supported rather than judged her, and used everything she learned to heal herself first.</p>
+            <p><strong>Eat Rrite was born from that healing.</strong></p>
         </div>
     </div>
 </section>

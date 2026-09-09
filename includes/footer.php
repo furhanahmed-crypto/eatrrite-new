@@ -1,15 +1,18 @@
     <footer class="site-footer">
         <div class="container footer-grid">
             <div>
-                <img src="assets/images/logo/logo-horizontal.png" alt="Eat Rrite" style="height:52px;margin-bottom:16px;">
-                <p>Eat Rrite helps you strike a balance between comfort, celebration, food and fitness so healthy living becomes an effortless routine.</p>
+                <img class="footer-logo" src="assets/images/logo/logo-horizontal-light.png" alt="Eat Rrite">
+                <p>Science-backed, culturally-rooted nutrition coaching — so you learn how to Eat Rrite for life, without crash diets.</p>
+                <p class="footer-locations"><?php echo htmlspecialchars($site['address_1']); ?> &amp; <?php echo htmlspecialchars($site['address_2']); ?><br><small><?php echo htmlspecialchars($site['locations_note']); ?></small></p>
             </div>
             <div>
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="index.php">Home</a></li>
                     <li><a href="about.php">About Us</a></li>
-                    <li><a href="index.php#services">Services</a></li>
+                    <li><a href="programs.php">Programs</a></li>
+                    <li><a href="pricing.php">Pricing</a></li>
+                    <li><a href="index.php#faqs">FAQs</a></li>
                     <li><a href="appointment.php">Appointment</a></li>
                     <li><a href="contact.php">Contact</a></li>
                 </ul>
@@ -17,18 +20,16 @@
             <div>
                 <h3>Programs</h3>
                 <ul>
-                    <li>Weight & Lifestyle Management</li>
-                    <li>Gut Health</li>
-                    <li>Female Hormone Health</li>
-                    <li>Diabetes Management</li>
-                    <li>Mom-to-Be NutriCare</li>
+                    <?php foreach ($programsLive as $program): ?>
+                        <li><a href="program.php?slug=<?php echo urlencode($program['slug']); ?>"><?php echo htmlspecialchars($program['short']); ?></a></li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
             <div>
                 <h3>Get In Touch</h3>
-                <p><?php echo htmlspecialchars($site['address_1']); ?><br><?php echo htmlspecialchars($site['address_2']); ?></p>
                 <p><a href="<?php echo htmlspecialchars($site['email_href']); ?>"><?php echo htmlspecialchars($site['email']); ?></a></p>
                 <p><a href="<?php echo htmlspecialchars($site['phone_href']); ?>"><?php echo htmlspecialchars($site['phone']); ?></a></p>
+                <p><?php echo htmlspecialchars($site['hours']); ?></p>
                 <div class="socials">
                     <a href="<?php echo htmlspecialchars($site['instagram']); ?>" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                     <a href="<?php echo htmlspecialchars($site['facebook']); ?>" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
@@ -38,7 +39,7 @@
         </div>
         <div class="container footer-bottom">
             <span>&copy; <?php echo date('Y'); ?> Eat Rrite. All rights reserved.</span>
-            <span>Stay healthy, stay fit, and just Eat Rrite.</span>
+            <span>Learn to Eat Rrite.</span>
         </div>
     </footer>
 
