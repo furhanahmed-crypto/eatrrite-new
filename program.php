@@ -14,7 +14,7 @@ $pageDescription = $program['meta_description'];
 $currentPage = 'programs';
 $bannerTitle = $program['short'];
 $secondaryImage = $program['image_secondary'] ?? 'assets/images/hero/healthy-plate.jpg';
-$founderImage = 'assets/images/about/founder.jpeg';
+$founderImage = 'assets/images/about/founder.jpg';
 
 include __DIR__ . '/includes/header.php';
 include __DIR__ . '/sections/page-banner.php';
@@ -28,7 +28,7 @@ include __DIR__ . '/sections/page-banner.php';
                 <span class="pill-label"><span class="pill-dot"></span> About the Program</span>
                 <h1 class="section-title split-title"><?php echo htmlspecialchars($program['name']); ?></h1>
                 <p class="section-lead"><?php echo htmlspecialchars($program['about']); ?></p>
-                <a class="btn btn-accent" href="appointment.php">Book Your Consultation</a>
+                <a class="btn btn-accent" href="appointment.php">Get Consultation</a>
             </div>
             <div class="program-split__media">
                 <img src="<?php echo htmlspecialchars($program['image']); ?>" alt="<?php echo htmlspecialchars($program['short']); ?>">
@@ -81,9 +81,8 @@ include __DIR__ . '/sections/page-banner.php';
                         <span class="package-card__badge">Most chosen</span>
                     <?php endif; ?>
                     <strong><?php echo htmlspecialchars($package['name']); ?></strong>
-                    <span class="package-card__price"><?php echo htmlspecialchars($package['price']); ?></span>
                     <p><?php echo htmlspecialchars($package['blurb']); ?></p>
-                    <a class="btn <?php echo !empty($package['featured']) ? 'btn-accent' : 'btn-primary'; ?>" href="appointment.php">Book Consultation</a>
+                    <a class="btn <?php echo !empty($package['featured']) ? 'btn-accent' : 'btn-primary'; ?>" href="appointment.php">Get Consultation</a>
                 </article>
                 <?php endforeach; ?>
             </div>

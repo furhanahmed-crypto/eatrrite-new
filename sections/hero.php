@@ -10,7 +10,7 @@
             <h1 class="hero-title split-title">Lose Weight Without Losing Your Dal-Chawal.</h1>
             <p class="hero-text">Real nutrition isn't about starvation or fear — it's about learning how to Eat Rrite. Science-backed, rooted in the food you already love, and built to last longer than 30 days.</p>
             <div class="hero-actions">
-                <a class="btn btn-accent" href="appointment.php">Book Your Consultation</a>
+                <a class="btn btn-accent" href="appointment.php">Get Consultation</a>
                 <a class="btn btn-outline-light" href="programs.php">View Our Programs</a>
             </div>
             <div class="hero-stats">

@@ -17,7 +17,7 @@
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer">
-                            <div class="faq-answer__inner">Book your ₹800 consultation call via the appointment page on this site, or message us on WhatsApp at +91 96398 77483. The consultation is a considered first step before choosing a 30, 90 or 180-day program.</div>
+                            <div class="faq-answer__inner">Book your consultation call via the appointment page on this site, or message us on WhatsApp at +91 96398 77483. The consultation is a considered first step before choosing a 30, 90 or 180-day program.</div>
                         </div>
                     </article>
                     <article class="faq-item">
@@ -31,11 +31,11 @@
                     </article>
                     <article class="faq-item">
                         <button class="faq-question" type="button">
-                            <span>What are your program prices?</span>
+                            <span>What program lengths do you offer?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer">
-                            <div class="faq-answer__inner">Every live program is available as a 30-Day Foundation (₹7,499), 90-Day Journey (₹21,999) or 180-Day Commitment (₹41,999). See the <a href="pricing.php">Pricing</a> page for full details.</div>
+                            <div class="faq-answer__inner">Every live program is available as a 30-Day Foundation, 90-Day Journey or 180-Day Commitment. Mukta will recommend the right length for you on your consultation call — <a href="appointment.php">Get Consultation</a> to get started.</div>
                         </div>
                     </article>
                     <article class="faq-item">

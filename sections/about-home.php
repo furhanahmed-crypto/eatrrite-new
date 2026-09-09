@@ -2,7 +2,7 @@
     <div class="container split">
         <div class="about-photos">
             <div class="stripe"></div>
-            <img class="main" src="assets/images/about/founder.jpeg" alt="Mukta Patil, Founder of Eat Rrite">
+            <img class="main" src="assets/images/about/founder.jpg" alt="Mukta Patil, Founder of Eat Rrite">
             <img class="side" src="assets/images/about/bowl.jpg" alt="Nourishing Bowl">
             <div class="circular-badge">
                 <svg viewBox="0 0 100 100" width="130" height="130">

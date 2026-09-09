@@ -12,7 +12,7 @@ include __DIR__ . '/sections/page-banner.php';
         <div class="appointment-copy">
             <span class="pill-label"><span class="pill-dot"></span> Appointment</span>
                 <h2 class="section-title">Begin your nutrition journey today</h2>
-            <p>Don't just chase weight loss — bring in holistic wellbeing. Book your ₹800 consultation and choose a 30, 90 or 180-day program built around your reports and the food you already love.</p>
+            <p>Don't just chase weight loss — bring in holistic wellbeing. Get a consultation and choose a 30, 90 or 180-day program built around your reports and the food you already love.</p>
             <ul class="appointment-points">
                 <li><i class="fa-solid fa-check"></i> Personalized consultation with a nutrition specialist</li>
                 <li><i class="fa-solid fa-check"></i> Choose your preferred date and time slot</li>

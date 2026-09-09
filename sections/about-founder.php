@@ -11,10 +11,10 @@
                 <cite>— Mukta Patil (founder)</cite>
             </blockquote>
             <p>Clients most often come to Mukta for gut health and emotional wellbeing — and stay for the weight loss. Many say Eat Rrite is the first place they've felt heard, not judged.</p>
-            <a class="btn btn-primary" href="appointment.php">Book Your Consultation</a>
+            <a class="btn btn-primary" href="appointment.php">Get Consultation</a>
         </div>
         <div class="about-photos">
-            <img class="main" src="assets/images/hero/healthy-plate.jpg" alt="Food as understanding">
+            <img class="main" src="assets/images/about/founder.jpg" alt="Mukta Patil, Founder of Eat Rrite">
         </div>
     </div>
 </section>

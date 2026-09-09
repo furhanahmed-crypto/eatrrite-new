@@ -28,7 +28,7 @@ include __DIR__ . '/sections/page-banner.php';
             <h3>Book or enquire</h3>
             <p>Share your name, phone, city and program of interest — we'll take it from there.</p>
             <div class="contact-actions">
-                <a class="btn btn-accent" href="appointment.php">Book Your Consultation (₹800)</a>
+                <a class="btn btn-accent" href="appointment.php">Get Consultation</a>
                 <a class="btn btn-primary" href="<?php echo htmlspecialchars($site['whatsapp']); ?>" target="_blank" rel="noopener">Message on WhatsApp</a>
             </div>
             <ul class="check-list contact-program-list">

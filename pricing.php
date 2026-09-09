@@ -21,14 +21,13 @@ include __DIR__ . '/sections/page-banner.php';
                     <span class="pricing-badge">Most Popular</span>
                 <?php endif; ?>
                 <h3><?php echo htmlspecialchars($package['name']); ?></h3>
-                <div class="pricing-price"><?php echo htmlspecialchars($package['price']); ?></div>
                 <p><?php echo htmlspecialchars($package['blurb']); ?></p>
-                <a class="btn <?php echo !empty($package['featured']) ? 'btn-accent' : 'btn-primary'; ?>" href="appointment.php">Book Consultation</a>
+                <a class="btn <?php echo !empty($package['featured']) ? 'btn-accent' : 'btn-primary'; ?>" href="appointment.php">Get Consultation</a>
             </article>
             <?php endforeach; ?>
         </div>
 
-        <p class="pricing-note">Every package begins with a consultation call (₹800), where Mukta reviews your history, current symptoms and reports (or tells you which tests to get first) before recommending a length.</p>
+        <p class="pricing-note">Every package begins with a consultation call, where Mukta reviews your history, current symptoms and reports (or tells you which tests to get first) before recommending a length.</p>
         <p class="disclaimer" style="text-align:center;"><?php echo htmlspecialchars($site['results_disclaimer']); ?></p>
     </div>
 </section>

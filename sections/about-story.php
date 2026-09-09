@@ -1,7 +1,7 @@
 <section class="section">
     <div class="container split">
         <div class="about-photos">
-            <img class="main" src="assets/images/about/founder.jpeg" alt="Mukta Patil">
+            <img class="main" src="assets/images/about/founder.jpg" alt="Mukta Patil">
             <img class="side" src="assets/images/hero/healthy-plate.jpg" alt="Traditional Indian meal">
         </div>
         <div>

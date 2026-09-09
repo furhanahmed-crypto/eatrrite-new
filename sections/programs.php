@@ -18,8 +18,7 @@
             <?php endforeach; ?>
         </div>
         <div class="section-cta-row">
-            <a class="btn btn-primary" href="pricing.php">View Pricing</a>
-            <a class="btn btn-outline" href="appointment.php">Book Your Consultation</a>
+            <a class="btn btn-primary" href="appointment.php">Get Consultation</a>
         </div>
     </div>
 </section>
