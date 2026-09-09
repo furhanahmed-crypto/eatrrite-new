@@ -43,7 +43,22 @@
         </div>
     </footer>
 
-    <a class="whatsapp-float" href="<?php echo htmlspecialchars($site['whatsapp']); ?>" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    <div class="float-actions" aria-label="Quick contact">
+        <a class="float-action float-action--call" href="<?php echo htmlspecialchars($site['phone_href']); ?>" aria-label="Call Us At <?php echo htmlspecialchars($site['phone']); ?>">
+            <span class="float-action__icon"><i class="fa-solid fa-phone"></i></span>
+            <span class="float-action__text">
+                <small>Call Us At</small>
+                <strong><?php echo htmlspecialchars($site['phone']); ?></strong>
+            </span>
+        </a>
+        <a class="float-action float-action--whatsapp" href="<?php echo htmlspecialchars($site['whatsapp']); ?>" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+            <span class="float-action__icon"><i class="fa-brands fa-whatsapp"></i></span>
+            <span class="float-action__text">
+                <small>WhatsApp</small>
+                <strong>Chat with us</strong>
+            </span>
+        </a>
+    </div>
 
     <!-- Video modal (intentional invalid YouTube id so error UI shows) -->
     <div class="video-modal" id="videoModal" aria-hidden="true" role="dialog" aria-labelledby="videoModalTitle">

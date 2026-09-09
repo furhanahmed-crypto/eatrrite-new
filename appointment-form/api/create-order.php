@@ -11,7 +11,7 @@ try {
     $order = appointment_service()->createOrder(appointment_json_input());
     appointment_json_ok($order);
 } catch (InvalidArgumentException $e) {
-    appointment_json_error($e->getMessage(), 409);
+    appointment_json_fail($e, 409);
 } catch (Throwable $e) {
-    appointment_json_error($e->getMessage(), 500);
+    appointment_json_fail($e, 500);
 }

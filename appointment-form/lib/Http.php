@@ -24,6 +24,27 @@ function appointment_json_error(string $message, int $status = 400, array $extra
     appointment_json_response(['ok' => false, 'error' => $message] + $extra, $status);
 }
 
+/**
+ * Log the real exception server-side and return a safe public message for production UI.
+ */
+function appointment_json_fail(Throwable $e, int $status = 500): void
+{
+    error_log('[appointment] ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
+
+    $raw = $e->getMessage();
+    $isValidation = $e instanceof InvalidArgumentException && $status < 500;
+    $looksTechnical = (bool) preg_match(
+        '/google|sheet|apps script|curl|configured|smtp|razorpay request failed|invalid response|openssl|timeout/i',
+        $raw
+    );
+
+    $public = ($isValidation && !$looksTechnical)
+        ? $raw
+        : 'A technical issue occurred. Please retry.';
+
+    appointment_json_error($public, $status);
+}
+
 function appointment_json_response(array $payload, int $status): void
 {
     http_response_code($status);

@@ -124,13 +124,6 @@ $programsLive = [
     ],
 ];
 
-$programsComingSoon = [
-    'Oncology (Cancer) Disease Management Nutrition Program',
-    'Enduro Sports Nutrition Program',
-    'NutriCare for Mom-to-Be',
-    'Post-Natal NutriCare & Weight Loss Program',
-];
-
 $programPackages = [
     [
         'name' => '30-Day Foundation',

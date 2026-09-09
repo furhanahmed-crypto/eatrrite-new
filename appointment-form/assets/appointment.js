@@ -99,6 +99,14 @@
         alertBox.textContent = message || '';
     }
 
+    function publicErrorMessage(error) {
+        var raw = (error && error.message) ? String(error.message) : '';
+        if (!raw || /google|sheet|apps script|curl|configured|technical issue|unexpected server/i.test(raw)) {
+            return 'A technical issue occurred. Please retry.';
+        }
+        return raw;
+    }
+
     function setLoading(isLoading) {
         state.loading = isLoading;
         submitBtn.disabled = isLoading;
@@ -116,7 +124,11 @@
             return { ok: false, error: 'Unexpected server response.' };
         });
         if (!response.ok || !payload.ok) {
-            throw new Error(payload.error || 'Something went wrong.');
+            var err = new Error(payload.error || 'Something went wrong.');
+            err.status = response.status;
+            err.payload = payload;
+            console.error('[appointment]', path, err.message, payload);
+            throw err;
         }
         return payload;
     }
@@ -257,7 +269,8 @@
         if (!state.availability) {
             timesEl.innerHTML = '<p class="er-times__empty">Loading available slots…</p>';
             loadAvailability().catch(function (error) {
-                timesEl.innerHTML = '<p class="er-times__empty">' + error.message + '</p>';
+                console.error('[appointment] slots', error);
+                timesEl.innerHTML = '<p class="er-times__empty">A technical issue occurred. Please retry.</p>';
             });
         } else {
             renderCalendar();
@@ -356,7 +369,8 @@
                         window.location.assign(target);
                     }).catch(function (error) {
                         setLoading(false);
-                        showAlert(error.message);
+                        console.error('[appointment] verify', error);
+                        showAlert(publicErrorMessage(error));
                     });
                 },
                 modal: {
@@ -369,14 +383,17 @@
 
             razorpay.on('payment.failed', function (response) {
                 setLoading(false);
+                console.error('[appointment] payment.failed', response);
                 showAlert((response.error && response.error.description) || 'Payment failed. Please try again.');
             });
 
             razorpay.open();
         } catch (error) {
             setLoading(false);
-            showAlert(error.message);
-            if (/slot/i.test(error.message)) {
+            console.error('[appointment] submit', error);
+            var message = publicErrorMessage(error);
+            showAlert(message);
+            if (/slot/i.test(error.message || '')) {
                 state.availability = null;
                 openModal();
             }

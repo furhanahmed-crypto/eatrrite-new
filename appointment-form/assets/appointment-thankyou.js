@@ -32,6 +32,7 @@
             return { ok: false, error: 'Unexpected server response.' };
         });
         if (!response.ok || !payload.ok) {
+            console.error('[appointment] finalize', path, payload);
             throw new Error(payload.error || 'Something went wrong.');
         }
         return payload;
@@ -126,7 +127,8 @@
 
     if (!verified.meet_link_ready) {
         finalizeMeetLink().catch(function (error) {
-            showMeetLinkError(error.message + ' Your payment was received — we will follow up shortly.');
+            console.error('[appointment] meet link', error);
+            showMeetLinkError('A technical issue occurred while preparing your Meet link. Your payment was received — please retry or contact us and we will follow up shortly.');
         });
     }
 })();

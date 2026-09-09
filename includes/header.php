@@ -40,13 +40,9 @@ $currentPage = $currentPage ?? 'home';
                 <a href="programs.php" class="<?php echo $currentPage === 'programs' ? 'is-active' : ''; ?>">Programs</a>
                 <a href="pricing.php" class="<?php echo $currentPage === 'pricing' ? 'is-active' : ''; ?>">Pricing</a>
                 <a href="index.php#blog">Blog</a>
-                <a href="contact.php" class="<?php echo $currentPage === 'contact' ? 'is-active' : ''; ?>">Contact</a>
-                <a class="header-call" href="<?php echo htmlspecialchars($site['phone_href']); ?>">
-                    <span class="header-call__icon"><i class="fa-solid fa-phone"></i></span>
-                    <span class="header-call__text">
-                        <small>Call Anytime</small>
-                        <strong><?php echo htmlspecialchars($site['phone']); ?></strong>
-                    </span>
+                <a class="nav-contact" href="contact.php">
+                    <span class="nav-contact__icon"><i class="fa-regular fa-envelope"></i></span>
+                    <span class="nav-contact__label">Contact Us</span>
                 </a>
                 <a class="btn btn-primary" href="appointment.php">Book Appointment</a>
             </nav>

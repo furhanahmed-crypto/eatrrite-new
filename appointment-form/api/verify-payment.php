@@ -14,7 +14,7 @@ try {
     $result['redirect'] = appointment_thank_you_url();
     appointment_json_ok($result);
 } catch (InvalidArgumentException $e) {
-    appointment_json_error($e->getMessage(), 400);
+    appointment_json_fail($e, 400);
 } catch (Throwable $e) {
-    appointment_json_error($e->getMessage(), 500);
+    appointment_json_fail($e, 500);
 }

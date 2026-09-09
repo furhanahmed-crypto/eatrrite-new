@@ -27,16 +27,6 @@ include __DIR__ . '/sections/page-banner.php';
             <?php endforeach; ?>
         </div>
 
-        <div class="coming-soon-box">
-            <h3>Programs Coming Soon</h3>
-            <p>Full detail is still being finalised for these confirmed program names:</p>
-            <ul>
-                <?php foreach ($programsComingSoon as $name): ?>
-                    <li><?php echo htmlspecialchars($name); ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-
         <p class="programs-note">If you don't see your exact concern listed, <a href="appointment.php">book a consultation</a> and we'll tell you honestly whether we can help.</p>
     </div>
 </section>

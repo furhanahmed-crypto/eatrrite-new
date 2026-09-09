@@ -10,5 +10,5 @@ header('Cache-Control: no-store');
 try {
     appointment_json_ok(appointment_service()->availability());
 } catch (Throwable $e) {
-    appointment_json_error($e->getMessage(), 500);
+    appointment_json_fail($e, 500);
 }

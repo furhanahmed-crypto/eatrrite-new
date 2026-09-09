@@ -17,7 +17,6 @@
             </article>
             <?php endforeach; ?>
         </div>
-        <p class="programs-coming-note">Coming soon: Oncology Nutrition, Enduro Sports Nutrition, NutriCare for Mom-to-Be, and Post-Natal NutriCare.</p>
         <div class="section-cta-row">
             <a class="btn btn-primary" href="pricing.php">View Pricing</a>
             <a class="btn btn-outline" href="appointment.php">Book Your Consultation</a>
