@@ -23,35 +23,25 @@ function appointment_mail_settings(): array
         return $settings;
     }
 
-    $env = [];
-    $envPath = dirname(__DIR__) . '/.env';
+    require_once dirname(__DIR__) . '/appointment-form/config.php';
+    $secrets = appointment_secrets();
+    $mail = is_array($secrets['mail'] ?? null) ? $secrets['mail'] : [];
 
-    if (is_readable($envPath)) {
-        foreach (file($envPath, FILE_IGNORE_NEW_LINES) as $line) {
-            $line = trim($line);
-            if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
-                continue;
-            }
-            [$key, $value] = explode('=', $line, 2);
-            $env[trim($key)] = trim($value);
-        }
-    }
-
-    $password = trim($env['MAIL_PASSWORD'] ?? '');
+    $password = trim((string) ($mail['password'] ?? ''));
     if ($password === '') {
-        $password = 'jyka wuku euwi ltpf'; // fallback until .env is updated
+        throw new RuntimeException('Mail password is missing in includes/secrets.php.');
     }
 
     $settings = [
-        'host' => $env['MAIL_HOST'] ?? 'smtp.gmail.com',
-        'port' => (int) ($env['MAIL_PORT'] ?? 587),
-        'encryption' => strtolower(trim($env['MAIL_ENCRYPTION'] ?? 'tls')),
-        'username' => $env['MAIL_USERNAME'] ?? 'marketing.eatrrite@gmail.com',
+        'host' => (string) ($mail['host'] ?? 'smtp.gmail.com'),
+        'port' => (int) ($mail['port'] ?? 587),
+        'encryption' => strtolower(trim((string) ($mail['encryption'] ?? 'tls'))),
+        'username' => (string) ($mail['username'] ?? ''),
         'password' => $password,
-        'from_email' => $env['MAIL_FROM'] ?? 'marketing.eatrrite@gmail.com',
-        'from_name' => $env['MAIL_FROM_NAME'] ?? 'Eat Rrite',
-        'admin_email' => $env['MAIL_ADMIN'] ?? 'eatrrite@gmail.com',
-        'admin_name' => $env['MAIL_ADMIN_NAME'] ?? 'Eat Rrite Team',
+        'from_email' => (string) ($mail['from_email'] ?? ''),
+        'from_name' => (string) ($mail['from_name'] ?? 'Eat Rrite'),
+        'admin_email' => (string) ($mail['admin_email'] ?? ''),
+        'admin_name' => (string) ($mail['admin_name'] ?? 'Eat Rrite Team'),
     ];
 
     return $settings;

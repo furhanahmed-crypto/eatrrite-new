@@ -61,7 +61,7 @@ final class AppointmentService
         $booking = $this->validatedBooking($input);
 
         if (!$this->sheet->isConfigured()) {
-            throw new RuntimeException('Online booking is not configured yet. Add the Google Apps Script web app URL to .env.');
+            throw new RuntimeException('Online booking is not configured yet. Add the Google Apps Script web app URL to includes/secrets.php.');
         }
 
         $this->slots->assertBookable($booking['date'], $booking['time'], $this->occupancy());

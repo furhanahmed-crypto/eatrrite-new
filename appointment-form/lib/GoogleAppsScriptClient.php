@@ -101,7 +101,7 @@ final class GoogleAppsScriptClient
     public function book(array $booking): array
     {
         if (!$this->isConfigured()) {
-            throw new RuntimeException('Google Apps Script is not configured. Deploy the script and add GOOGLE_APPS_SCRIPT_WEBAPP_URL to .env.');
+            throw new RuntimeException('Google Apps Script is not configured. Deploy the script and add apps_script_url to includes/secrets.php.');
         }
 
         $response = $this->call([

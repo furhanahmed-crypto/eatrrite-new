@@ -4,8 +4,51 @@ declare(strict_types=1);
 
 /**
  * Appointment booking configuration.
- * Secrets come from the project-root .env file. Never send KEY_SECRET to the browser.
+ * Secrets come from includes/secrets.php (gitignored — keep only on the server).
+ * Never send KEY_SECRET to the browser.
  */
+function appointment_secrets(): array
+{
+    static $secrets = null;
+
+    if ($secrets !== null) {
+        return $secrets;
+    }
+
+    $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'secrets.php';
+
+    if (!is_readable($path)) {
+        throw new RuntimeException(
+            'Missing includes/secrets.php. Copy includes/secrets.example.php to includes/secrets.php and fill in the values on the server.'
+        );
+    }
+
+    $loaded = require $path;
+
+    if (!is_array($loaded)) {
+        throw new RuntimeException('includes/secrets.php must return an array.');
+    }
+
+    $secrets = $loaded;
+
+    return $secrets;
+}
+
+function appointment_secret(string $key, ?string $default = null): string
+{
+    $secrets = appointment_secrets();
+
+    if (array_key_exists($key, $secrets) && $secrets[$key] !== null && $secrets[$key] !== '') {
+        return (string) $secrets[$key];
+    }
+
+    if ($default !== null) {
+        return $default;
+    }
+
+    throw new RuntimeException('Missing required secret: ' . $key);
+}
+
 function appointment_config(): array
 {
     static $config = null;
@@ -14,25 +57,23 @@ function appointment_config(): array
         return $config;
     }
 
-    $env = appointment_load_env(dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env');
-
     $config = [
-        'razorpay_key_id' => appointment_env($env, 'RAZORPAY_KEY_ID'),
-        'razorpay_key_secret' => appointment_env($env, 'RAZORPAY_KEY_SECRET'),
-        'google_sheet_id' => appointment_env($env, 'GOOGLE_SHEET_ID'),
-        'google_sheet_name' => appointment_env($env, 'GOOGLE_SHEET_NAME', 'eatrrite-website-appointments'),
-        'google_sheet_tab' => appointment_env($env, 'GOOGLE_SHEET_TAB_NAME', 'Sheet1'),
-        'google_slot_times_tab' => appointment_env($env, 'GOOGLE_SLOT_TIMES_TAB', 'slot-times-config'),
-        'google_disabled_slots_tab' => appointment_env($env, 'GOOGLE_DISABLED_SLOTS_TAB', 'disabled-slots'),
-        'apps_script_url' => rtrim(appointment_env($env, 'GOOGLE_APPS_SCRIPT_WEBAPP_URL', ''), '/'),
-        'apps_script_secret' => appointment_env($env, 'GOOGLE_APPS_SCRIPT_SECRET', ''),
+        'razorpay_key_id' => appointment_secret('razorpay_key_id'),
+        'razorpay_key_secret' => appointment_secret('razorpay_key_secret'),
+        'google_sheet_id' => appointment_secret('google_sheet_id'),
+        'google_sheet_name' => appointment_secret('google_sheet_name', 'eatrrite-website-appointments'),
+        'google_sheet_tab' => appointment_secret('google_sheet_tab', 'Sheet1'),
+        'google_slot_times_tab' => appointment_secret('google_slot_times_tab', 'slot-times-config'),
+        'google_disabled_slots_tab' => appointment_secret('google_disabled_slots_tab', 'disabled-slots'),
+        'apps_script_url' => rtrim(appointment_secret('apps_script_url', ''), '/'),
+        'apps_script_secret' => appointment_secret('apps_script_secret', ''),
 
         'amount_rupees' => 800,
         'currency' => 'INR',
         'timezone' => 'Asia/Kolkata',
         'booking_days_ahead' => 30,
         'hold_minutes' => 15,
-        'admin_dashboard_password' => appointment_env($env, 'ADMIN_DASHBOARD_PASSWORD', ''),
+        'admin_dashboard_password' => appointment_secret('admin_dashboard_password', ''),
 
         'business_name' => 'Eat Rrite',
         'business_description' => 'Appointment confirmation',
@@ -46,43 +87,4 @@ function appointment_config(): array
     ];
 
     return $config;
-}
-
-function appointment_load_env(string $path): array
-{
-    if (!is_readable($path)) {
-        throw new RuntimeException('Missing .env file at project root.');
-    }
-
-    $vars = [];
-
-    foreach (file($path, FILE_IGNORE_NEW_LINES) as $line) {
-        $line = trim($line);
-
-        if ($line === '' || str_starts_with($line, '#')) {
-            continue;
-        }
-
-        if (!str_contains($line, '=')) {
-            continue;
-        }
-
-        [$key, $value] = explode('=', $line, 2);
-        $vars[trim($key)] = trim($value);
-    }
-
-    return $vars;
-}
-
-function appointment_env(array $env, string $key, ?string $default = null): string
-{
-    if (array_key_exists($key, $env) && $env[$key] !== '') {
-        return $env[$key];
-    }
-
-    if ($default !== null) {
-        return $default;
-    }
-
-    throw new RuntimeException('Missing required environment variable: ' . $key);
 }

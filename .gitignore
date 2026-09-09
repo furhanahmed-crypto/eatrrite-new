@@ -1,4 +1,6 @@
 .env
+.env.*
 .DS_Store
+includes/secrets.php
 appointment-form/data/*.json
 !appointment-form/data/.gitkeep

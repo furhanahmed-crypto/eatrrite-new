@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Run from project root: php email/test-smtp.php
- * Sends a test email using settings from .env / AppointmentEmails.php.
+ * Sends a test email using settings from includes/secrets.php.
  */
 require_once __DIR__ . '/AppointmentEmails.php';
 
@@ -27,6 +27,6 @@ try {
     echo "FAILED — {$e->getMessage()}\n";
     echo "\nFix: generate a new Gmail App Password for {$settings['username']}\n";
     echo "     Google Account → Security → 2-Step Verification → App passwords\n";
-    echo "     Then add MAIL_PASSWORD=... to your .env file.\n";
+    echo "     Then set mail.password in includes/secrets.php on the server.\n";
     exit(1);
 }
