@@ -12,7 +12,7 @@ export const metadata = {
 export default function PricingPage() {
   return (
     <SiteShell current="pricing">
-      <PageBanner title="Pricing" pill="Pricing" />
+      <PageBanner title="Pricing" />
       <PricingGrid data={pricingContent[0]} />
     </SiteShell>
   );

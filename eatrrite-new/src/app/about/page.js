@@ -18,7 +18,7 @@ const sectionMap = {
 export default function AboutPage() {
   return (
     <SiteShell current="about">
-      <PageBanner title="About Us" pill="About" />
+      <PageBanner title="About Us" />
       {aboutContent.map((section) => {
         const Component = sectionMap[section.name];
         if (!Component) return null;

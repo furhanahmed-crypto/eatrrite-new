@@ -13,7 +13,7 @@ export default function ProgramsPage() {
   const section = programsPageContent[0];
   return (
     <SiteShell current="programs">
-      <PageBanner title="Programs" pill="Programs" />
+      <PageBanner title="Programs" />
       <ProgramsGrid data={section} />
     </SiteShell>
   );

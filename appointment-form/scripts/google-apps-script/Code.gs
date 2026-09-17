@@ -1,24 +1,14 @@
 /**
- * Eat Rrite appointment booking – standalone Google Apps Script
+ * Eat Rrite appointments — Google Sheets + Meet web app.
  *
- * Create this from https://script.google.com (not from the sheet Extensions menu).
- * It opens the spreadsheet by ID. The Google Drive file name does not matter.
+ * Properties: SCRIPT_SECRET, SHEET_ID, TAB_NAME, DISABLED_SLOTS_TAB
+ * Services: Google Calendar API
+ * Deploy: Web app → Execute as Me → Anyone
  *
- * Script properties (gear icon → Project Settings):
- *   SCRIPT_SECRET  = value of GOOGLE_APPS_SCRIPT_SECRET in .env
- *   SHEET_ID       = 1hbwqnwyzt4heR4O6lHQtCDItofUkbCH98vQxuQRaWbU
- *   TAB_NAME            = Sheet1
- *   SLOT_TIMES_TAB      = slot-times-config  (optional; PHP also sends tab_name)
- *   DISABLED_SLOTS_TAB  = disabled-slots     (optional; PHP also sends disabled_tab_name)
- *
- * Then: Services (+) → Google Calendar API
- * Deploy → New deployment → Web app → Execute as Me → Anyone
- * Paste the /exec URL into .env as GOOGLE_APPS_SCRIPT_WEBAPP_URL
- *
- * Run testSheetAccess() once in the editor to grant spreadsheet permission.
+ * Actions: list | list_disabled_slots | set_disabled_slot | book | cancel
  */
 
-const HEADERS = [
+var HEADERS = [
   "Name",
   "Service",
   "Phone Number",
@@ -28,39 +18,34 @@ const HEADERS = [
   "Appointment Booked At",
 ];
 
+var DISABLED_HEADERS = ["Date", "Time", "Disabled", "Updated At"];
+
 function doPost(e) {
   try {
-    const payload = parsePayload_(e);
+    var payload = JSON.parse(e.postData.contents);
     assertSecret_(payload.secret);
 
-    if (payload.action === "list") {
+    var action = payload.action;
+    if (action === "list") {
       return json_({ ok: true, booked: listBooked_(payload) });
     }
-
-    if (payload.action === "list_slot_times") {
-      return json_({ ok: true, config: listSlotTimes_(payload) });
+    if (action === "list_disabled_slots") {
+      return json_({ ok: true, disabled: listDisabled_(payload) });
     }
-
-    if (payload.action === "list_disabled_slots") {
-      return json_({ ok: true, disabled: listDisabledSlots_(payload) });
+    if (action === "set_disabled_slot") {
+      return json_(setDisabled_(payload));
     }
-
-    if (payload.action === "set_disabled_slot") {
-      return json_(setDisabledSlot_(payload));
-    }
-
-    if (payload.action === "book") {
+    if (action === "book") {
       return json_(book_(payload));
     }
-
-    if (payload.action === "cancel") {
+    if (action === "cancel") {
       return json_(cancel_(payload));
     }
 
-    return json_({ ok: false, error: "Unknown action." }, 400);
+    return json_({ ok: false, error: "Unknown action." });
   } catch (error) {
-    const message = error && error.message ? error.message : String(error);
-    const taken = message === "slot_taken";
+    var message = error && error.message ? error.message : String(error);
+    var taken = message === "slot_taken";
     return json_({
       ok: false,
       error: taken
@@ -75,171 +60,58 @@ function doGet() {
   return json_({ ok: true, service: "eatrrite-appointments" });
 }
 
-function parsePayload_(e) {
-  if (!e || !e.postData || !e.postData.contents) {
-    throw new Error("Empty request.");
-  }
-  const payload = JSON.parse(e.postData.contents);
-  if (!payload || typeof payload !== "object") {
-    throw new Error("Invalid JSON.");
-  }
-  return payload;
+function testSheetAccess() {
+  Logger.log("Connected: " + appointmentsSheet_({}).getName());
 }
 
+/* ---------- sheets ---------- */
+
 function assertSecret_(secret) {
-  const expected =
+  var expected =
     PropertiesService.getScriptProperties().getProperty("SCRIPT_SECRET") || "";
   if (!expected || secret !== expected) {
     throw new Error("Unauthorized Apps Script request.");
   }
 }
 
-function getSheet_(payload) {
-  const props = PropertiesService.getScriptProperties();
-  const tabName =
-    (payload && payload.tab_name) || props.getProperty("TAB_NAME") || "Sheet1";
-  const sheetId =
-    (payload && payload.sheet_id) || props.getProperty("SHEET_ID") || "";
-
+function openSpreadsheet_(payload) {
+  var props = PropertiesService.getScriptProperties();
+  var sheetId = (payload && payload.sheet_id) || props.getProperty("SHEET_ID") || "";
   if (!sheetId) {
-    throw new Error("Missing SHEET_ID. Set it in Apps Script properties.");
+    throw new Error("Missing SHEET_ID.");
   }
+  return SpreadsheetApp.openById(sheetId);
+}
 
-  const spreadsheet = SpreadsheetApp.openById(sheetId);
-  let sheet = spreadsheet.getSheetByName(tabName);
+function appointmentsSheet_(payload) {
+  var props = PropertiesService.getScriptProperties();
+  var tab =
+    (payload && payload.tab_name) || props.getProperty("TAB_NAME") || "Sheet1";
+  var spreadsheet = openSpreadsheet_(payload);
+  var sheet = spreadsheet.getSheetByName(tab);
   if (!sheet) {
-    sheet = spreadsheet.insertSheet(tabName);
+    sheet = spreadsheet.insertSheet(tab);
   }
-
-  ensureHeaders_(sheet);
-  return sheet;
-}
-
-function testSheetAccess() {
-  const sheet = getSheet_({});
-  Logger.log("Connected to spreadsheet. Tab: " + sheet.getName());
-}
-
-function ensureHeaders_(sheet) {
-  const range = sheet.getRange(1, 1, 1, HEADERS.length);
-  const current = range.getValues()[0];
-  const missing = current.every(function (value) {
-    return String(value).trim() === "";
-  });
-
-  if (missing) {
-    range.setValues([HEADERS]);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(HEADERS);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold");
     sheet.setFrozenRows(1);
   }
+  return sheet;
 }
 
-function listBooked_(payload) {
-  const sheet = getSheet_(payload);
-  const lastRow = sheet.getLastRow();
-  if (lastRow < 2) {
-    return [];
-  }
-
-  const lastCol = Math.max(sheet.getLastColumn(), HEADERS.length);
-  const values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
-  const booked = [];
-
-  values.forEach(function (row) {
-    const date = normalizeDate_(row[3]);
-    const time = normalizeTime_(row[4]);
-    if (!date || !time) {
-      return;
-    }
-    booked.push({
-      name: String(row[0] || "").trim(),
-      service: String(row[1] || "").trim(),
-      phone: String(row[2] || "").trim(),
-      date: date,
-      time: time,
-      meet_link: String(row[5] || "").trim(),
-      booked_at: formatDateTime_(row[6]),
-    });
-  });
-
-  return booked;
-}
-
-function listSlotTimes_(payload) {
-  const spreadsheet = SpreadsheetApp.openById(
-    (payload && payload.sheet_id) ||
-      PropertiesService.getScriptProperties().getProperty("SHEET_ID") ||
-      "",
-  );
-  const tabName = (payload && payload.tab_name) || "slot-times-config";
-  const sheet = spreadsheet.getSheetByName(tabName);
-  if (!sheet) {
-    return { found: false, settings: {}, windows: [] };
-  }
-
-  const lastRow = sheet.getLastRow();
-  if (lastRow < 2) {
-    return { found: false, settings: {}, windows: [] };
-  }
-
-  const lastCol = Math.max(sheet.getLastColumn(), 6);
-  const values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
-  const settings = {};
-  const windows = [];
-
-  values.forEach(function (row) {
-    const type = String(row[0] || "")
-      .trim()
-      .toLowerCase();
-    if (type === "setting") {
-      const key = String(row[1] || "").trim();
-      if (key) {
-        settings[key] = String(
-          row[5] !== "" && row[5] != null ? row[5] : row[4] || "",
-        ).trim();
-      }
-      return;
-    }
-    if (type === "window") {
-      windows.push({
-        weekday: String(row[2] || "")
-          .trim()
-          .toLowerCase(),
-        start: formatClock_(row[3]),
-        end: formatClock_(row[4]),
-      });
-    }
-  });
-
-  return { found: windows.length > 0, settings: settings, windows: windows };
-}
-
-const DISABLED_HEADERS = ["Date", "Time", "Disabled", "Updated At"];
-
-function disabledTabName_(payload) {
-  return (
+function disabledSheet_(payload, createIfMissing) {
+  var props = PropertiesService.getScriptProperties();
+  var tab =
     (payload && payload.disabled_tab_name) ||
-    PropertiesService.getScriptProperties().getProperty("DISABLED_SLOTS_TAB") ||
-    "disabled-slots"
-  );
-}
-
-function getDisabledSheet_(payload, createIfMissing) {
-  const spreadsheet = SpreadsheetApp.openById(
-    (payload && payload.sheet_id) ||
-      PropertiesService.getScriptProperties().getProperty("SHEET_ID") ||
-      "",
-  );
-  const tabName = disabledTabName_(payload);
-  let sheet = spreadsheet.getSheetByName(tabName);
+    props.getProperty("DISABLED_SLOTS_TAB") ||
+    "disabled-slots";
+  var spreadsheet = openSpreadsheet_(payload);
+  var sheet = spreadsheet.getSheetByName(tab);
   if (!sheet) {
-    if (!createIfMissing) {
-      return null;
-    }
-    sheet = spreadsheet.insertSheet(tabName);
-    sheet
-      .getRange(1, 1, 1, DISABLED_HEADERS.length)
-      .setValues([DISABLED_HEADERS]);
+    if (!createIfMissing) return null;
+    sheet = spreadsheet.insertSheet(tab);
+    sheet.appendRow(DISABLED_HEADERS);
     sheet.getRange(1, 1, 1, DISABLED_HEADERS.length).setFontWeight("bold");
     sheet.setFrozenRows(1);
     sheet.getRange("A:B").setNumberFormat("@");
@@ -247,94 +119,81 @@ function getDisabledSheet_(payload, createIfMissing) {
   return sheet;
 }
 
-function isTruthyDisabled_(value) {
-  if (value === true || value === 1) {
-    return true;
-  }
-  const text = String(value || "")
-    .trim()
-    .toLowerCase();
-  return text === "true" || text === "yes" || text === "1" || text === "hidden";
+function dataRows_(sheet) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+  return sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn()).getValues();
 }
 
-function listDisabledSlots_(payload) {
-  const sheet = getDisabledSheet_(payload, false);
-  if (!sheet || sheet.getLastRow() < 2) {
-    return [];
+/* ---------- list ---------- */
+
+function listBooked_(payload) {
+  var rows = dataRows_(appointmentsSheet_(payload));
+  var booked = [];
+  for (var i = 0; i < rows.length; i++) {
+    var date = toDate_(rows[i][3]);
+    var time = toTime_(rows[i][4]);
+    if (!date || !time) continue;
+    booked.push({
+      name: String(rows[i][0] || "").trim(),
+      service: String(rows[i][1] || "").trim(),
+      phone: String(rows[i][2] || "").trim(),
+      date: date,
+      time: time,
+      meet_link: String(rows[i][5] || "").trim(),
+      booked_at: toDateTime_(rows[i][6]),
+    });
   }
+  return booked;
+}
 
-  const lastCol = Math.max(sheet.getLastColumn(), DISABLED_HEADERS.length);
-  const values = sheet
-    .getRange(2, 1, sheet.getLastRow() - 1, lastCol)
-    .getValues();
-  const disabled = [];
-
-  values.forEach(function (row) {
-    if (!isTruthyDisabled_(row[2])) {
-      return;
-    }
-    const date = normalizeDate_(row[0]);
-    const time = formatClock_(row[1]);
-    if (!date || !time) {
-      return;
-    }
+function listDisabled_(payload) {
+  var sheet = disabledSheet_(payload, false);
+  if (!sheet) return [];
+  var rows = dataRows_(sheet);
+  var disabled = [];
+  for (var i = 0; i < rows.length; i++) {
+    if (!isTrue_(rows[i][2])) continue;
+    var date = toDate_(rows[i][0]);
+    var time = toTime_(rows[i][1]);
+    if (!date || !time) continue;
     disabled.push({ date: date, time: time });
-  });
-
+  }
   return disabled;
 }
 
-function isDisabledSlot_(payload, date, time) {
-  return listDisabledSlots_(payload).some(function (row) {
-    return row.date === date && row.time === time;
-  });
-}
+/* ---------- disable / enable ---------- */
 
-function setDisabledSlot_(payload) {
-  const lock = LockService.getScriptLock();
+function setDisabled_(payload) {
+  var lock = LockService.getScriptLock();
   lock.waitLock(20000);
-
   try {
-    const date = normalizeDate_(payload.date);
-    const time = normalizeTime_(payload.time);
-    const hidden =
-      payload.hidden === true ||
-      payload.hidden === "true" ||
-      payload.hidden === 1 ||
-      payload.hidden === "1";
-
+    var date = toDate_(payload.date);
+    var time = toTime_(payload.time);
+    var hidden = isTrue_(payload.hidden);
     if (!date || !time) {
       throw new Error("Appointment date and time are required.");
     }
 
-    const sheet = getDisabledSheet_(payload, true);
-    const lastRow = sheet.getLastRow();
-    let foundRow = 0;
-
-    if (lastRow >= 2) {
-      const lastCol = Math.max(sheet.getLastColumn(), DISABLED_HEADERS.length);
-      const values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
-      for (let i = 0; i < values.length; i++) {
-        const rowDate = normalizeDate_(values[i][0]);
-        const rowTime = formatClock_(values[i][1]);
-        if (rowDate === date && rowTime === time) {
-          foundRow = i + 2;
-          break;
-        }
+    var sheet = disabledSheet_(payload, true);
+    var rows = dataRows_(sheet);
+    var foundRow = 0;
+    for (var i = 0; i < rows.length; i++) {
+      if (toDate_(rows[i][0]) === date && toTime_(rows[i][1]) === time) {
+        foundRow = i + 2;
+        break;
       }
     }
 
-    const updatedAt = Utilities.formatDate(
+    var updatedAt = Utilities.formatDate(
       new Date(),
       "Asia/Kolkata",
-      "yyyy-MM-dd HH:mm:ss",
+      "yyyy-MM-dd HH:mm:ss"
     );
 
     if (hidden) {
       if (foundRow) {
-        sheet
-          .getRange(foundRow, 1, 1, DISABLED_HEADERS.length)
-          .setValues([[date, time, "TRUE", updatedAt]]);
+        sheet.getRange(foundRow, 1, 1, 4).setValues([[date, time, "TRUE", updatedAt]]);
       } else {
         sheet.appendRow([date, time, "TRUE", updatedAt]);
         foundRow = sheet.getLastRow();
@@ -350,141 +209,46 @@ function setDisabledSlot_(payload) {
   }
 }
 
-function cancel_(payload) {
-  const lock = LockService.getScriptLock();
-  lock.waitLock(20000);
-
-  try {
-    const date = normalizeDate_(payload.date);
-    const time = normalizeTime_(payload.time);
-    const phone = String(payload.phone || "").trim();
-    const name = String(payload.name || "").trim();
-
-    if (!date || !time) {
-      throw new Error("Appointment date and time are required.");
-    }
-
-    const sheet = getSheet_(payload);
-    const lastRow = sheet.getLastRow();
-    if (lastRow < 2) {
-      throw new Error("Booking not found.");
-    }
-
-    const lastCol = Math.max(sheet.getLastColumn(), HEADERS.length);
-    const values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
-    let foundRow = 0;
-    let meetLink = "";
-
-    for (let i = 0; i < values.length; i++) {
-      const rowDate = normalizeDate_(values[i][3]);
-      const rowTime = normalizeTime_(values[i][4]);
-      if (rowDate !== date || rowTime !== time) {
-        continue;
-      }
-
-      const rowPhone = String(values[i][2] || "").trim();
-      const rowName = String(values[i][0] || "").trim();
-      const phoneMatch = !phone || rowPhone === phone;
-      const nameMatch = !name || rowName === name;
-
-      if (phoneMatch && nameMatch) {
-        foundRow = i + 2;
-        meetLink = String(values[i][5] || "").trim();
-        break;
-      }
-    }
-
-    if (!foundRow) {
-      throw new Error("Booking not found.");
-    }
-
-    sheet.deleteRow(foundRow);
-    tryDeleteCalendarEvent_(meetLink, date, time);
-
-    return {
-      ok: true,
-      date: date,
-      time: time,
-      cancelled: true,
-    };
-  } finally {
-    lock.releaseLock();
-  }
-}
-
-function tryDeleteCalendarEvent_(meetLink, date, time) {
-  if (!meetLink && !date) {
-    return;
-  }
-
-  try {
-    const dayStart = new Date(date + "T00:00:00+05:30");
-    const dayEnd = new Date(date + "T23:59:59+05:30");
-    const events = Calendar.Events.list("primary", {
-      timeMin: dayStart.toISOString(),
-      timeMax: dayEnd.toISOString(),
-      singleEvents: true,
-      maxResults: 50,
-    });
-
-    const items = events.items || [];
-    for (let i = 0; i < items.length; i++) {
-      const event = items[i];
-      const link = event.hangoutLink || "";
-      const start = event.start && event.start.dateTime ? event.start.dateTime : "";
-      const matchesLink = meetLink && link && link === meetLink;
-      const matchesTime =
-        time && start.indexOf("T" + time) !== -1;
-
-      if (matchesLink || matchesTime) {
-        Calendar.Events.remove("primary", event.id);
-        return;
-      }
-    }
-  } catch (error) {
-    // Sheet row is already removed; calendar cleanup is best-effort.
-  }
-}
+/* ---------- book ---------- */
 
 function book_(payload) {
-  const lock = LockService.getScriptLock();
+  var lock = LockService.getScriptLock();
   lock.waitLock(20000);
-
   try {
-    const date = normalizeDate_(payload.date);
-    const time = normalizeTime_(payload.time);
-
+    var date = toDate_(payload.date);
+    var time = toTime_(payload.time);
     if (!date || !time) {
       throw new Error("Appointment date and time are required.");
     }
 
-    const existing = listBooked_(payload);
-    const blockMinutes = Math.max(
+    var blockMinutes = Math.max(
       1,
-      parseInt(payload.consultant_block_minutes, 10) || 45,
+      parseInt(payload.consultant_block_minutes, 10) || 45
     );
-    const taken = existing.some(function (row) {
-      return (
-        row.date === date && occupanciesOverlap_(row.time, time, blockMinutes)
-      );
-    });
-
-    if (taken) {
-      throw new Error("slot_taken");
+    var existing = listBooked_(payload);
+    for (var i = 0; i < existing.length; i++) {
+      if (
+        existing[i].date === date &&
+        blocksOverlap_(existing[i].time, time, blockMinutes)
+      ) {
+        throw new Error("slot_taken");
+      }
     }
 
-    if (isDisabledSlot_(payload, date, time)) {
-      throw new Error("That time slot is not offered.");
+    var disabled = listDisabled_(payload);
+    for (var d = 0; d < disabled.length; d++) {
+      if (disabled[d].date === date && disabled[d].time === time) {
+        throw new Error("That time slot is not offered.");
+      }
     }
 
-    const bookedAt = Utilities.formatDate(
+    var bookedAt = Utilities.formatDate(
       new Date(),
       "Asia/Kolkata",
-      "yyyy-MM-dd HH:mm:ss",
+      "yyyy-MM-dd HH:mm:ss"
     );
-    const meetLink = createMeetLink_(payload);
-    const sheet = getSheet_(payload);
-
+    var meetLink = createMeet_(payload);
+    var sheet = appointmentsSheet_(payload);
     sheet.appendRow([
       String(payload.name || ""),
       String(payload.service || ""),
@@ -496,31 +260,23 @@ function book_(payload) {
     ]);
     sheet.getRange(sheet.getLastRow(), 4, 1, 2).setNumberFormat("@");
 
-    return {
-      ok: true,
-      meet_link: meetLink,
-      booked_at: bookedAt,
-    };
+    return { ok: true, meet_link: meetLink, booked_at: bookedAt };
   } finally {
     lock.releaseLock();
   }
 }
 
-function createMeetLink_(payload) {
-  const startIso = payload.start_iso;
-  const endIso = payload.end_iso;
-  const title = "Eat Rrite appointment – " + (payload.name || "Client");
-
-  const event = Calendar.Events.insert(
+function createMeet_(payload) {
+  var event = Calendar.Events.insert(
     {
-      summary: title,
+      summary: "Eat Rrite appointment – " + (payload.name || "Client"),
       description: [
         "Service: " + (payload.service || ""),
         "Phone: " + (payload.phone || ""),
         "Payment ID: " + (payload.payment_id || ""),
       ].join("\n"),
-      start: { dateTime: startIso, timeZone: "Asia/Kolkata" },
-      end: { dateTime: endIso, timeZone: "Asia/Kolkata" },
+      start: { dateTime: payload.start_iso, timeZone: "Asia/Kolkata" },
+      end: { dateTime: payload.end_iso, timeZone: "Asia/Kolkata" },
       conferenceData: {
         createRequest: {
           requestId: Utilities.getUuid(),
@@ -529,137 +285,165 @@ function createMeetLink_(payload) {
       },
     },
     "primary",
-    { conferenceDataVersion: 1 },
+    { conferenceDataVersion: 1 }
   );
 
-  if (event.hangoutLink) {
-    return event.hangoutLink;
-  }
+  if (event.hangoutLink) return event.hangoutLink;
 
-  if (event.conferenceData && event.conferenceData.entryPoints) {
-    const video = event.conferenceData.entryPoints.filter(function (entry) {
-      return entry.entryPointType === "video" && entry.uri;
-    })[0];
-    if (video) {
-      return video.uri;
+  var points =
+    event.conferenceData && event.conferenceData.entryPoints
+      ? event.conferenceData.entryPoints
+      : [];
+  for (var i = 0; i < points.length; i++) {
+    if (points[i].entryPointType === "video" && points[i].uri) {
+      return points[i].uri;
     }
   }
 
-  throw new Error(
-    "Google Meet link could not be created. Enable Calendar API in Apps Script.",
-  );
+  throw new Error("Google Meet link could not be created.");
 }
 
-function normalizeDate_(value) {
-  if (!value && value !== 0) {
-    return "";
-  }
+/* ---------- cancel ---------- */
 
-  if (
-    Object.prototype.toString.call(value) === "[object Date]" &&
-    !isNaN(value)
-  ) {
-    return Utilities.formatDate(value, "Asia/Kolkata", "yyyy-MM-dd");
-  }
+function cancel_(payload) {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    var date = toDate_(payload.date);
+    var time = toTime_(payload.time);
+    var phone = String(payload.phone || "").trim();
+    var name = String(payload.name || "").trim();
+    if (!date || !time) {
+      throw new Error("Appointment date and time are required.");
+    }
 
-  const text = String(value).trim();
-  const iso = text.match(/^(\d{4}-\d{2}-\d{2})/);
-  if (iso) {
-    return iso[1];
-  }
+    var sheet = appointmentsSheet_(payload);
+    var rows = dataRows_(sheet);
+    var foundRow = 0;
+    var meetLink = "";
 
-  const parsed = new Date(text);
-  if (!isNaN(parsed.getTime())) {
-    return Utilities.formatDate(parsed, "Asia/Kolkata", "yyyy-MM-dd");
-  }
+    for (var i = 0; i < rows.length; i++) {
+      if (toDate_(rows[i][3]) !== date || toTime_(rows[i][4]) !== time) {
+        continue;
+      }
+      var rowPhone = String(rows[i][2] || "").trim();
+      var rowName = String(rows[i][0] || "").trim();
+      if (phone && rowPhone !== phone) continue;
+      if (name && rowName !== name) continue;
+      foundRow = i + 2;
+      meetLink = String(rows[i][5] || "").trim();
+      break;
+    }
 
-  return "";
+    if (!foundRow) {
+      throw new Error("Booking not found.");
+    }
+
+    sheet.deleteRow(foundRow);
+    tryDeleteMeet_(meetLink, date, time);
+    return { ok: true, date: date, time: time, cancelled: true };
+  } finally {
+    lock.releaseLock();
+  }
 }
 
-function formatClock_(value) {
-  if (typeof value === "number" && isFinite(value)) {
-    const minutes = Math.round((value % 1) * 24 * 60);
-    const hour = Math.floor(minutes / 60) % 24;
-    const minute = minutes % 60;
-    return pad_(hour) + ":" + pad_(minute);
+function tryDeleteMeet_(meetLink, date, time) {
+  try {
+    var events = Calendar.Events.list("primary", {
+      timeMin: new Date(date + "T00:00:00+05:30").toISOString(),
+      timeMax: new Date(date + "T23:59:59+05:30").toISOString(),
+      singleEvents: true,
+      maxResults: 50,
+    });
+    var items = events.items || [];
+    for (var i = 0; i < items.length; i++) {
+      var event = items[i];
+      var link = event.hangoutLink || "";
+      var start =
+        event.start && event.start.dateTime ? event.start.dateTime : "";
+      if ((meetLink && link === meetLink) || (time && start.indexOf("T" + time) !== -1)) {
+        Calendar.Events.remove("primary", event.id);
+        return;
+      }
+    }
+  } catch (error) {
+    // Sheet already updated; calendar cleanup is best-effort.
   }
-  return normalizeTime_(value);
 }
 
-function normalizeTime_(value) {
-  if (!value && value !== 0) {
-    return "";
-  }
+/* ---------- helpers ---------- */
 
-  if (
-    Object.prototype.toString.call(value) === "[object Date]" &&
-    !isNaN(value)
-  ) {
-    return Utilities.formatDate(value, "Asia/Kolkata", "HH:mm");
-  }
-
-  const text = String(value).trim();
-  const match24 = text.match(/^([01]?\d|2[0-3]):([0-5]\d)/);
-  if (match24 && !/am|pm/i.test(text)) {
-    return pad_(match24[1]) + ":" + match24[2];
-  }
-
-  const match12 = text.match(/^(\d{1,2}):([0-5]\d)\s*([AaPp][Mm])/);
-  if (match12) {
-    let hour = parseInt(match12[1], 10);
-    const minute = match12[2];
-    const meridiem = match12[3].toUpperCase();
-    if (meridiem === "PM" && hour < 12) hour += 12;
-    if (meridiem === "AM" && hour === 12) hour = 0;
-    return pad_(hour) + ":" + minute;
-  }
-
-  return "";
-}
-
-function occupanciesOverlap_(timeA, timeB, blockMinutes) {
-  const startA = toMinutes_(timeA);
-  const startB = toMinutes_(timeB);
-  if (startA === null || startB === null) {
-    return timeA === timeB;
-  }
-  return startA < startB + blockMinutes && startB < startA + blockMinutes;
+function blocksOverlap_(timeA, timeB, blockMinutes) {
+  var a = toMinutes_(timeA);
+  var b = toMinutes_(timeB);
+  if (a === null || b === null) return timeA === timeB;
+  return a < b + blockMinutes && b < a + blockMinutes;
 }
 
 function toMinutes_(value) {
-  const time = normalizeTime_(value);
-  if (!time) {
-    return null;
-  }
-  const parts = time.split(":");
-  const hour = parseInt(parts[0], 10);
-  const minute = parseInt(parts[1], 10);
-  if (isNaN(hour) || isNaN(minute)) {
-    return null;
-  }
-  return hour * 60 + minute;
+  var time = toTime_(value);
+  if (!time) return null;
+  var parts = time.split(":");
+  return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
 }
 
-function formatDateTime_(value) {
-  if (!value && value !== 0) {
-    return "";
+function toDate_(value) {
+  if (value === "" || value == null) return "";
+  if (Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value)) {
+    return Utilities.formatDate(value, "Asia/Kolkata", "yyyy-MM-dd");
   }
-  if (
-    Object.prototype.toString.call(value) === "[object Date]" &&
-    !isNaN(value)
-  ) {
+  var text = String(value).trim();
+  var iso = text.match(/^(\d{4}-\d{2}-\d{2})/);
+  return iso ? iso[1] : "";
+}
+
+function toTime_(value) {
+  if (value === "" || value == null) return "";
+  if (Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value)) {
+    return Utilities.formatDate(value, "Asia/Kolkata", "HH:mm");
+  }
+  if (typeof value === "number" && isFinite(value)) {
+    var mins = Math.round((value % 1) * 24 * 60);
+    return pad_(Math.floor(mins / 60) % 24) + ":" + pad_(mins % 60);
+  }
+  var text = String(value).trim();
+  var m24 = text.match(/^([01]?\d|2[0-3]):([0-5]\d)/);
+  if (m24 && !/am|pm/i.test(text)) {
+    return pad_(m24[1]) + ":" + m24[2];
+  }
+  var m12 = text.match(/^(\d{1,2}):([0-5]\d)\s*([AaPp][Mm])/);
+  if (m12) {
+    var hour = parseInt(m12[1], 10);
+    if (m12[3].toUpperCase() === "PM" && hour < 12) hour += 12;
+    if (m12[3].toUpperCase() === "AM" && hour === 12) hour = 0;
+    return pad_(hour) + ":" + m12[2];
+  }
+  return "";
+}
+
+function toDateTime_(value) {
+  if (value === "" || value == null) return "";
+  if (Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value)) {
     return Utilities.formatDate(value, "Asia/Kolkata", "yyyy-MM-dd HH:mm:ss");
   }
   return String(value).trim();
 }
 
+function isTrue_(value) {
+  if (value === true || value === 1) return true;
+  var text = String(value || "")
+    .trim()
+    .toLowerCase();
+  return text === "true" || text === "yes" || text === "1" || text === "hidden";
+}
+
 function pad_(value) {
-  const text = String(value);
+  var text = String(value);
   return text.length === 1 ? "0" + text : text;
 }
 
 function json_(object) {
   return ContentService.createTextOutput(JSON.stringify(object)).setMimeType(
-    ContentService.MimeType.JSON,
+    ContentService.MimeType.JSON
   );
 }

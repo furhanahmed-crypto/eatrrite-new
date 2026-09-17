@@ -12,7 +12,7 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <SiteShell current="contact">
-      <PageBanner title="Contact Us" pill="Contact" />
+      <PageBanner title="Contact Us" />
       <ContactPanel data={contactContent[0]} />
     </SiteShell>
   );

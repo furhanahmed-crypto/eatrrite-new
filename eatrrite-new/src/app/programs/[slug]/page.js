@@ -25,7 +25,7 @@ export default async function ProgramDetailPage({ params }) {
 
   return (
     <SiteShell current="programs">
-      <PageBanner title={program.short} pill="Program" />
+      <PageBanner title={program.short} crumb="Program" />
       <section className="py-16">
         <div className="container-er grid items-center gap-10 lg:grid-cols-2">
           <div className="space-y-4">

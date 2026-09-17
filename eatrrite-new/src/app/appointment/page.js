@@ -13,7 +13,7 @@ export const metadata = {
 export default function AppointmentPage() {
   return (
     <SiteShell current="appointment">
-      <PageBanner title="Book Appointment" pill="Appointment" />
+      <PageBanner title="Book Appointment" />
       <section className="bg-cream py-16 md:py-24">
         <div className="container-er grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="space-y-4">

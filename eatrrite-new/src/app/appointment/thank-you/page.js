@@ -13,10 +13,9 @@ const MEET_ERROR =
   "A technical issue occurred while preparing your Meet link. Your payment was received — please retry or contact us and we will follow up shortly.";
 
 function readVerifiedBooking() {
-  if (typeof window === "undefined") return null;
-  const raw = sessionStorage.getItem("er_verified_booking");
-  if (!raw) return null;
   try {
+    const raw = sessionStorage.getItem("er_verified_booking");
+    if (!raw) return null;
     return JSON.parse(raw);
   } catch {
     return null;
@@ -56,24 +55,34 @@ async function pollFinalize(paymentId) {
 }
 
 export default function ThankYouPage() {
-  const [payload] = useState(readVerifiedBooking);
+  const [hydrated, setHydrated] = useState(false);
+  const [payload, setPayload] = useState(null);
+  const [meetLink, setMeetLink] = useState("");
+  const [meetPending, setMeetPending] = useState(false);
+  const [meetError, setMeetError] = useState("");
+
+  useEffect(() => {
+    const stored = readVerifiedBooking();
+    const verified = stored?.verified || null;
+    const paymentId =
+      stored?.payment?.razorpay_payment_id || verified?.payment_id || "";
+    const readyLink =
+      verified?.meet_link_ready && verified?.meet_link ? verified.meet_link : "";
+
+    setPayload(stored);
+    setMeetLink(readyLink);
+    setMeetPending(Boolean(verified && paymentId && !readyLink));
+    setMeetError(verified && !paymentId ? MEET_ERROR : "");
+    setHydrated(true);
+  }, []);
+
   const verified = payload?.verified || null;
   const paymentId =
     payload?.payment?.razorpay_payment_id || verified?.payment_id || "";
-  const readyLink =
-    verified?.meet_link_ready && verified?.meet_link ? verified.meet_link : "";
   const booking = toBookingView(verified);
 
-  const [meetLink, setMeetLink] = useState(readyLink);
-  const [meetPending, setMeetPending] = useState(
-    Boolean(verified && paymentId && !readyLink)
-  );
-  const [meetError, setMeetError] = useState(
-    verified && !paymentId ? MEET_ERROR : ""
-  );
-
   useEffect(() => {
-    if (!verified || meetLink || !paymentId) return;
+    if (!hydrated || !verified || meetLink || !paymentId) return;
 
     let cancelled = false;
     pollFinalize(paymentId)
@@ -93,19 +102,25 @@ export default function ThankYouPage() {
     return () => {
       cancelled = true;
     };
-  }, [verified, paymentId, meetLink]);
+  }, [hydrated, verified, paymentId, meetLink]);
 
   return (
     <SiteShell current="appointment">
-      <PageBanner title="Appointment Confirmed" pill="Appointment" />
+      <PageBanner title="Appointment Confirmed" crumb="Thank you" />
       <section className="bg-cream py-16 md:py-24">
         <div className="container-er max-w-3xl">
-          <ThankYouStatus
-            booking={booking}
-            meetLink={meetLink}
-            meetPending={meetPending}
-            meetError={meetError}
-          />
+          {!hydrated ? (
+            <div className="rounded-[20px] border border-border-soft bg-surface px-6 py-16 text-center shadow-er">
+              <p className="text-soft">Loading your confirmation…</p>
+            </div>
+          ) : (
+            <ThankYouStatus
+              booking={booking}
+              meetLink={meetLink}
+              meetPending={meetPending}
+              meetError={meetError}
+            />
+          )}
         </div>
       </section>
     </SiteShell>
