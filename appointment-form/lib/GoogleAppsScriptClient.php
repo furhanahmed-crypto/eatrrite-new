@@ -232,7 +232,7 @@ final class GoogleAppsScriptClient
         $raw = curl_exec($ch);
         $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
-        curl_close($ch);
+        unset($ch);
 
         if ($raw === false) {
             throw new RuntimeException('Google Sheet request failed: ' . $error);
