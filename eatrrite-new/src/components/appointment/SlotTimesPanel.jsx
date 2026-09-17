@@ -14,6 +14,7 @@ export function SlotTimesPanel({
   onSelectTime,
   onCancel,
   onConfirm,
+  confirming = false,
 }) {
   return (
     <div className="space-y-4">
@@ -34,9 +35,10 @@ export function SlotTimesPanel({
             <button
               key={item}
               type="button"
+              disabled={confirming}
               onClick={() => onSelectTime(item)}
               className={cn(
-                "h-[42px] cursor-pointer rounded-[10px] border text-[13px] font-semibold transition",
+                "h-[42px] cursor-pointer rounded-[10px] border text-[13px] font-semibold transition disabled:cursor-not-allowed disabled:opacity-60",
                 time === item
                   ? "border-brand bg-brand text-white"
                   : "border-[#e3ebe0] bg-white text-brand hover:border-brand hover:bg-mint dark:bg-surface"
@@ -48,16 +50,16 @@ export function SlotTimesPanel({
         </div>
       </div>
       <div className="flex items-center justify-end gap-2 pt-1">
-        <Button type="button" variant="ghost" onClick={onCancel}>
+        <Button type="button" variant="ghost" onClick={onCancel} disabled={confirming}>
           Cancel
         </Button>
         <Button
           type="button"
           onClick={onConfirm}
-          disabled={!date || !time}
+          disabled={!date || !time || confirming}
           className="min-w-[140px] rounded-[10px] bg-brand hover:bg-brand-dark"
         >
-          Confirm slot
+          {confirming ? "Holding…" : "Confirm slot"}
         </Button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { blockMinutes, scheduleConfig } from "@/config/schedule";
 import { availableTimesForDate } from "@/lib/schedule-slots";
 import { listAppointments, listDisabledSlots } from "@/lib/apps-script";
-import { readHolds } from "@/lib/storage";
+import { activeHolds } from "@/lib/holds";
 
 function pad(n) {
   return String(n).padStart(2, "0");
@@ -19,14 +19,12 @@ function timesOnDate(rows, isoDate) {
   return times;
 }
 
-export async function buildAvailability() {
+export async function buildAvailability(ignoreHoldId = "") {
   const booked = await listAppointments().catch(() => []);
   const disabled = await listDisabledSlots().catch(() => []);
-  const holds = await readHolds();
-  const now = Date.now();
-  const activeHolds = holds.filter((row) => row.expiresAt > now);
+  const holds = await activeHolds(ignoreHoldId);
 
-  const occupiedRows = [...booked, ...activeHolds];
+  const occupiedRows = [...booked, ...holds];
   const days = {};
   const from = new Date();
   from.setHours(0, 0, 0, 0);

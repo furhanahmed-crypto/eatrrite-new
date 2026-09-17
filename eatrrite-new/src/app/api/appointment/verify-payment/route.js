@@ -27,9 +27,6 @@ export async function POST(request) {
       });
     }
 
-    const holds = await readHolds();
-    await saveHolds(holds.filter((row) => row.orderId !== orderId));
-
     const record = {
       payment_id: paymentId,
       order_id: orderId,
@@ -43,6 +40,17 @@ export async function POST(request) {
       meet_link: "",
       verified_at: Date.now(),
     };
+
+    const holds = await readHolds();
+    const now = Date.now();
+    await saveHolds(
+      holds.filter(
+        (row) =>
+          row.expiresAt > now &&
+          row.orderId !== orderId &&
+          !(row.date === record.date && row.time === record.time)
+      )
+    );
 
     bookings.push(record);
     await saveBookings(bookings);

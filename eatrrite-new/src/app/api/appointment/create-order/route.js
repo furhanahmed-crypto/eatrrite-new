@@ -1,9 +1,8 @@
-import { scheduleConfig } from "@/config/schedule";
 import { createRazorpayOrder } from "@/lib/razorpay";
-import { buildAvailability } from "@/lib/slots";
-import { readHolds, saveHolds } from "@/lib/storage";
+import { attachOrderHold } from "@/lib/holds";
 import { jsonFail, jsonOk } from "@/lib/api-response";
 import { getServerEnv } from "@/config/env";
+import { randomUUID } from "crypto";
 
 export async function POST(request) {
   try {
@@ -14,14 +13,10 @@ export async function POST(request) {
     const service = String(body.programname || "").trim();
     const date = String(body.date || "").trim();
     const time = String(body.time || "").trim();
+    const holdId = String(body.holdId || "").trim() || randomUUID();
 
     if (!name || !email || !phone || !service || !date || !time) {
       return jsonFail(new Error("Please fill all fields."), 400);
-    }
-
-    const availability = await buildAvailability();
-    if (!(availability.days[date] || []).includes(time)) {
-      return jsonFail(new Error("That slot is no longer available."), 409);
     }
 
     const order = await createRazorpayOrder({
@@ -33,10 +28,7 @@ export async function POST(request) {
       time,
     });
 
-    const holds = await readHolds();
-    const expiresAt = Date.now() + scheduleConfig.holdMinutes * 60 * 1000;
-    holds.push({ date, time, orderId: order.id, expiresAt });
-    await saveHolds(holds);
+    await attachOrderHold(date, time, holdId, order.id);
 
     const env = getServerEnv();
     return jsonOk({
@@ -44,9 +36,12 @@ export async function POST(request) {
       amount: order.amount,
       currency: order.currency,
       key_id: env.razorpayKeyId,
+      holdId,
     });
   } catch (error) {
-    const status = /slot/i.test(error.message || "") ? 409 : 500;
+    const status = /no longer available|slot/i.test(error.message || "")
+      ? 409
+      : 500;
     return jsonFail(error, status);
   }
 }

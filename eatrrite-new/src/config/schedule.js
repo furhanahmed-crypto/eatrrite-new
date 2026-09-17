@@ -8,7 +8,7 @@ export const scheduleConfig = {
   // How far ahead customers can book
   bookingDaysAhead: 30,
 
-  // How long a unpaid checkout holds a slot (minutes)
+  // How long a selected (or unpaid) slot stays held for others
   holdMinutes: 15,
 
   // Customer-facing meeting length

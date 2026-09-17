@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Script from "next/script";
 import { siteConfig } from "@/config/site";
-import { publicHoursNote } from "@/config/schedule";
+import { publicHoursNote, scheduleConfig } from "@/config/schedule";
 import { Button } from "@/shared/ui/button";
 import { SlotPickerModal } from "@/components/appointment/SlotPickerModal";
 import { AppointmentFields } from "@/components/appointment/AppointmentFields";
@@ -57,7 +57,7 @@ export function AppointmentForm() {
         },
         onDismiss() {
           setLoading(false);
-          setAlert("Payment was cancelled. Your slot is held for a few minutes.");
+          setAlert("Payment was cancelled. Your slot stays held for a few minutes.");
         },
       });
     } catch (error) {
@@ -83,8 +83,9 @@ export function AppointmentForm() {
           onOpenSlots={() => setOpenSlots(true)}
         />
         <p className="m-0 text-[13px] leading-snug text-body">
-          A ₹{siteConfig.amountRupees} confirmation fee holds your consultation.
-          Hours (IST): {publicHoursNote()}.
+          Confirming a slot holds it for {scheduleConfig.holdMinutes} minutes.
+          A ₹{siteConfig.amountRupees} fee completes the booking. Hours (IST):{" "}
+          {publicHoursNote()}.
         </p>
         <Button
           type="submit"

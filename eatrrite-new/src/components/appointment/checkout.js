@@ -2,11 +2,22 @@
 
 import { siteConfig } from "@/config/site";
 
-export async function createOrderAndPay({ form, slot, onVerified, onError, onDismiss }) {
+export async function createOrderAndPay({
+  form,
+  slot,
+  onVerified,
+  onError,
+  onDismiss,
+}) {
   const orderRes = await fetch("/api/appointment/create-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...form, date: slot.date, time: slot.time }),
+    body: JSON.stringify({
+      ...form,
+      date: slot.date,
+      time: slot.time,
+      holdId: slot.holdId || "",
+    }),
   });
   const order = await orderRes.json();
   if (!order.ok) throw new Error(order.error || "Could not create order");
