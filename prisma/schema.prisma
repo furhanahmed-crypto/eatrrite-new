@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Booking {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @default("")
+  phone     String   @default("")
+  service   String   @default("")
+  date      String
+  time      String
+  meetLink  String   @default("") @map("meet_link")
+  paymentId String   @default("") @map("payment_id")
+  orderId   String   @default("") @map("order_id")
+  status    String   @default("completed")
+  bookedAt  DateTime @default(now()) @map("booked_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([date, time])
+  @@index([date])
+  @@index([paymentId])
+  @@map("bookings")
+}
+
+/// Temporary slot holds while selecting / paying.
+model Hold {
+  id        String   @id @default(cuid())
+  holdId    String   @unique @map("hold_id")
+  date      String
+  time      String
+  orderId   String   @default("") @map("order_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([date, time])
+  @@index([expiresAt])
+  @@map("holds")
+}
+
+/// Admin-hidden slot starts.
+model DisabledSlot {
+  id        String   @id @default(cuid())
+  date      String
+  time      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([date, time])
+  @@map("disabled_slots")
+}
