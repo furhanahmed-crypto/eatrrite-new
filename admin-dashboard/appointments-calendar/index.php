@@ -6,13 +6,14 @@ require_once dirname(__DIR__) . '/bootstrap.php';
 
 admin_dashboard_require();
 
-$config = appointment_runtime_config();
+$requestedView = (string) ($_GET['view'] ?? '');
+$view = in_array($requestedView, ['month', 'day'], true) ? $requestedView : 'month';
+
+// Schedule comes from PHP config. Only day view needs Google disabled-slots for hide/show UI.
+$config = appointment_runtime_config($view === 'day');
 $slots = new SlotService($config);
 $sheet = new GoogleAppsScriptClient($config);
 $feed = new AppointmentFeed($slots, $sheet);
-
-$requestedView = (string) ($_GET['view'] ?? '');
-$view = in_array($requestedView, ['month', 'day'], true) ? $requestedView : 'month';
 
 $today = $slots->today()->setTime(0, 0, 0);
 $dateParam = trim((string) ($_GET['date'] ?? ''));

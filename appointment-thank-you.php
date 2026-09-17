@@ -31,7 +31,7 @@ include __DIR__ . '/sections/page-banner.php';
                 data-api="<?php echo htmlspecialchars($apiBase, ENT_QUOTES, 'UTF-8'); ?>"
                 data-csrf="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"
             >
-                <?php include __DIR__ . '/appointment-form/success-panel.php'; ?>
+                <?php include __DIR__ . '/appointment-form/views/success-panel.php'; ?>
             </div>
         </div>
 

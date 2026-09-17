@@ -7,36 +7,51 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/lib/Http.php';
-require_once __DIR__ . '/lib/SlotService.php';
-require_once __DIR__ . '/lib/HoldService.php';
-require_once __DIR__ . '/lib/RazorpayService.php';
-require_once __DIR__ . '/lib/GoogleAppsScriptClient.php';
-require_once __DIR__ . '/lib/SlotTimesStore.php';
-require_once __DIR__ . '/lib/DisabledSlotsStore.php';
-require_once __DIR__ . '/lib/BookingStore.php';
-require_once __DIR__ . '/lib/AppointmentService.php';
+require_once __DIR__ . '/src/Http.php';
+require_once __DIR__ . '/src/SlotService.php';
+require_once __DIR__ . '/src/HoldService.php';
+require_once __DIR__ . '/src/RazorpayService.php';
+require_once __DIR__ . '/src/GoogleAppsScriptClient.php';
+require_once __DIR__ . '/src/DisabledSlotsStore.php';
+require_once __DIR__ . '/src/BookingStore.php';
+require_once __DIR__ . '/src/AppointmentService.php';
 
 date_default_timezone_set(appointment_config()['timezone']);
 
-function appointment_runtime_config(): array
+/**
+ * Runtime config.
+ * Schedule is always local. Disabled slots load from Apps Script only when needed.
+ */
+function appointment_runtime_config(bool $withDisabledSlots = false): array
 {
-    static $runtime = null;
-    if ($runtime === null) {
+    static $local = null;
+    static $withDisabled = null;
+
+    if ($local === null) {
         $config = appointment_config();
-        $config['slot_times'] = (new SlotTimesStore($config))->load();
-        $config['disabled_slots'] = (new DisabledSlotsStore($config))->all();
-        $runtime = $config;
+        $config['slot_times'] = appointment_slot_times($config);
+        $config['disabled_slots'] = [];
+        $local = $config;
     }
 
-    return $runtime;
+    if (!$withDisabledSlots) {
+        return $local;
+    }
+
+    if ($withDisabled === null) {
+        $config = $local;
+        $config['disabled_slots'] = (new DisabledSlotsStore($config))->all();
+        $withDisabled = $config;
+    }
+
+    return $withDisabled;
 }
 
 function appointment_service(): AppointmentService
 {
     static $service = null;
     if ($service === null) {
-        $service = new AppointmentService(appointment_runtime_config());
+        $service = new AppointmentService(appointment_runtime_config(true));
     }
 
     return $service;

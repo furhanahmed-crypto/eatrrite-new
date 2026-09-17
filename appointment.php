@@ -26,7 +26,7 @@ include __DIR__ . '/sections/page-banner.php';
         </div>
         <div class="appointment-form-card">
             <h3>Make Appointment</h3>
-            <?php include __DIR__ . '/appointment-form/form.php'; ?>
+            <?php include __DIR__ . '/appointment-form/views/form.php'; ?>
         </div>
     </div>
 </section>

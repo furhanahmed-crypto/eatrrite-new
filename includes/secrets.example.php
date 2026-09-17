@@ -13,7 +13,6 @@ return [
     'google_sheet_id' => '',
     'google_sheet_name' => 'eatrrite-website-appointments',
     'google_sheet_tab' => 'Sheet1',
-    'google_slot_times_tab' => 'slot-times-config',
     'google_disabled_slots_tab' => 'disabled-slots',
     'apps_script_url' => '',
     'apps_script_secret' => '',
