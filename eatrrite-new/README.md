@@ -18,7 +18,6 @@ cp .env.example .env.local
 # Fill Razorpay, admin password, mail, Apps Script URL/secret
 bunx neon auth
 bunx neon link --project-id sparkling-king-56603914 --branch production -y
-bunx neon env pull --file .env
 bunx neon env pull --file .env.local
 bun run db:push
 bun run dev
