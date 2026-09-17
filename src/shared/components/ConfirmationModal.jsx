@@ -54,7 +54,7 @@ export function ConfirmationModal({
             disabled={loading}
           >
             {loading ? <Loader2 className="animate-spin" aria-hidden /> : null}
-            {confirmLabel}
+            {loading ? "Please wait…" : confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

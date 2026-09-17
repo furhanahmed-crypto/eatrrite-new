@@ -13,7 +13,7 @@ export default async function AdminAppointmentsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-cream px-4 py-10">
+    <main className="min-h-screen overflow-x-hidden bg-cream py-6 min-[400px]:py-10">
       <div className="container-er max-w-5xl">
         <AdminCalendar />
       </div>

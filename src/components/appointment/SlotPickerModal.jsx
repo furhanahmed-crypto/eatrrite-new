@@ -103,7 +103,7 @@ export function SlotPickerModal({ open, onOpenChange, onSelect, selected }) {
       });
       const data = await res.json();
       if (!data.ok) {
-        throw new Error(data.error || "Could not hold this slot.");
+        throw new Error(data.error || "That slot is no longer available.");
       }
 
       writeHoldId(data.holdId);
@@ -116,7 +116,7 @@ export function SlotPickerModal({ open, onOpenChange, onSelect, selected }) {
       onOpenChange(false);
     } catch (err) {
       console.error("[appointment] hold", err);
-      setError(err.message || "That slot is no longer available.");
+      setError("That slot is no longer available. Please pick another.");
       try {
         const holdId = readHoldId();
         const res = await fetch(
@@ -137,8 +137,8 @@ export function SlotPickerModal({ open, onOpenChange, onSelect, selected }) {
       open={open}
       onOpenChange={onOpenChange}
       title="Date and time"
-      description={`Choose a slot · held for ${scheduleConfig.holdMinutes} min after confirm · IST`}
-      className="max-w-[560px] sm:max-w-[560px]"
+      description={`Pick a time · stays reserved for ${scheduleConfig.holdMinutes} min after you confirm · IST`}
+      className="w-[calc(100vw-1.25rem)] max-w-[560px] sm:w-full sm:max-w-[560px]"
     >
       {loading ? (
         <div className="flex min-h-48 flex-col items-center justify-center gap-3 py-8 text-soft">

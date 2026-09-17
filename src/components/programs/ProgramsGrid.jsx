@@ -21,8 +21,8 @@ export function ProgramsGrid({ data }) {
               <div className="relative aspect-[16/10]">
                 <Image src={program.image} alt={program.short} fill className="object-cover" />
               </div>
-              <div className="space-y-3 p-6">
-                <h3 className="text-2xl">{program.short}</h3>
+              <div className="space-y-3 p-4 min-[400px]:p-6">
+                <h3 className="text-xl min-[400px]:text-2xl">{program.short}</h3>
                 <p>{program.summary}</p>
                 <Link
                   href={`/programs/${program.slug}`}

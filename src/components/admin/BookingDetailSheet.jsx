@@ -54,7 +54,7 @@ export function BookingDetailSheet({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="sm:max-w-md">
+        <SheetContent className="w-full max-w-[100vw] sm:max-w-md">
           <SheetHeader>
             <SheetTitle>{current?.name || "Client"}</SheetTitle>
             <SheetDescription>
@@ -117,7 +117,7 @@ export function BookingDetailSheet({
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title="Cancel this booking?"
-        description="This removes the appointment from the sheet and frees the slot. The Meet event is cleared when possible."
+        description="This removes the appointment and frees the slot. The Meet event is cleared when possible."
         confirmLabel="Cancel booking"
         cancelLabel="Keep booking"
         confirmVariant="destructive"

@@ -33,11 +33,11 @@ export function AdminLoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-sm space-y-4 rounded-3xl border border-border-soft bg-surface p-8 shadow-sm">
+    <form onSubmit={handleSubmit} className="mx-auto w-full max-w-sm space-y-4 rounded-3xl border border-border-soft bg-surface p-5 shadow-sm min-[400px]:p-8">
       <p className="text-xs uppercase tracking-[0.2em] text-brand">
         Eat Rrite
       </p>
-      <h1 className="font-heading text-3xl text-ink">
+      <h1 className="font-heading text-[clamp(1.5rem,7vw,1.875rem)] text-ink">
         Consultant calendar
       </h1>
       <p className="text-sm text-soft">

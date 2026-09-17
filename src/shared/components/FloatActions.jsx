@@ -17,13 +17,13 @@ function WhatsAppIcon({ className }) {
 export function FloatActions() {
   return (
     <div
-      className="fixed right-4 bottom-4 z-40 flex flex-col gap-3 md:right-5 md:bottom-5"
+      className="fixed right-3 bottom-3 z-40 flex flex-col gap-2.5 min-[400px]:right-4 min-[400px]:bottom-4 min-[400px]:gap-3 md:right-5 md:bottom-5"
       aria-label="Quick contact"
     >
       <a
         href={siteConfig.phoneHref}
         aria-label={`Call ${siteConfig.phone}`}
-        className="grid size-14 place-items-center rounded-full bg-gold text-ink shadow-[0_12px_28px_rgba(1,78,78,0.18)] transition hover:-translate-y-0.5"
+        className="grid size-12 place-items-center rounded-full bg-gold text-ink shadow-[0_12px_28px_rgba(1,78,78,0.18)] transition hover:-translate-y-0.5 min-[400px]:size-14"
       >
         <Phone className="size-5" />
       </a>
@@ -32,7 +32,7 @@ export function FloatActions() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="grid size-14 place-items-center rounded-full bg-[#25d366] text-white shadow-[0_12px_28px_rgba(1,78,78,0.18)] transition hover:-translate-y-0.5"
+        className="grid size-12 place-items-center rounded-full bg-[#25d366] text-white shadow-[0_12px_28px_rgba(1,78,78,0.18)] transition hover:-translate-y-0.5 min-[400px]:size-14"
       >
         <WhatsAppIcon className="size-6" />
       </a>

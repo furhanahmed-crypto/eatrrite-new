@@ -24,11 +24,11 @@ export function ThankYouStatus({
 
   return (
     <div className="space-y-8">
-      <div className="rounded-[20px] border border-border-soft bg-surface px-6 py-10 text-center shadow-er">
+      <div className="rounded-[20px] border border-border-soft bg-surface px-4 py-8 text-center shadow-er min-[400px]:px-6 min-[400px]:py-10">
         <div className="mx-auto mb-4 grid size-14 place-items-center rounded-full bg-brand text-2xl text-white">
           ✓
         </div>
-        <h2 className="font-heading text-2xl text-brand md:text-[28px]">
+        <h2 className="font-heading text-[clamp(1.35rem,6vw,1.75rem)] text-brand md:text-[28px]">
           Appointment confirmed
         </h2>
         <p className="mx-auto mt-3 max-w-lg text-body">
@@ -70,7 +70,9 @@ export function ThankYouStatus({
       </div>
 
       <div className="space-y-4">
-        <h2 className="font-heading text-3xl text-ink">What happens next?</h2>
+        <h2 className="font-heading text-[clamp(1.5rem,7vw,1.875rem)] text-ink">
+          What happens next?
+        </h2>
         <p className="text-body">
           Your payment has been received and your consultation slot is reserved
           with Eat Rrite. We are creating your Google Meet link and adding your

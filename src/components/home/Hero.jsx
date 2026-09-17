@@ -62,13 +62,13 @@ export function Hero({ data }) {
           >
             <Link
               href={data.primaryCta.href}
-              className="inline-flex h-12 items-center rounded-full bg-gold px-7 font-heading text-base font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-[#f0c96a]"
+              className="inline-flex h-11 items-center rounded-full bg-gold px-5 font-heading text-[15px] font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-[#f0c96a] min-[400px]:h-12 min-[400px]:px-7 min-[400px]:text-base"
             >
               {data.primaryCta.label}
             </Link>
             <Link
               href={data.secondaryCta.href}
-              className="inline-flex h-12 items-center rounded-full border border-white/30 px-7 font-heading text-base font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-brand"
+              className="inline-flex h-11 items-center rounded-full border border-white/30 px-5 font-heading text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-brand min-[400px]:h-12 min-[400px]:px-7 min-[400px]:text-base"
             >
               {data.secondaryCta.label}
             </Link>

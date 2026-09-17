@@ -14,7 +14,7 @@ export function PricingGrid({ data }) {
           {data.packages.map((item) => (
             <article
               key={item.name}
-              className={`rounded-[24px] border bg-surface p-8 text-center ${
+              className={`rounded-[24px] border bg-surface p-5 text-center min-[400px]:p-8 ${
                 item.featured
                   ? "border-gold shadow-er"
                   : "border-border-soft"

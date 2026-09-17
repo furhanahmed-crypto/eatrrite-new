@@ -28,7 +28,9 @@ export function Modal({
             {title}
           </DialogTitle>
           {description ? (
-            <DialogDescription>{description}</DialogDescription>
+            <DialogDescription className="text-pretty">
+              {description}
+            </DialogDescription>
           ) : null}
         </DialogHeader>
         {children}
