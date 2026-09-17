@@ -1,5 +1,6 @@
 import { verifyRazorpaySignature } from "@/lib/razorpay";
-import { readBookings, saveBookings, readHolds, saveHolds } from "@/lib/storage";
+import { createBooking, findBookingByPaymentId } from "@/lib/db/bookings";
+import { clearHoldByOrderOrSlot } from "@/lib/db/holds";
 import { jsonFail, jsonOk } from "@/lib/api-response";
 
 export async function POST(request) {
@@ -14,46 +15,32 @@ export async function POST(request) {
       return jsonFail(new Error("Payment verification failed."), 400);
     }
 
-    const bookings = await readBookings();
-    const existing = bookings.find((row) => row.payment_id === paymentId);
+    const existing = await findBookingByPaymentId(paymentId);
     if (existing) {
       return jsonOk({
-        payment_id: paymentId,
-        order_id: orderId,
-        meet_link_ready: Boolean(existing.meet_link),
-        meet_link: existing.meet_link || "",
         ...existing,
+        meet_link_ready: Boolean(existing.meet_link),
         redirect: "/appointment/thank-you",
       });
     }
 
-    const record = {
-      payment_id: paymentId,
-      order_id: orderId,
-      status: "verified",
+    const date = String(booking.date || "");
+    const time = String(booking.time || "");
+
+    const record = await createBooking({
       name: String(booking.name || ""),
       email: String(booking.email || ""),
       phone: String(booking.phone || ""),
       service: String(booking.service || ""),
-      date: String(booking.date || ""),
-      time: String(booking.time || ""),
-      meet_link: "",
-      verified_at: Date.now(),
-    };
+      date,
+      time,
+      paymentId,
+      orderId,
+      meetLink: "",
+      status: "verified",
+    });
 
-    const holds = await readHolds();
-    const now = Date.now();
-    await saveHolds(
-      holds.filter(
-        (row) =>
-          row.expiresAt > now &&
-          row.orderId !== orderId &&
-          !(row.date === record.date && row.time === record.time)
-      )
-    );
-
-    bookings.push(record);
-    await saveBookings(bookings);
+    await clearHoldByOrderOrSlot({ orderId, date, time });
 
     return jsonOk({
       ...record,

@@ -1,7 +1,7 @@
 /**
- * Eat Rrite — Meet link only (Calendar API).
+ * Eat Rrite (Next.js) — Meet link only (Calendar API).
  *
- * Properties: SCRIPT_SECRET
+ * Properties: SCRIPT_SECRET  (= APPS_SCRIPT_SECRET in .env.local)
  * Services: Google Calendar API
  * Deploy: Web app → Execute as Me → Anyone
  *

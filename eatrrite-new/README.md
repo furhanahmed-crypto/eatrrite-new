@@ -1,54 +1,49 @@
 # Eat Rrite (Next.js)
 
-Next.js 16 rewamp of the Eat Rrite marketing site and appointment booking flow. The PHP site in the parent folder stays untouched; all new work lives in this app.
+Standalone marketing site + appointment booking for Eat Rrite.
 
 ## Stack
 
 - Next.js App Router + React
-- Tailwind CSS 4 + shadcn/ui (`src/shared/ui`)
-- next-themes (light / dark)
-- Razorpay checkout
-- Google Apps Script → Google Sheets + Meet (same deployed script as PHP)
+- Tailwind CSS 4 + shadcn/ui
+- Neon Postgres + Prisma
+- Razorpay
+- Google Apps Script (Meet links only)
 
-## Folders
-
-| Path | Purpose |
-|---|---|
-| `src/app/` | Routes + API |
-| `src/components/{home,about,…}/` | Feature UI |
-| `src/constants/` | Page section content arrays |
-| `src/config/` | Site + schedule + env helpers |
-| `src/shared/` | Shell, modals, shadcn primitives |
-| `src/lib/` | Apps Script, Razorpay, storage, slots |
-| `public/images/` | Static images (mirrors PHP assets) |
-| `storage/` | Local holds/bookings JSON (gitignored) |
-
-## Scripts
+## Setup
 
 ```bash
-npm run dev
-npm run lint
-npm run build
+bun install
+cp .env.example .env.local
+# Fill Razorpay, admin password, mail, Apps Script URL/secret
+bunx neon auth
+bunx neon link --project-id sparkling-king-56603914 --branch production -y
+bunx neon env pull --file .env
+bunx neon env pull --file .env.local
+bun run db:push
+bun run dev
 ```
 
-## Environment
+Deploy Meet script from `scripts/google-apps-script/` (see that folder’s README).
 
-Copy `.env.example` → `.env.local` and fill secrets (Razorpay, Apps Script URL/secret, sheet id/tabs, admin password, mail fields). Never commit `.env.local`.
+## Optional: import old bookings CSV
+
+1. Save a CSV as `prisma/import/bookings.csv`
+2. `bun run db:import-bookings`
 
 ## Booking flow
 
-1. `/appointment` — form + slot Modal (schedule from `src/config/schedule.js`)
-2. `POST /api/appointment/create-order` — Razorpay order + local hold
-3. Client pays → `POST /api/appointment/verify-payment`
-4. `/appointment/thank-you` polls `POST /api/appointment/finalize` → Apps Script `book` (Sheet row + Meet)
-
-## Admin
-
-- `/admin/login` — password from `ADMIN_DASHBOARD_PASSWORD`
-- `/admin/appointments` — month + day views, booking detail Sheet, hide/show slots via Apps Script
+1. Confirm slot → Neon `holds` (15 min)
+2. Pay → Neon `bookings`
+3. Finalize → Apps Script Meet → save `meet_link`
 
 ## Where to edit
 
-- Booking rules + clinic hours: `src/config/schedule.js` (meeting/prep/hold/days-ahead/windows)
-- Home (and other) copy: `src/constants/<page>/…Content.js`
-- Brand tokens: `src/app/globals.css`
+| What | Where |
+|---|---|
+| Hours / slot rules | `src/config/schedule.js` |
+| Site copy / fee | `src/config/site.js`, `src/constants/` |
+| Schema | `prisma/schema.prisma` |
+| DB helpers | `src/lib/db/` |
+| Meet | `src/lib/meet.js`, `scripts/google-apps-script/` |
+| Brand tokens | `src/app/globals.css` |

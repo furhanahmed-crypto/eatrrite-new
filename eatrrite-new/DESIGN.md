@@ -14,42 +14,30 @@
 | `shadow-er` | Soft brand shadow |
 | `font-heading` | Lora |
 
-Brand CSS vars live on `:root` / `.dark` as `--er-*`. `@theme inline` maps them to Tailwind color utilities. Shadcn tokens (`primary`, `muted`, `card`…) stay separate.
+Brand CSS vars live on `:root` / `.dark` as `--er-*`. `@theme inline` maps them to Tailwind color utilities.
 
 ## Typography
 
 - **Headings:** Lora → `--font-heading`
 - **Body:** Bricolage Grotesque → `--font-body`
 
-Use `font-[family-name:var(--font-heading)]` for display titles. Body inherits from the theme.
-
 ## Layout helpers
 
-- `.container-shell` — max-width content width
-- `.section-space` — vertical section padding
-- `.eyebrow` — small uppercase label
+- `.container-er` — max-width content width
 
 ## Components
 
 | Use shadcn for | Keep custom Tailwind for |
 |---|---|
-| Button, Input, Label, Select | Hero carousel, about splits, program grids |
-| Dialog → `Modal` / `ConfirmationModal` | Page banners, float Call/WhatsApp |
-| Sheet → admin booking detail | Marketing section layouts |
-| Dropdown (theme / nav extras) | Pricing consultation CTAs |
+| Button, Input, Label, Dialog, Sheet | Hero, page banner, home sections |
+| Dropdown | Marketing layouts |
 
-Shared wrappers:
-
-- `src/shared/components/Modal.jsx`
-- `src/shared/components/ConfirmationModal.jsx`
-- `src/shared/components/SiteHeader.jsx` — nav + theme toggle
-- `src/shared/components/SiteFooter.jsx`
-- `src/shared/components/FloatActions.jsx`
+Shared: `SiteHeader`, `SiteFooter`, `PageBanner`, `Modal`, `ConfirmationModal`, `FloatActions`.
 
 ## Motion
 
-Keep motion subtle and purposeful (hero/carousel, theme transitions). Avoid decorative noise.
+Subtle and purposeful (hero, reveal, split titles). Avoid decorative noise.
 
 ## Imagery
 
-Images live under `public/images/` with the same subfolders as the PHP `assets/images/` tree (hero, about, logo, blog, faq, services, testimonials, …).
+Static assets under `public/images/` (`hero`, `about`, `logo`, `blog`, `faq`, `services`, `testimonials`, …).

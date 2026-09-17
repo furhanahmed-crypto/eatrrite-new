@@ -68,7 +68,7 @@ export function DaySlotList({ date, rows, onSelectBooking, onToggleHidden }) {
         open={Boolean(pending)}
         onOpenChange={(open) => !open && setPending(null)}
         title={pending?.hidden ? "Hide this slot?" : "Show this slot?"}
-        description="This updates the Google Sheet disabled-slots tab."
+        description="This hides or shows the slot in Neon for customers."
         confirmLabel={pending?.hidden ? "Hide slot" : "Show slot"}
         loading={loading}
         onConfirm={confirmToggle}

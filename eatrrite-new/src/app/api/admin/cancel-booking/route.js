@@ -1,4 +1,4 @@
-import { cancelAppointment } from "@/lib/apps-script";
+import { deleteBooking } from "@/lib/db/bookings";
 import { isAdminAuthed } from "@/lib/admin-auth";
 import { jsonFail, jsonOk } from "@/lib/api-response";
 
@@ -18,8 +18,8 @@ export async function POST(request) {
       return jsonFail(new Error("Date and time are required."), 400);
     }
 
-    await cancelAppointment({ date, time, phone, name });
-    return jsonOk({ date, time, cancelled: true });
+    const cancelled = await deleteBooking({ date, time, phone, name });
+    return jsonOk({ ...cancelled, cancelled: true });
   } catch (error) {
     return jsonFail(error, 500);
   }

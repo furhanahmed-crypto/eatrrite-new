@@ -1,4 +1,4 @@
-import { setDisabledSlot } from "@/lib/apps-script";
+import { setDisabledSlot } from "@/lib/db/disabled-slots";
 import { offeredTimesForDate } from "@/lib/schedule-slots";
 import { isAdminAuthed } from "@/lib/admin-auth";
 import { jsonFail, jsonOk } from "@/lib/api-response";
@@ -19,8 +19,8 @@ export async function POST(request) {
       return jsonFail(new Error("That time is not a slot on this day."), 400);
     }
 
-    await setDisabledSlot(date, time, hidden);
-    return jsonOk({ date, time, hidden });
+    const result = await setDisabledSlot(date, time, hidden);
+    return jsonOk(result);
   } catch (error) {
     return jsonFail(error, 500);
   }

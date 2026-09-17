@@ -67,13 +67,17 @@ export default function ThankYouPage() {
     const paymentId =
       stored?.payment?.razorpay_payment_id || verified?.payment_id || "";
     const readyLink =
-      verified?.meet_link_ready && verified?.meet_link ? verified.meet_link : "";
+      verified?.meet_link_ready && verified?.meet_link
+        ? verified.meet_link
+        : "";
 
-    setPayload(stored);
-    setMeetLink(readyLink);
-    setMeetPending(Boolean(verified && paymentId && !readyLink));
-    setMeetError(verified && !paymentId ? MEET_ERROR : "");
-    setHydrated(true);
+    setTimeout(() => {
+      setPayload(stored);
+      setMeetLink(readyLink);
+      setMeetPending(Boolean(verified && paymentId && !readyLink));
+      setMeetError(verified && !paymentId ? MEET_ERROR : "");
+      setHydrated(true);
+    }, 0);
   }, []);
 
   const verified = payload?.verified || null;

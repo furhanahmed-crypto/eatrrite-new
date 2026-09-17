@@ -1,4 +1,5 @@
-import { listAppointments, listDisabledSlots } from "@/lib/apps-script";
+import { listBookings } from "@/lib/db/bookings";
+import { listDisabledSlots } from "@/lib/db/disabled-slots";
 import { isAdminAuthed } from "@/lib/admin-auth";
 import { jsonFail, jsonOk } from "@/lib/api-response";
 
@@ -9,7 +10,7 @@ export async function GET() {
     }
 
     const [booked, disabled] = await Promise.all([
-      listAppointments(),
+      listBookings(),
       listDisabledSlots(),
     ]);
 

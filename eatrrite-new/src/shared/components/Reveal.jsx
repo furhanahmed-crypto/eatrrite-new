@@ -5,7 +5,7 @@ import { motion, useInView } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1];
 
-/** Fade-up on scroll — matches PHP GSAP revealOnEnter */
+/** Fade-up on scroll into view. */
 export function Reveal({
   children,
   className,

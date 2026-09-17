@@ -1,13 +1,10 @@
 export function getServerEnv() {
   return {
+    databaseUrl: process.env.DATABASE_URL || "",
     razorpayKeyId: process.env.RAZORPAY_KEY_ID || "",
     razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET || "",
     appsScriptUrl: (process.env.APPS_SCRIPT_URL || "").replace(/\/$/, ""),
     appsScriptSecret: process.env.APPS_SCRIPT_SECRET || "",
-    googleSheetId: process.env.GOOGLE_SHEET_ID || "",
-    googleSheetName: process.env.GOOGLE_SHEET_NAME || "eatrrite-website-appointments",
-    googleSheetTab: process.env.GOOGLE_SHEET_TAB || "Sheet1",
-    googleDisabledSlotsTab: process.env.GOOGLE_DISABLED_SLOTS_TAB || "disabled-slots",
     adminDashboardPassword: process.env.ADMIN_DASHBOARD_PASSWORD || "",
     mailHost: process.env.MAIL_HOST || "",
     mailPort: Number(process.env.MAIL_PORT || 587),

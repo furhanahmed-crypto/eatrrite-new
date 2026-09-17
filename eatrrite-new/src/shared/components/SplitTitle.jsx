@@ -20,7 +20,7 @@ function buildChars(text) {
   }));
 }
 
-/** Letter-stagger titles — matches PHP GSAP split-title */
+/** Letter-stagger titles for section headings. */
 export function SplitTitle({
   as: Tag = "h2",
   children,

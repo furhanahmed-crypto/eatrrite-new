@@ -8,7 +8,7 @@ export function jsonFail(error, status = 500) {
   const message = error?.message || "A technical issue occurred. Please retry.";
   console.error("[appointment]", message, error);
   const publicMessage =
-    status >= 500 || /google|sheet|apps script|razorpay|configured/i.test(message)
+    status >= 500 || /apps script|razorpay|configured|prisma|database|neon/i.test(message)
       ? "A technical issue occurred. Please retry."
       : message;
   return NextResponse.json({ ok: false, error: publicMessage }, { status });

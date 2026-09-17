@@ -1,7 +1,8 @@
 import { scheduleConfig } from "@/config/schedule";
 import { availableTimesForDate } from "@/lib/schedule-slots";
-import { listAppointments, listDisabledSlots } from "@/lib/apps-script";
-import { readHolds, saveHolds } from "@/lib/storage";
+import { listBookings } from "@/lib/db/bookings";
+import { listDisabledSlots } from "@/lib/db/disabled-slots";
+import { listActiveHolds, upsertHold } from "@/lib/db/holds";
 
 function timesOnDate(rows, isoDate) {
   const times = [];
@@ -11,33 +12,11 @@ function timesOnDate(rows, isoDate) {
   return times;
 }
 
-/** Drop expired holds and return the rest. */
-export async function activeHolds(ignoreHoldId = "") {
-  const now = Date.now();
-  const rows = await readHolds();
-  const kept = [];
-
-  for (const row of rows) {
-    if (row.expiresAt <= now) continue;
-    if (ignoreHoldId && row.holdId === ignoreHoldId) continue;
-    kept.push(row);
-  }
-
-  return kept;
-}
-
-export async function saveActiveHolds(rows) {
-  const now = Date.now();
-  const kept = rows.filter((row) => row.expiresAt > now);
-  await saveHolds(kept);
-  return kept;
-}
-
 /** True when date+time is free, optionally ignoring one hold (the caller's). */
 export async function isSlotFree(date, time, ignoreHoldId = "") {
-  const booked = await listAppointments().catch(() => []);
-  const disabled = await listDisabledSlots().catch(() => []);
-  const holds = await activeHolds(ignoreHoldId);
+  const booked = await listBookings();
+  const disabled = await listDisabledSlots();
+  const holds = await listActiveHolds(ignoreHoldId);
   const open = availableTimesForDate(
     date,
     timesOnDate([...booked, ...holds], date),
@@ -46,19 +25,13 @@ export async function isSlotFree(date, time, ignoreHoldId = "") {
   return open.includes(time);
 }
 
-/** Hold a slot on selection for holdMinutes. Replaces any prior hold by the same holdId. */
+/** Hold a slot on selection for holdMinutes. */
 export async function placeSelectionHold(date, time, holdId) {
   const free = await isSlotFree(date, time, holdId);
   if (!free) {
     throw new Error("That slot is no longer available. Pick another time.");
   }
-
-  const expiresAt = Date.now() + scheduleConfig.holdMinutes * 60 * 1000;
-  const others = await activeHolds(holdId);
-  others.push({ date, time, holdId, orderId: "", expiresAt });
-  await saveActiveHolds(others);
-
-  return { holdId, date, time, expiresAt };
+  return upsertHold({ holdId, date, time, orderId: "" });
 }
 
 /** Attach a Razorpay order to an existing selection hold (or create one). */
@@ -67,11 +40,8 @@ export async function attachOrderHold(date, time, holdId, orderId) {
   if (!free) {
     throw new Error("That slot is no longer available.");
   }
-
-  const expiresAt = Date.now() + scheduleConfig.holdMinutes * 60 * 1000;
-  const others = await activeHolds(holdId);
-  others.push({ date, time, holdId, orderId, expiresAt });
-  await saveActiveHolds(others);
-
-  return { holdId, orderId, expiresAt };
+  return upsertHold({ holdId, date, time, orderId });
 }
+
+export { listActiveHolds };
+export const holdMinutes = () => scheduleConfig.holdMinutes;
