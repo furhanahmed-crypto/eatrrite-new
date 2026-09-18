@@ -45,7 +45,6 @@ export function useAdminActions(selected, setBooked, setDisabled) {
     setDisabled(data.disabled || []);
   }
 
-  
   async function toggleHidden(time, hidden) {
     const res = await fetch("/api/admin/toggle-slot", {
       method: "POST",
