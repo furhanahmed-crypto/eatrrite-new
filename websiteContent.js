@@ -8,21 +8,18 @@ const websiteContent = [
 
   {
     section: "Hero",
-    badge: "Learn. Build. Grow.",
-    heading: "Build skills that move you forward.",
+    badge: "🚀 Learn. Build. Grow.",
+    heading: "A Better Way to Learn and Build",
     description:
-      "Learn practical skills, build real-world projects, and grow your confidence with a simple learning experience designed for you.",
-    buttons: [
-      "Get Started",
-      "Explore Features",
-    ],
+      "StudyHub helps you learn modern web development with simple resources, real projects, and a supportive community.",
+    buttons: ["Get Started", "Explore Features"],
     stats: [
       {
-        value: "10K+",
+        value: "1K+",
         label: "Students",
       },
       {
-        value: "500+",
+        value: "50+",
         label: "Projects",
       },
       {
@@ -30,35 +27,54 @@ const websiteContent = [
         label: "Free Resources",
       },
     ],
+    visual: {
+      title: "Learning Progress",
+      progress: "60%",
+      checklist: [
+        "HTML & CSS",
+        "JavaScript Basics",
+        "React Fundamentals",
+        "Build a Project",
+      ],
+      sideCards: [
+        {
+          title: "Small Steps Big Results",
+        },
+        {
+          title: "Build Create Learn",
+        },
+      ],
+    },
   },
 
   {
     section: "Featured Cards",
     badge: "FEATURES",
-    heading: "Everything you need to keep learning.",
+    heading: "Everything You Need to Get Started",
     description:
-      "A simple way to learn new skills, practice what you learn, and turn your ideas into real projects.",
+      "Simple, practical and beginner friendly resources to help you grow.",
+
     cards: [
       {
         icon: "book",
         title: "Learn",
         description:
-          "Explore tutorials, guides, and practical resources that make learning simple and easy to understand.",
-        action: "Start Learning",
+          "Easy to follow tutorials and guides for modern web development.",
+        action: "Start Learning →",
       },
       {
         icon: "code",
         title: "Build",
         description:
-          "Turn your knowledge into real-world projects and gain practical experience by building things.",
-        action: "Start Building",
+          "Work on real world projects and improve your skills.",
+        action: "Explore Projects →",
       },
       {
-        icon: "growth",
+        icon: "users",
         title: "Grow",
         description:
-          "Keep improving your skills, connect with others, and build confidence through consistent practice.",
-        action: "Keep Growing",
+          "Join a community of learners and get help when you need it.",
+        action: "Join Community →",
       },
     ],
   },
@@ -66,25 +82,43 @@ const websiteContent = [
   {
     section: "Footer",
     logo: "StudyHub",
-    description:
-      "A simple learning space to help you learn, build, and grow.",
+    description: "Helping students learn, build and grow in web development.",
+
+    socialLinks: [
+      "GitHub",
+      "YouTube",
+      "Twitter",
+      "LinkedIn",
+    ],
+
     quickLinks: {
       title: "Quick Links",
-      links: ["Home", "Features", "About", "Contact"],
+      links: [
+        "Home",
+        "Features",
+        "About",
+        "Contact",
+      ],
     },
+
     resources: {
       title: "Resources",
-      links: ["Tutorials", "Projects", "Guides", "Community"],
+      links: [
+        "Blog",
+        "Projects",
+        "Tutorials",
+        "Community",
+      ],
     },
+
     newsletter: {
-      title: "Stay in the loop",
-      description:
-        "Get useful learning resources and updates delivered to your inbox.",
+      title: "Newsletter",
+      description: "Get the latest updates and resources.",
       placeholder: "Enter your email",
       button: "Subscribe",
     },
-    socialLinks: ["Instagram", "LinkedIn", "GitHub"],
-    copyright: "© 2026 StudyHub. All rights reserved.",
-    credit: "Built with React & Tailwind CSS.",
+
+    copyright: "© 2025 StudyHub. All rights reserved.",
+    credit: "Made with ❤️ for learners.",
   },
 ];
