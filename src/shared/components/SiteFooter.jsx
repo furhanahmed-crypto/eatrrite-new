@@ -39,6 +39,9 @@ export function SiteFooter() {
               <Link href="/programs">Programs</Link>
             </li>
             <li>
+              <Link href="/snackbar">Snackbar</Link>
+            </li>
+            <li>
               <Link href="/pricing">Pricing</Link>
             </li>
             <li>

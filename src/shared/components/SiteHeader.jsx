@@ -12,6 +12,7 @@ const links = [
   { href: "/", label: "Home", key: "home" },
   { href: "/about", label: "About", key: "about" },
   { href: "/programs", label: "Programs", key: "programs" },
+  { href: "/snackbar", label: "Snackbar", key: "snackbar" },
   { href: "/pricing", label: "Pricing", key: "pricing" },
   { href: "/#blog", label: "Blog", key: "blog" },
   { href: "/contact", label: "Contact", key: "contact" },
@@ -56,7 +57,7 @@ export function SiteHeader({ current = "home" }) {
             priority
           />
         </Link>
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-4 xl:gap-6 lg:flex">
           {links.map((link) => (
             <Link
               key={link.href}
