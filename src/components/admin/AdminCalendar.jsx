@@ -30,7 +30,7 @@ export function AdminCalendar() {
     cursor,
     selected
   );
-  const { toggleHidden, cancelBooking, logout, router } = useAdminActions(
+  const { toggleHidden, cancelBooking, router } = useAdminActions(
     selected,
     setBooked,
     setDisabled
@@ -79,7 +79,6 @@ export function AdminCalendar() {
         monthLabel={monthLabel}
         onPrev={() => shiftMonth(-1)}
         onNext={() => shiftMonth(1)}
-        onLogout={logout}
       />
       {error ? <p className="text-destructive">{error}</p> : null}
       <MonthGrid cells={cells} onSelectDate={setSelected} />

@@ -1,5 +1,4 @@
-const orderHref =
-  "https://api.whatsapp.com/send?phone=9639877483&text=Hi%20team.%20I%20would%20like%20to%20order%20Snackbar.";
+const checkoutHref = "/snackbar/checkout";
 
 export const snackbarContent = [
   {
@@ -10,7 +9,7 @@ export const snackbarContent = [
     image: "/images/snackbar/hero.png",
     imageAlt:
       "Eat Rrite Snackbar box with a wholesome date, oat and almond bar",
-    primaryCta: { label: "Order the bar", href: orderHref },
+    primaryCta: { label: "Buy now", href: checkoutHref },
     secondaryCta: { label: "See the ingredients", href: "#inside" },
   },
   {
@@ -91,7 +90,7 @@ export const snackbarContent = [
     name: "cta-section",
     pill: "Bring the bar home",
     title: "Taste the Eat Rrite bar.",
-    text: "Message us on WhatsApp for Snackbar — one diet-perfect bar, packed with the ingredients we trust.",
-    cta: { label: "Order on WhatsApp", href: orderHref },
+    text: "Buy Snackbar online — one diet-perfect bar, packed with the ingredients we trust.",
+    cta: { label: "Buy now", href: checkoutHref },
   },
 ];

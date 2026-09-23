@@ -2,9 +2,9 @@ import { createHmac } from "crypto";
 import { getServerEnv } from "@/config/env";
 import { siteConfig } from "@/config/site";
 
-export async function createRazorpayOrder(notes) {
+export async function createRazorpayOrder(notes, amountRupees = siteConfig.amountRupees) {
   const env = getServerEnv();
-  const amount = siteConfig.amountRupees * 100;
+  const amount = Number(amountRupees) * 100;
   const auth = Buffer.from(
     `${env.razorpayKeyId}:${env.razorpayKeySecret}`
   ).toString("base64");
