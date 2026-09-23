@@ -30,7 +30,7 @@ export function SlotTimesPanel({
         {date && times.length === 0 ? (
           <p className="text-[13px] text-soft">No open times this day.</p>
         ) : null}
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 min-[380px]:grid-cols-3 sm:grid-cols-4">
           {times.map((item) => (
             <button
               key={item}
@@ -49,17 +49,17 @@ export function SlotTimesPanel({
           ))}
         </div>
       </div>
-      <div className="flex items-center justify-end gap-2 pt-1">
-        <Button type="button" variant="ghost" onClick={onCancel} disabled={confirming}>
+      <div className="flex flex-col-reverse gap-2 pt-1 min-[400px]:flex-row min-[400px]:items-center min-[400px]:justify-end">
+        <Button type="button" variant="ghost" onClick={onCancel} disabled={confirming} className="w-full min-[400px]:w-auto">
           Cancel
         </Button>
         <Button
           type="button"
           onClick={onConfirm}
           disabled={!date || !time || confirming}
-          className="min-w-[140px] rounded-[10px] bg-brand hover:bg-brand-dark"
+          className="w-full min-w-0 rounded-[10px] bg-brand hover:bg-brand-dark min-[400px]:w-auto min-[400px]:min-w-[140px]"
         >
-          {confirming ? "Holding…" : "Confirm slot"}
+          {confirming ? "Confirming…" : "Confirm slot"}
         </Button>
       </div>
     </div>

@@ -14,11 +14,11 @@ export default function AppointmentPage() {
   return (
     <SiteShell current="appointment">
       <PageBanner title="Book Appointment" />
-      <section className="bg-cream py-16 md:py-24">
-        <div className="container-er grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+      <section className="bg-cream py-12 md:py-24">
+        <div className="container-er grid items-start gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
           <div className="space-y-4">
             <PillLabel>Consultation</PillLabel>
-            <h1 className="font-heading text-4xl font-bold text-ink md:text-5xl">
+            <h1 className="font-heading text-[clamp(1.75rem,8vw,3rem)] font-bold leading-tight text-ink md:text-5xl">
               Reserve your slot
             </h1>
             <p className="max-w-md text-body">
@@ -26,7 +26,7 @@ export default function AppointmentPage() {
               consultation. After payment, we finalize your Google Meet link.
             </p>
           </div>
-          <div className="rounded-[20px] border border-border-soft bg-mint/60 p-5 shadow-er sm:p-7">
+          <div className="rounded-[20px] border border-border-soft bg-mint/60 p-4 shadow-er min-[400px]:p-5 sm:p-7">
             <AppointmentForm />
           </div>
         </div>

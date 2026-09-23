@@ -30,7 +30,7 @@ export function AdminCalendar() {
     cursor,
     selected
   );
-  const { toggleHidden, cancelBooking, logout, router } = useAdminActions(
+  const { toggleHidden, cancelBooking, router } = useAdminActions(
     selected,
     setBooked,
     setDisabled
@@ -74,17 +74,18 @@ export function AdminCalendar() {
   if (loading) return <AdminCalendarSkeleton />;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 min-[400px]:space-y-6">
       <CalendarToolbar
         monthLabel={monthLabel}
         onPrev={() => shiftMonth(-1)}
         onNext={() => shiftMonth(1)}
-        onLogout={logout}
       />
       {error ? <p className="text-destructive">{error}</p> : null}
       <MonthGrid cells={cells} onSelectDate={setSelected} />
-      <div>
-        <h2 className="mb-3 text-lg font-medium">Day · {selected}</h2>
+      <div className="min-w-0">
+        <h2 className="mb-3 text-base font-medium min-[400px]:text-lg">
+          Day · {selected}
+        </h2>
         <DaySlotList
           date={selected}
           rows={rows}

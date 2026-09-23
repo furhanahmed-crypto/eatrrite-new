@@ -8,7 +8,7 @@ export function AboutMission({ data }) {
             className="rounded-[24px] border border-border-soft bg-surface p-6 shadow-er"
           >
             <h3 className="mb-3 text-2xl">{card.title}</h3>
-            <p>{card.text}</p>
+            <p className="whitespace-pre-line">{card.text}</p>
           </article>
         ))}
       </div>

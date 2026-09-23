@@ -2,7 +2,7 @@ export const programs = [
   {
     slug: "weight-lifestyle-management",
     name: "Nutrition for Weight & Lifestyle Management",
-    short: "Weight & Lifestyle Management",
+    short: "Complete Weight & Lifestyle Management",
     image: "/images/services/weight.jpg",
     imageSecondary: "/images/hero/healthy-plate.jpg",
     summary:
@@ -32,19 +32,19 @@ export const programs = [
     summary:
       "Manage and work toward reversing diabetes or high blood sugar with food you already eat — alongside your doctor.",
     about:
-      "For anyone diagnosed with diabetes or high blood sugar, this program looks at nutrition as a genuine management and reversal tool — built around your reports and regular meals.",
+      "For anyone diagnosed with diabetes or high blood sugar, this program looks at nutrition as a genuine management and reversal tool — built around your reports and regular meals. Along with working toward sugar reversal, it also works on the side effects many diabetics live with — weight gain, low energy, sluggish mornings, a post-meal energy crash, slow digestion, acid reflux, and more.",
     benefits: [
       "Blood sugar changes from the first 4 weeks",
+      "Works on weight gain, low energy, sluggish mornings, post-meal crash, slow digestion, and acid reflux",
       "Path toward long-term stabilisation",
       "Coordination with your doctor",
       "Meals from regular Indian food",
-      "Direct WhatsApp access to Mukta",
     ],
     ideal: "Anyone diagnosed with diabetes or high blood sugar.",
     mukta:
       "Led personally by Mukta Patil using traditional Indian food wisdom and evidence-based nutrition.",
     expect:
-      "Most clients notice changes within 4 weeks. By 90–180 days, blood sugar tends to stabilise.",
+      "Most clients notice changes within 4 weeks. By 90–180 days, blood sugar tends to stabilise — and everyday side effects like low energy, post-meal crash, slow digestion, and acid reflux typically ease too.",
   },
   {
     slug: "gut-health",
@@ -55,20 +55,20 @@ export const programs = [
     summary:
       "Relief from acidity, bloating, constipation and GERD — using your regular Indian meals.",
     about:
-      "Mukta works with your regular meals, adjusting how and what you combine, so gut issues are addressed without replacing your diet.",
+      "Mukta works with your regular meals, adjusting how and what you combine, so gut issues are addressed without replacing your diet. The aim is a life free of antacids — with better mood, better sleep, better focus at work, and an easier time with friends and family.",
     benefits: [
+      "A life free of antacids",
+      "Better mood, better sleep, and clearer focus at work",
+      "Easier time with friends and family",
       "Relief from bloating, acidity, constipation and GERD",
-      "Goal of coming off antacids",
       "Plan around home-cooked meals",
-      "Direct access for flare-ups",
-      "Weekly structure with flexibility",
     ],
     ideal:
       "Anyone dealing with acidity, bloating, constipation, GERD, or gut-related anxiety.",
     mukta:
       "Led personally by Mukta Patil — gut health is an area clients often say she truly understands.",
     expect:
-      "The goal is complete resolution of gut-related issues — including no longer needing antacids.",
+      "The goal is a life free of antacids — and with it, better mood, better sleep, better focus at work, and an easier time with friends and family.",
   },
   {
     slug: "female-hormone-health",
@@ -77,22 +77,22 @@ export const programs = [
     image: "/images/services/hormone.jpg",
     imageSecondary: "/images/about/kitchen.jpg",
     summary:
-      "Nutrition for PCOS, PCOD, perimenopause, menopause and postpartum recovery.",
+      "Nutrition for Perimenopause, Menopause, PCOS, PCOD and Postpartum Recovery.",
     about:
-      "Mukta builds your plan around your specific hormonal picture and reports, addressing the root cause rather than only the symptoms.",
+      "Mukta builds your plan around your specific hormonal picture and reports, addressing the root cause rather than only the symptoms. With the diet, women typically see weight loss, a flatter stomach, better digestion, clearer thinking without brain fog, a steadier period flow with fewer cramps, better mood regulation, easier joint-pain management, and better chances of fertility.",
     benefits: [
-      "More regular cycles and better PMS control",
-      "Better insulin sensitivity and mood",
-      "Weight addressed with hormonal root cause",
-      "Adapts across life stages",
+      "Weight loss and a flatter stomach",
+      "Better digestion and less brain fog",
+      "Steadier period flow and fewer cramps",
+      "Better mood, joint-pain management, and fertility support",
       "Direct WhatsApp access through flare-ups",
     ],
     ideal:
-      "Women managing PCOS, PCOD, PMS, perimenopause, menopause, or postpartum recovery.",
+      "Women managing Perimenopause, Menopause, PCOS, PCOD, PMS, or Postpartum Recovery.",
     mukta:
       "Eat Rrite was born from Mukta's own postpartum health crisis — she leads this program personally.",
     expect:
-      "Clients typically report weight and fat loss, better mood, more regular cycles, and reduced cortisol-related belly fat.",
+      "With the diet, women typically see weight loss, a flatter stomach, better digestion, no brain fog, better period flow, fewer cramps, better mood regulation, easier joint-pain management, and better chances of fertility.",
   },
 ];
 

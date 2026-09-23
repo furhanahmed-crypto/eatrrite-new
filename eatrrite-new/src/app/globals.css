@@ -152,11 +152,13 @@
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body), sans-serif;
     line-height: 1.7;
+    overflow-x: hidden;
   }
   h1,
   h2,
@@ -196,7 +198,7 @@
 }
 
 .container-er {
-  width: min(100% - 2rem, var(--container));
+  width: min(calc(100% - clamp(1rem, 5vw, 2rem)), var(--container));
   margin-inline: auto;
 }
 

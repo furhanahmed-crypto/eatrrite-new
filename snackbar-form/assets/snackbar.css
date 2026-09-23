@@ -1,0 +1,94 @@
+:root {
+  --er-brand: #014e4e;
+  --er-gold: #e5b858;
+  --er-cream: #f8f5f0;
+  --er-mint: #f1f7f4;
+  --er-ink: #1c2029;
+  --er-body: #595b62;
+}
+
+* { box-sizing: border-box; }
+
+body.er-snackbar {
+  margin: 0;
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  background: var(--er-cream);
+  color: var(--er-body);
+}
+
+.er-wrap {
+  width: min(calc(100% - 2rem), 720px);
+  margin: 2.5rem auto 4rem;
+}
+
+.er-card {
+  background: rgba(241, 247, 244, 0.7);
+  border: 1px solid rgba(1, 78, 78, 0.12);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 18px 50px rgba(1, 78, 78, 0.06);
+}
+
+.er-card h1,
+.er-thanks h1 {
+  font-family: Lora, Georgia, serif;
+  color: var(--er-ink);
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  margin: 0 0 0.5rem;
+}
+
+.er-form { display: grid; gap: 0.9rem; }
+.er-field { display: grid; gap: 0.35rem; }
+.er-field span {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.er-field input,
+.er-field textarea {
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.65rem 0.85rem;
+  color: var(--er-brand);
+  font: inherit;
+}
+.er-field textarea { min-height: 5.5rem; resize: vertical; }
+.er-grid { display: grid; gap: 0.9rem; }
+@media (min-width: 560px) { .er-grid { grid-template-columns: 1fr 1fr; } }
+
+.er-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 600;
+  color: var(--er-brand);
+}
+
+.er-submit {
+  height: 54px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--er-gold);
+  color: var(--er-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.er-alert {
+  border-radius: 12px;
+  background: #fdecee;
+  color: #842029;
+  padding: 0.75rem 0.9rem;
+}
+
+.er-thanks {
+  text-align: center;
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem 1.25rem;
+}
+
+.er-thanks a { color: var(--er-brand); }

@@ -5,9 +5,9 @@ export function ContactPanel({ data }) {
   return (
     <section className="py-16 md:py-24">
       <div className="container-er grid gap-6 lg:grid-cols-2">
-        <article className="rounded-[24px] border border-border-soft bg-surface p-8 shadow-er">
+        <article className="rounded-[24px] border border-border-soft bg-surface p-5 shadow-er min-[400px]:p-8">
           <PillLabel>Get In Touch</PillLabel>
-          <h2 className="mt-3 mb-4 text-3xl">{data.title}</h2>
+          <h2 className="mt-3 mb-4 text-[clamp(1.5rem,7vw,1.875rem)]">{data.title}</h2>
           <p className="mb-6">{data.text}</p>
           <p className="mb-3">
             <strong>Phone / WhatsApp</strong>
@@ -34,7 +34,7 @@ export function ContactPanel({ data }) {
             {data.hours}
           </p>
         </article>
-        <article className="rounded-[24px] border border-border-soft bg-surface p-8 shadow-er">
+        <article className="rounded-[24px] border border-border-soft bg-surface p-5 shadow-er min-[400px]:p-8">
           <h3 className="mb-3 text-2xl">Book or enquire</h3>
           <p className="mb-6">
             Share your name, phone, city and program of interest — we will take

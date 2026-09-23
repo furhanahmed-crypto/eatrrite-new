@@ -57,7 +57,7 @@ export function AppointmentForm() {
         },
         onDismiss() {
           setLoading(false);
-          setAlert("Payment was cancelled. Your slot stays held for a few minutes.");
+          setAlert("Payment was cancelled. Your slot stays reserved for a few minutes.");
         },
       });
     } catch (error) {
@@ -83,8 +83,9 @@ export function AppointmentForm() {
           onOpenSlots={() => setOpenSlots(true)}
         />
         <p className="m-0 text-[13px] leading-snug text-body">
-          Confirming a slot holds it for {scheduleConfig.holdMinutes} minutes.
-          A ₹{siteConfig.amountRupees} fee completes the booking. Hours (IST):{" "}
+          After you confirm a slot, it stays reserved for{" "}
+          {scheduleConfig.holdMinutes} minutes while you pay. A ₹
+          {siteConfig.amountRupees} fee completes the booking. Hours (IST):{" "}
           {publicHoursNote()}.
         </p>
         <Button

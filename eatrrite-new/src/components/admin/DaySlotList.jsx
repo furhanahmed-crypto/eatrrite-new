@@ -28,9 +28,9 @@ export function DaySlotList({ date, rows, onSelectBooking, onToggleHidden }) {
         {rows.map((row) => (
           <div
             key={`${row.kind}-${row.time}`}
-            className="flex items-center justify-between gap-3 rounded-2xl border border-border-soft px-4 py-3"
+            className="flex items-center justify-between gap-2 rounded-2xl border border-border-soft px-3 py-3 min-[400px]:gap-3 min-[400px]:px-4"
           >
-            <div>
+            <div className="min-w-0">
               <p className="font-medium">
                 {row.endTime
                   ? `${formatDisplayTime(row.time)} – ${formatDisplayTime(row.endTime)}`
@@ -39,7 +39,7 @@ export function DaySlotList({ date, rows, onSelectBooking, onToggleHidden }) {
               {row.kind === "booking" ? (
                 <button
                   type="button"
-                  className="cursor-pointer text-left text-sm text-brand hover:underline"
+                  className="cursor-pointer truncate text-left text-sm text-brand hover:underline"
                   onClick={() => onSelectBooking(row.events[0])}
                 >
                   {row.events[0]?.name || "Booking"} · {row.events[0]?.service}
@@ -53,12 +53,12 @@ export function DaySlotList({ date, rows, onSelectBooking, onToggleHidden }) {
             {row.kind !== "booking" ? (
               <button
                 type="button"
-                className="cursor-pointer text-xs underline"
+                className="shrink-0 cursor-pointer text-xs underline"
                 onClick={() =>
                   setPending({ time: row.time, hidden: row.kind !== "disabled" })
                 }
               >
-                {row.kind === "disabled" ? "Show slot" : "Hide slot"}
+                {row.kind === "disabled" ? "Show" : "Hide"}
               </button>
             ) : null}
           </div>
@@ -68,7 +68,7 @@ export function DaySlotList({ date, rows, onSelectBooking, onToggleHidden }) {
         open={Boolean(pending)}
         onOpenChange={(open) => !open && setPending(null)}
         title={pending?.hidden ? "Hide this slot?" : "Show this slot?"}
-        description="This hides or shows the slot in Neon for customers."
+        description="This updates whether customers can book this time."
         confirmLabel={pending?.hidden ? "Hide slot" : "Show slot"}
         loading={loading}
         onConfirm={confirmToggle}

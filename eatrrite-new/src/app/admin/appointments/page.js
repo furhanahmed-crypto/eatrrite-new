@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { isAdminAuthed } from "@/lib/admin-auth";
 import { AdminCalendar } from "@/components/admin/AdminCalendar";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 
 export const metadata = {
   title: "Admin appointments",
@@ -13,10 +14,13 @@ export default async function AdminAppointmentsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-cream px-4 py-10">
-      <div className="container-er max-w-5xl">
-        <AdminCalendar />
-      </div>
-    </main>
+    <>
+      <AdminHeader current="appointments" />
+      <main className="min-h-screen overflow-x-hidden bg-cream py-6 min-[400px]:py-10">
+        <div className="container-er max-w-5xl">
+          <AdminCalendar />
+        </div>
+      </main>
+    </>
   );
 }

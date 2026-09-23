@@ -39,17 +39,17 @@ export function SlotCalendar({
           <ChevronRight className="size-5" />
         </button>
       </div>
-      <div className="mt-3 grid grid-cols-7 gap-1.5">
+      <div className="mt-3 grid grid-cols-7 gap-1">
         {weekdays.map((day) => (
           <span
             key={day}
-            className="text-center text-[11px] font-semibold text-soft"
+            className="text-center text-[10px] font-semibold text-soft min-[400px]:text-[11px]"
           >
             {day}
           </span>
         ))}
       </div>
-      <div className="mt-2 grid grid-cols-7 gap-1.5">
+      <div className="mt-2 grid grid-cols-7 gap-1">
         {cells.map((cell) => {
           const selected = selectedDate === cell.iso;
           const enabled = cell.inMonth && cell.hasSlots;
@@ -60,7 +60,7 @@ export function SlotCalendar({
               disabled={!enabled}
               onClick={() => onSelectDate(cell.iso)}
               className={cn(
-                "h-[42px] rounded-xl text-sm font-semibold transition",
+                "h-9 rounded-lg text-sm font-semibold transition min-[400px]:h-[42px] min-[400px]:rounded-xl",
                 !cell.inMonth && "text-soft/40",
                 cell.inMonth && !enabled && "cursor-not-allowed text-soft/50",
                 enabled && "cursor-pointer",

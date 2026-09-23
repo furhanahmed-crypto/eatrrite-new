@@ -18,6 +18,13 @@ export const siteConfig = {
   resultsDisclaimer:
     "Individual results vary based on starting health, adherence and medical history.",
   amountRupees: 800,
+  snackbarAmountRupees: 3999,
+  snackbarMinQty: 1,
+  snackbarMaxQty: 20,
+  cohortConsultationRupees: 800,
+  cohortMonthlyRupees: 20000,
+  cohortSpots: 10,
+  timezone: "Asia/Kolkata",
   currency: "INR",
   services: [
     "Nutrition for Weight & Lifestyle Management",

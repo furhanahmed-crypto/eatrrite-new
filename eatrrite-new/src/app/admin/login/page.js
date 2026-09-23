@@ -13,8 +13,10 @@ export default async function AdminLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center bg-cream px-4 py-16">
-      <AdminLoginForm />
+    <main className="flex min-h-screen items-center overflow-x-hidden bg-cream py-12 min-[400px]:py-16">
+      <div className="container-er w-full max-w-md">
+        <AdminLoginForm />
+      </div>
     </main>
   );
 }

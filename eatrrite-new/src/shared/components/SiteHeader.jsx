@@ -12,6 +12,7 @@ const links = [
   { href: "/", label: "Home", key: "home" },
   { href: "/about", label: "About", key: "about" },
   { href: "/programs", label: "Programs", key: "programs" },
+  { href: "/snackbar", label: "Snackbar", key: "snackbar" },
   { href: "/pricing", label: "Pricing", key: "pricing" },
   { href: "/#blog", label: "Blog", key: "blog" },
   { href: "/contact", label: "Contact", key: "contact" },
@@ -46,8 +47,8 @@ export function SiteHeader({ current = "home" }) {
           </span>
         </div>
       </div>
-      <div className="container-er flex items-center justify-between gap-4 py-4">
-        <Link href="/" className="relative h-11 w-44 shrink-0">
+      <div className="container-er flex items-center justify-between gap-3 py-3 min-[400px]:gap-4 min-[400px]:py-4">
+        <Link href="/" className="relative h-9 w-36 shrink-0 min-[400px]:h-11 min-[400px]:w-44">
           <Image
             src="/images/logo/logo-horizontal.png"
             alt="Eat Rrite"
@@ -56,7 +57,7 @@ export function SiteHeader({ current = "home" }) {
             priority
           />
         </Link>
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-4 xl:gap-6 lg:flex">
           {links.map((link) => (
             <Link
               key={link.href}

@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="mt-auto bg-footer text-white">
       <div className="container-er grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
-          <div className="relative h-10 w-44">
+          <div className="relative h-9 w-36 min-[400px]:h-10 min-[400px]:w-44">
             <Image
               src="/images/logo/logo-horizontal-light.png"
               alt="Eat Rrite"
@@ -37,6 +37,9 @@ export function SiteFooter() {
             </li>
             <li>
               <Link href="/programs">Programs</Link>
+            </li>
+            <li>
+              <Link href="/snackbar">Snackbar</Link>
             </li>
             <li>
               <Link href="/pricing">Pricing</Link>

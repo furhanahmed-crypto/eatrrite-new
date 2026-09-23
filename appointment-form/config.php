@@ -90,6 +90,7 @@ function appointment_config(): array
 
         // --- 2. Booking product settings ---
         'amount_rupees' => 800,
+        'snackbar_amount_rupees' => 3999,
         'currency' => 'INR',
         'timezone' => 'Asia/Kolkata',
         'booking_days_ahead' => 30,

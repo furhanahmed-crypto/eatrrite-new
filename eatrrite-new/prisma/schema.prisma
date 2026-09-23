@@ -45,6 +45,44 @@ model Hold {
   @@map("holds")
 }
 
+model SnackbarOrder {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String
+  address      String
+  quantity     Int
+  amountRupees Int      @map("amount_rupees")
+  paymentId    String   @default("") @map("payment_id")
+  orderId      String   @default("") @map("order_id")
+  status       String   @default("paid")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([paymentId])
+  @@index([orderId])
+  @@map("snackbar_orders")
+}
+
+model CohortApplication {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String
+  amountRupees Int      @map("amount_rupees")
+  cohortMonth  String   @map("cohort_month")
+  paymentId    String   @default("") @map("payment_id")
+  orderId      String   @default("") @map("order_id")
+  status       String   @default("paid")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([paymentId])
+  @@index([orderId])
+  @@index([cohortMonth])
+  @@map("cohort_applications")
+}
+
 /// Admin-hidden slot starts.
 model DisabledSlot {
   id        String   @id @default(cuid())

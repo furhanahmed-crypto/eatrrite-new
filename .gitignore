@@ -4,3 +4,7 @@
 includes/secrets.php
 appointment-form/storage/*.json
 !appointment-form/storage/.gitkeep
+snackbar-form/storage/*.json
+!snackbar-form/storage/.gitkeep
+cohort-form/storage/*.json
+!cohort-form/storage/.gitkeep
