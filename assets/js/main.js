@@ -282,7 +282,13 @@
         }
 
         /* ---------- Letter-split headings ---------- */
+        var skipCohortSplit = document.body.classList.contains("co-page")
+            && window.matchMedia("(max-width: 899px)").matches;
+
         document.querySelectorAll(".split-title").forEach(function (heading) {
+            if (skipCohortSplit) {
+                return;
+            }
             splitHeading(heading);
             var chars = heading.querySelectorAll(".split-char");
             if (!chars.length) return;
@@ -343,7 +349,10 @@
             ".services-grid .card",
             ".pricing-card"
         ].forEach(function (selector) {
-            revealOnEnter(document.querySelectorAll(selector), {
+            var nodes = Array.prototype.filter.call(document.querySelectorAll(selector), function (el) {
+                return !el.closest("[data-co-swipe]");
+            });
+            revealOnEnter(nodes, {
                 y: 56,
                 duration: 0.9,
                 threshold: 0.3

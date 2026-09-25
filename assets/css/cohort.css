@@ -92,3 +92,182 @@
   box-shadow: 0 18px 40px rgba(229, 184, 88, 0.18);
 }
 .feature-card.is-brand .feature-card__icon { background: var(--color-accent); color: var(--color-ink); }
+
+.co-swipe__dots {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  body.co-page .section.section-mint {
+    background: #fff;
+  }
+  .co-page .section {
+    padding: 48px 0;
+  }
+  .co-page .section-heading {
+    margin-bottom: 20px;
+  }
+  .co-page .section-title {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+  .co-page .section-lead {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  .co-page .pill-label {
+    font-size: 12px;
+    padding: 6px 12px;
+    margin-bottom: 10px;
+  }
+  .co-page .feature-card,
+  .co-page .process-card {
+    padding: 18px 16px;
+  }
+  .co-page .feature-card__icon,
+  .co-page .process-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .co-page .feature-card__num,
+  .co-page .process-num {
+    font-size: 28px;
+    top: 14px;
+    right: 14px;
+  }
+  .co-page .feature-card h3,
+  .co-page .process-card h3 {
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+  .co-page .feature-card p,
+  .co-page .process-card p,
+  .co-page .co-checks li {
+    font-size: 13px;
+  }
+  .co-page .co-checks {
+    gap: 8px;
+  }
+  .co-page .co-consult-sub {
+    margin: 28px 0 16px;
+  }
+  .co-page .co-consult-sub h3 {
+    font-size: 20px;
+  }
+  .co-page .process-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .co-page .why-grid--five:not(.co-swipe) {
+    grid-template-columns: 1fr;
+  }
+  .co-page .why-grid {
+    margin-top: 16px;
+  }
+  .co-page .cta-box {
+    padding: 28px 20px;
+  }
+  .co-page .cta-box h2,
+  .co-page .cta-box .split-title {
+    font-size: 22px;
+  }
+  .co-hero {
+    padding: 36px 0;
+  }
+  .co-hero h1 {
+    font-size: 28px;
+  }
+  .co-hero p {
+    font-size: 15px;
+  }
+  .co-stats {
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+  .co-stats strong {
+    font-size: 18px;
+  }
+  .co-stats span {
+    font-size: 9px;
+    letter-spacing: 0.03em;
+  }
+  .co-page .about-photos {
+    min-height: 0;
+  }
+  .co-page .about-photos .main {
+    height: 260px;
+  }
+  .co-page .about-photos .side {
+    height: 120px;
+  }
+  .co-page .faq-panel {
+    padding: 24px 16px;
+  }
+  .co-page .faq-illustration {
+    display: none;
+  }
+
+  .co-page .co-swipe {
+    display: flex;
+    align-items: stretch;
+    grid-template-columns: none;
+    gap: 0;
+    overflow: hidden;
+    background: #fff;
+    scroll-snap-type: x mandatory;
+    touch-action: pan-y;
+    cursor: grab;
+    margin-top: 16px;
+    overscroll-behavior-x: contain;
+  }
+  .co-page .co-swipe.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
+  .co-page .co-swipe > * {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-width: 0;
+  }
+  .co-page .co-compare-grid .feature-card h3 {
+    min-height: 0;
+  }
+  .co-page .co-swipe .feature-card,
+  .co-page .co-swipe .feature-card:hover {
+    transform: none;
+    box-shadow: none;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .co-swipe__dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    background: #fff;
+  }
+  .co-swipe__dots button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(1, 78, 78, 0.22);
+    cursor: pointer;
+  }
+  .co-swipe__dots button.is-active {
+    width: 22px;
+    background: var(--color-primary);
+  }
+}

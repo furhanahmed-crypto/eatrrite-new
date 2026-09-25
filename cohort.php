@@ -6,6 +6,7 @@ $pageDescription = "Apply for Eat Rrite's women's hormonal health and lifestyle 
 $currentPage = 'cohort';
 $bodyClass = 'co-page';
 $extraCss = ['assets/css/cohort.css', 'assets/css/cohort-ui.css'];
+$extraJs = ['assets/js/cohort.js?v=' . (int) @filemtime(__DIR__ . '/assets/js/cohort.js')];
 $cohort = require __DIR__ . '/constants/cohort.php';
 include __DIR__ . '/includes/header.php';
 include __DIR__ . '/sections/cohort-hero.php';
