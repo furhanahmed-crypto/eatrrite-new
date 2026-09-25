@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'pill' => 'Your consultation',
-    'title' => 'What You Get With Your ₹800 Consultation',
+    'pill' => 'Your ₹800 consultation',
+    'title' => 'Your ₹800 Consultation',
     'lead' => 'One conversation. Clear next steps. No lock-in to a longer program until you choose it.',
     'items' => [
         ['num' => '01', 'icon' => 'fa-user-doctor', 'title' => '1-on-1 with Mukta', 'text' => 'A 30-minute consultation with Mukta Patil herself — not a junior coach or a chatbot.'],

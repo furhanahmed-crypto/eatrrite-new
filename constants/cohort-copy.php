@@ -30,6 +30,7 @@ return [
     'compare' => require __DIR__ . '/cohort-compare.php',
     'get' => require __DIR__ . '/cohort-get.php',
     'results' => [
+        'ready' => false,
         'pill' => 'Client stories',
         'title' => 'Real Women, Real Results',
         'lead' => 'Before-and-after photos from women in the reversal cohort — added here with each client’s consent.',
@@ -37,6 +38,7 @@ return [
         'label' => 'Client photo',
     ],
     'videos' => [
+        'ready' => false,
         'pill' => 'Testimonials',
         'title' => 'Hear From Our Clients',
         'lead' => 'Short video stories from women who worked with Mukta on hormones, weight and lifestyle.',

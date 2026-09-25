@@ -7,6 +7,33 @@
   color: var(--color-ink);
 }
 
+.co-compare-note {
+  max-width: 640px;
+  margin: 0 auto 8px;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.co-consult-sub {
+  margin: 48px 0 24px;
+  text-align: center;
+}
+.co-consult-sub h3 {
+  margin: 0 0 8px;
+  color: var(--color-primary);
+  font-size: clamp(22px, 3vw, 28px);
+}
+.co-consult-sub p {
+  margin: 0 auto;
+  max-width: 560px;
+  color: var(--color-text);
+}
+.co-consult-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
 .co-compare-grid {
   display: grid;
   grid-template-columns: 1fr;

@@ -16,6 +16,7 @@ $mark = static function (string $kind): array {
             <h2 class="section-title split-title" id="co-compare-title"><?php echo htmlspecialchars($compare['title']); ?></h2>
             <p class="section-lead section-lead--center"><?php echo htmlspecialchars($compare['lead']); ?></p>
         </div>
+        <p class="co-compare-note">Eat Rrite vs diet apps vs Instagram advice — same problem, very different starting points.</p>
         <div class="co-compare-grid">
             <?php foreach ($compare['cols'] as $i => $col): ?>
                 <article class="feature-card<?php echo !empty($col['brand']) ? ' is-brand' : ''; ?>">

@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'pill' => 'Why Eat Rrite',
-    'title' => 'Why Eat Rrite?',
-    'lead' => "There's no shortage of diet advice out there. Here's what's actually different.",
+    'pill' => 'Why nothing has worked',
+    'title' => 'Why Nothing Has Worked',
+    'lead' => 'Crash diets, calorie apps and Instagram tips treat the symptom you can see. Hormonal imbalance and early lifestyle disease sit underneath — they need a plan built around your reports, not another 30-day challenge.',
     'cols' => [
         ['title' => 'Eat Rrite', 'icon' => 'fa-leaf', 'brand' => true],
         ['title' => 'Generic Diet Apps', 'icon' => 'fa-mobile-screen', 'brand' => false],
