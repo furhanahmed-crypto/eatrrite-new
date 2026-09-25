@@ -1,2 +1,0 @@
-# Optional CSV import folder (not required for the app to run).
-# Place bookings.csv here, then: bun run db:import-bookings
