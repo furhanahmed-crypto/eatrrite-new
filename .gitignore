@@ -2,6 +2,7 @@
 .env.*
 .DS_Store
 includes/secrets.php
+includes/db.local.php
 appointment-form/storage/*.json
 !appointment-form/storage/.gitkeep
 snackbar-form/storage/*.json

@@ -2,32 +2,24 @@
 
 declare(strict_types=1);
 
-/**
- * Hidden slots from Google Sheet via Apps Script (no local JSON cache).
- */
 final class DisabledSlotsStore
 {
-    private GoogleAppsScriptClient $sheet;
+    private DisabledSlotRepository $slots;
 
-    public function __construct(array $config, ?GoogleAppsScriptClient $sheet = null)
+    public function __construct(array $config = [], ?DisabledSlotRepository $slots = null)
     {
-        $this->sheet = $sheet ?? new GoogleAppsScriptClient($config);
+        unset($config);
+        $this->slots = $slots ?? new DisabledSlotRepository();
     }
 
-    /**
-     * @return list<array{date:string,time:string}>
-     */
+    /** @return list<array{date:string,time:string}> */
     public function all(): array
     {
-        try {
-            return $this->sheet->listDisabledSlots();
-        } catch (Throwable) {
-            return [];
-        }
+        return $this->slots->all();
     }
 
     public function set(string $date, string $time, bool $hidden): void
     {
-        $this->sheet->setDisabledSlot($date, $time, $hidden);
+        $this->slots->set($date, $time, $hidden);
     }
 }

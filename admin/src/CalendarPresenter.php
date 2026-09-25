@@ -18,21 +18,22 @@ final class CalendarPresenter
             }
             $grouped[$date][] = $row;
         }
-
         return $grouped;
     }
 
     /**
      * @param array<string, list<array<string, mixed>>> $byDate
-     * @return list<array{iso:string,day:int,in_month:bool,is_today:bool,is_selected:bool,count:int,events:list<array<string, mixed>>}>
+     * @return list<array{iso:string,day:int,in_month:bool,is_today:bool,is_selected:bool,count:int}>
      */
-    public static function monthCells(DateTimeImmutable $month, DateTimeImmutable $selected, DateTimeImmutable $today, array $byDate): array
-    {
+    public static function monthCells(
+        DateTimeImmutable $month,
+        DateTimeImmutable $selected,
+        DateTimeImmutable $today,
+        array $byDate
+    ): array {
         $start = $month->modify('first day of this month')->setTime(0, 0, 0);
-        $pad = (int) $start->format('w');
-        $cursor = $start->modify('-' . $pad . ' days');
+        $cursor = $start->modify('-' . (int) $start->format('w') . ' days');
         $cells = [];
-
         for ($i = 0; $i < 42; $i++) {
             $iso = $cursor->format('Y-m-d');
             $events = $byDate[$iso] ?? [];
@@ -43,32 +44,20 @@ final class CalendarPresenter
                 'is_today' => $iso === $today->format('Y-m-d'),
                 'is_selected' => $iso === $selected->format('Y-m-d'),
                 'count' => count($events),
-                'events' => $events,
             ];
             $cursor = $cursor->modify('+1 day');
         }
-
         return $cells;
     }
 
-    /**
-     * One row per 15-minute offered slot, plus any booked times not on the grid.
-     *
-     * @param list<array<string, mixed>> $events
-     * @return array{
-     *   windows:list<array{start:int,end:int,capacity_end:int,label:string}>,
-     *   unavailable:bool,
-     *   rows:list<array<string, mixed>>
-     * }
-     */
-    public static function dayLayout(array $events, SlotService $slots, DateTimeImmutable $day): array
+    /** @param list<array<string, mixed>> $events @return list<array<string, mixed>> */
+    public static function dayRows(array $events, SlotService $slots, DateTimeImmutable $day): array
     {
         $date = $day->format('Y-m-d');
         $offered = $slots->offeredTimesForDate($date);
         $byStart = [];
         foreach ($events as $event) {
-            $time = (string) $event['time'];
-            $byStart[$time][] = $event;
+            $byStart[(string) $event['time']][] = $event;
         }
 
         $times = $offered;
@@ -79,39 +68,36 @@ final class CalendarPresenter
         }
         usort($times, static fn (string $a, string $b): int => self::toMinutes($a) <=> self::toMinutes($b));
 
+        $covered = [];
         $rows = [];
-        $previousMinutes = null;
         foreach ($times as $time) {
-            $minutes = self::toMinutes($time);
-            if ($previousMinutes !== null && ($minutes - $previousMinutes) > 15) {
-                $rows[] = ['kind' => 'gap'];
-            }
-            $previousMinutes = $minutes;
-
-            $startsHere = $byStart[$time] ?? [];
-            if ($startsHere !== []) {
-                foreach ($startsHere as $event) {
-                    $rows[] = [
-                        'kind' => 'booking',
-                        'time' => $time,
-                        'display_time' => $slots->displayTime($time),
-                        'event' => $event,
-                    ];
+            $starts = $byStart[$time] ?? [];
+            if ($starts !== []) {
+                $end = $slots->consultantSlotEnd($date, $time)->format('H:i');
+                $startM = self::toMinutes($time);
+                $endM = self::toMinutes($end);
+                foreach ($times as $other) {
+                    $otherM = self::toMinutes($other);
+                    if ($otherM > $startM && $otherM < $endM) {
+                        $covered[$other] = true;
+                    }
                 }
-                continue;
-            }
-
-            $blocker = self::blockingEvent($minutes, $events);
-            if ($blocker !== null) {
+                $event = $starts[0];
                 $rows[] = [
-                    'kind' => 'busy',
+                    'kind' => 'booking',
                     'time' => $time,
-                    'display_time' => $slots->displayTime($time),
-                    'event' => $blocker,
+                    'end_time' => $end,
+                    'display_time' => $slots->displayTime($time) . ' – ' . $slots->displayTime($end),
+                    'display_meeting' => $slots->displayTime($time) . ' – ' . $slots->displayTime(
+                        $slots->slotEnd($date, $time)->format('H:i')
+                    ),
+                    'event' => $event,
                 ];
                 continue;
             }
-
+            if (!empty($covered[$time])) {
+                continue;
+            }
             $hidden = $slots->isDisabled($date, $time);
             $rows[] = [
                 'kind' => $hidden ? 'disabled' : 'open',
@@ -120,67 +106,12 @@ final class CalendarPresenter
                 'hidden' => $hidden,
             ];
         }
-
-        $windows = self::windowsFor($slots, $day);
-
-        return [
-            'windows' => $windows,
-            'unavailable' => $windows === [] && $events === [],
-            'rows' => $rows,
-        ];
-    }
-
-    /**
-     * @return list<array{start:int,end:int,capacity_end:int,label:string}>
-     */
-    public static function windowsFor(SlotService $slots, DateTimeImmutable $day): array
-    {
-        $name = [
-            1 => 'monday',
-            2 => 'tuesday',
-            3 => 'wednesday',
-            4 => 'thursday',
-            5 => 'friday',
-            6 => 'saturday',
-            7 => 'sunday',
-        ][(int) $day->format('N')] ?? '';
-
-        $out = [];
-        foreach ($slots->weeklyHours()[$name] ?? [] as $window) {
-            $start = self::toMinutes($window['start']);
-            $end = self::toMinutes($window['end']);
-            $out[] = [
-                'start' => $start,
-                'end' => $end,
-                'capacity_end' => $end + $slots->consultantPrepMinutes(),
-                'label' => $slots->displayTime($window['start']) . '–' . $slots->displayTime($window['end']),
-            ];
-        }
-
-        return $out;
-    }
-
-    /**
-     * @param list<array<string, mixed>> $events
-     * @return array<string, mixed>|null
-     */
-    private static function blockingEvent(int $minutes, array $events): ?array
-    {
-        foreach ($events as $event) {
-            $start = (int) $event['start_minutes'];
-            $end = (int) $event['end_minutes'];
-            if ($minutes >= $start && $minutes < $end) {
-                return $event;
-            }
-        }
-
-        return null;
+        return $rows;
     }
 
     private static function toMinutes(string $time): int
     {
         [$hour, $minute] = array_map('intval', explode(':', $time));
-
         return ($hour * 60) + $minute;
     }
 }

@@ -1,34 +1,32 @@
 <?php
-$pageTitle = 'Nutrition Programs | Eat Rrite — Weight Loss, Diabetes, Gut Health & More';
-$pageDescription = 'Explore Eat Rrite\'s 30, 90 and 180-day nutrition programs for weight loss, diabetes management, gut health and women\'s hormonal health — built around your reports, not a template.';
+$pageTitle = 'Nutrition Programs';
+$pageDescription = 'Explore Eat Rrite\'s 30, 90 and 180-day nutrition programs for weight loss, diabetes, gut health and women\'s hormonal health.';
 $currentPage = 'programs';
 $bannerTitle = 'Programs';
+$inner = require __DIR__ . '/constants/inner.php';
+$copy = $inner['programs'];
 include __DIR__ . '/includes/header.php';
 include __DIR__ . '/sections/page-banner.php';
 ?>
 <section class="section">
     <div class="container">
         <div class="section-heading is-center">
-            <span class="pill-label"><span class="pill-dot"></span> Programs / Services</span>
-            <h1 class="section-title split-title">Nutrition Programs Built Around You, Not a Diagnosis</h1>
-            <p class="section-lead" style="margin-left:auto;margin-right:auto;text-align:center;">Every Eat Rrite program starts the same way — not with a fixed meal plan, but with a consultation call that looks at your actual reports, history and lifestyle. From there, we build a 30-day, 90-day or 180-day plan around your specific condition, using food you already eat.</p>
+            <span class="pill-label"><span class="pill-dot"></span> <?php echo htmlspecialchars($copy['pill']); ?></span>
+            <h2 class="section-title split-title"><?php echo htmlspecialchars($copy['title']); ?></h2>
+            <p class="section-lead section-lead--center"><?php echo htmlspecialchars($copy['lead']); ?></p>
         </div>
-
-        <div class="programs-grid programs-grid--four">
+        <div class="programs-grid programs-grid--two">
             <?php foreach ($programsLive as $program): ?>
             <article class="card program-card">
-                <div class="img-wrap">
-                    <img src="<?php echo htmlspecialchars($program['image']); ?>" alt="<?php echo htmlspecialchars($program['short']); ?>">
+                <div class="img-wrap img-wrap--wide">
+                    <img src="<?php echo htmlspecialchars(er_href($program['image'])); ?>" alt="<?php echo htmlspecialchars($program['short']); ?>">
                 </div>
                 <h3><?php echo htmlspecialchars($program['short']); ?></h3>
                 <p><?php echo htmlspecialchars($program['summary']); ?></p>
-                <a class="program-link" href="program.php?slug=<?php echo urlencode($program['slug']); ?>">View Program <i class="fa-solid fa-arrow-right"></i></a>
+                <a class="program-link" href="<?php echo htmlspecialchars(er_href('program.php?slug=' . urlencode($program['slug']))); ?>">View Program <i class="fa-solid fa-arrow-right"></i></a>
             </article>
             <?php endforeach; ?>
         </div>
-
-        <p class="programs-note">If you don't see your exact concern listed, <a href="appointment.php">book a consultation</a> and we'll tell you honestly whether we can help.</p>
     </div>
 </section>
-<?php include __DIR__ . '/sections/cta.php'; ?>
 <?php include __DIR__ . '/includes/footer.php'; ?>

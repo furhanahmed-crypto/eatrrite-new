@@ -1,7 +1,8 @@
 <?php
 $pageTitle = 'Eat Rrite | Holistic Nutrition Coaching in Hyderabad & Dehradun';
-$pageDescription = 'Eat Rrite offers science-backed, culturally-rooted nutrition coaching for weight loss, PCOS, diabetes, gut health and more — without crash diets. Book a consultation online.';
+$pageDescription = 'Eat Rrite offers science-backed, culturally-rooted nutrition coaching for weight loss, PCOS, diabetes, gut health and more — without crash diets.';
 $currentPage = 'home';
+$home = require __DIR__ . '/constants/home.php';
 include __DIR__ . '/includes/header.php';
 include __DIR__ . '/sections/hero.php';
 include __DIR__ . '/sections/services.php';

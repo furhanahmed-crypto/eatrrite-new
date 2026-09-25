@@ -5,10 +5,13 @@
   const api = form.dataset.api;
   const csrf = form.dataset.csrf;
   const unit = Number(form.dataset.unitRupees || 3999);
+  const minQty = Number(form.dataset.minQty || 1);
+  const maxQty = Number(form.dataset.maxQty || 20);
   const alertEl = form.querySelector("[data-er-alert]");
   const submit = form.querySelector("[data-er-submit]");
   const qty = form.querySelector("[name=quantity]");
   const totalEl = form.querySelector("[data-er-total]");
+  const breakdownEl = form.querySelector("[data-er-breakdown]");
 
   function showAlert(message) {
     if (!alertEl) return;
@@ -16,26 +19,43 @@
     alertEl.textContent = message || "";
   }
 
+  function quantity() {
+    return Math.min(maxQty, Math.max(minQty, Number(qty?.value || 1)));
+  }
+
   function rupees() {
-    const quantity = Math.max(1, Number(qty?.value || 1));
-    return unit * quantity;
+    return unit * quantity();
   }
 
   function refreshTotal() {
-    if (totalEl) totalEl.textContent = `₹${rupees().toLocaleString("en-IN")}`;
-    if (submit) submit.textContent = `Pay ₹${rupees().toLocaleString("en-IN")}`;
+    const count = quantity();
+    if (qty && Number(qty.value) !== count) qty.value = String(count);
+    const label = `₹${rupees().toLocaleString("en-IN")}`;
+    if (breakdownEl) {
+      breakdownEl.textContent = `₹${unit.toLocaleString("en-IN")} × ${count}`;
+    }
+    if (totalEl) totalEl.textContent = label;
+    if (submit) submit.textContent = `Pay ${label}`;
   }
 
   qty?.addEventListener("input", refreshTotal);
+  form.querySelectorAll("[data-er-qty]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!qty) return;
+      qty.value = String(quantity() + Number(button.dataset.erQty || 0));
+      refreshTotal();
+    });
+  });
   refreshTotal();
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     showAlert("");
     const payload = Object.fromEntries(new FormData(form).entries());
-    payload.quantity = Number(payload.quantity || 1);
+    payload.quantity = quantity();
     payload.phone = payload.mobilenumber;
     submit.disabled = true;
+    submit.textContent = "Confirming…";
 
     try {
       const orderRes = await fetch(`${api}/create-order.php`, {
@@ -67,6 +87,7 @@
         modal: {
           ondismiss() {
             submit.disabled = false;
+            refreshTotal();
             showAlert("Payment was cancelled. You can try again.");
           },
         },
@@ -74,6 +95,7 @@
       razorpay.open();
     } catch (error) {
       submit.disabled = false;
+      refreshTotal();
       showAlert(error.message || "A technical issue occurred. Please retry.");
     }
   });

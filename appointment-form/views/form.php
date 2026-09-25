@@ -11,6 +11,8 @@ $assetBase = appointment_public_path('assets');
 $apiBase = appointment_public_path('api');
 $amountRupees = (int) $config['amount_rupees'];
 $meetingMinutes = $slotService->customerMeetingMinutes();
+$hideService = !empty($hideService);
+$cohortService = (string) ($config['cohort_service'] ?? 'Consultation — to be recommended');
 $assetVersion = max(
     (int) filemtime(__DIR__ . '/../assets/appointment.js'),
     (int) filemtime(__DIR__ . '/../assets/appointment.css')
@@ -29,17 +31,21 @@ $assetVersion = max(
     <div class="er-alert" data-er-alert hidden></div>
 
     <div class="er-fields" data-er-fields>
-        <label class="er-field">
-            <span>Service</span>
-            <select name="programname" required>
-                <option value="">Select a service</option>
-                <?php foreach ($config['services'] as $service): ?>
-                    <option value="<?php echo htmlspecialchars($service, ENT_QUOTES, 'UTF-8'); ?>">
-                        <?php echo htmlspecialchars($service, ENT_QUOTES, 'UTF-8'); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </label>
+        <?php if ($hideService): ?>
+            <input type="hidden" name="programname" value="<?php echo htmlspecialchars($cohortService, ENT_QUOTES, 'UTF-8'); ?>">
+        <?php else: ?>
+            <label class="er-field">
+                <span>Service</span>
+                <select name="programname" required>
+                    <option value="">Select a service</option>
+                    <?php foreach ($config['services'] as $service): ?>
+                        <option value="<?php echo htmlspecialchars($service, ENT_QUOTES, 'UTF-8'); ?>">
+                            <?php echo htmlspecialchars($service, ENT_QUOTES, 'UTF-8'); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+        <?php endif; ?>
 
         <div class="er-grid">
             <label class="er-field">

@@ -2,28 +2,25 @@
 
 declare(strict_types=1);
 
-/**
- * Admin calendar feed from Apps Script (no disk cache).
- */
 final class AppointmentFeed
 {
-    private GoogleAppsScriptClient $sheet;
-    private SlotService $slots;
-
-    public function __construct(SlotService $slots, GoogleAppsScriptClient $sheet)
-    {
-        $this->slots = $slots;
-        $this->sheet = $sheet;
+    public function __construct(
+        private SlotService $slots,
+        private BookingStore $bookings
+    ) {
     }
 
-    /**
-     * @return list<array<string, mixed>>
-     */
+    /** @return list<array<string, mixed>> */
     public function all(): array
     {
+        $raw = $this->bookings->allCompleted();
+        $answers = (new QuestionnaireRepository())->forAppointments(array_map(
+            static fn (array $row): string => (string) ($row['id'] ?? ''),
+            $raw
+        ));
         $rows = [];
-        foreach ($this->sheet->listAppointments() as $row) {
-            $enriched = $this->enrich($row);
+        foreach ($raw as $row) {
+            $enriched = $this->enrich($row, $answers[(string) ($row['id'] ?? '')] ?? []);
             if ($enriched !== null) {
                 $rows[] = $enriched;
             }
@@ -37,14 +34,13 @@ final class AppointmentFeed
     }
 
     /**
-     * @param array{date:string,time:string,name:string,service:string,phone:string,meet_link:string,booked_at:string} $row
-     * @return array<string, mixed>|null
+     * @param array<string, mixed> $row
+     * @param array<string, string> $answers
      */
-    private function enrich(array $row): ?array
+    private function enrich(array $row, array $answers): ?array
     {
-        $date = $row['date'];
-        $time = $row['time'];
-
+        $date = (string) ($row['date'] ?? '');
+        $time = (string) ($row['time'] ?? '');
         try {
             $start = $this->slots->slotStart($date, $time);
             $meetingEnd = $this->slots->slotEnd($date, $time);
@@ -53,11 +49,14 @@ final class AppointmentFeed
             return null;
         }
 
+        $name = (string) ($row['name'] ?? '');
+        $service = (string) ($row['service'] ?? '');
+
         return [
-            'id' => $date . '|' . $time . '|' . md5($row['name'] . $row['phone'] . $row['service']),
-            'name' => $row['name'] !== '' ? $row['name'] : 'Client',
-            'service' => $row['service'],
-            'phone' => $row['phone'],
+            'id' => $date . '|' . $time . '|' . md5($name . ($row['phone'] ?? '') . $service),
+            'name' => $name !== '' ? $name : 'Client',
+            'service' => $service,
+            'phone' => (string) ($row['phone'] ?? ''),
             'date' => $date,
             'time' => $time,
             'display_date' => $this->slots->displayDate($date),
@@ -66,31 +65,52 @@ final class AppointmentFeed
             'display_meeting_end' => $this->slots->displayTime($meetingEnd->format('H:i')),
             'block_end' => $blockEnd->format('H:i'),
             'display_block_end' => $this->slots->displayTime($blockEnd->format('H:i')),
-            'meet_link' => $row['meet_link'],
-            'booked_at' => $row['booked_at'],
+            'email' => (string) ($row['email'] ?? ''),
+            'meet_link' => (string) ($row['meet_link'] ?? ''),
+            'booked_at' => (string) ($row['booked_at'] ?? ''),
+            'questionnaire' => $this->labeledAnswers($answers),
             'start_minutes' => ((int) $start->format('G') * 60) + (int) $start->format('i'),
             'end_minutes' => ((int) $blockEnd->format('G') * 60) + (int) $blockEnd->format('i'),
-            'color' => self::colorFor($row['service'] !== '' ? $row['service'] : $row['name']),
         ];
     }
 
-    public static function colorFor(string $seed): string
+    /**
+     * @param array<string, string> $answers
+     * @return list<array{label:string,answer:string}>
+     */
+    private function labeledAnswers(array $answers): array
     {
-        $palette = [
-            '#38640e',
-            '#5a8c2a',
-            '#2f4a28',
-            '#6b8f71',
-            '#c4a35a',
-            '#f57e57',
-            '#3d5340',
-            '#7a9a4a',
-            '#4b6b3c',
-            '#9c7a3c',
-        ];
+        if ($answers === []) {
+            return [];
+        }
+        $spec = require dirname(__DIR__, 2) . '/constants/questionnaire.php';
+        $labeled = [];
+        foreach ($spec['steps'] as $step) {
+            $key = (string) $step['key'];
+            if (!array_key_exists($key, $answers)) {
+                continue;
+            }
+            $labeled[] = [
+                'label' => (string) $step['label'],
+                'answer' => $this->displayAnswer($answers[$key]),
+            ];
+            $follow = (string) ($step['follow_key'] ?? '');
+            if ($follow !== '' && trim((string) ($answers[$follow] ?? '')) !== '') {
+                $labeled[] = [
+                    'label' => (string) ($step['follow_label'] ?? $follow),
+                    'answer' => (string) $answers[$follow],
+                ];
+            }
+        }
+        return $labeled;
+    }
 
-        $index = (int) sprintf('%u', crc32($seed)) % count($palette);
-
-        return $palette[$index];
+    private function displayAnswer(string $raw): string
+    {
+        $decoded = json_decode($raw, true);
+        if (is_array($decoded)) {
+            return implode(', ', array_map('strval', $decoded));
+        }
+        return $raw !== '' ? $raw : '—';
     }
 }

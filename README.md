@@ -1,167 +1,120 @@
-# Eat Rrite Website
+# Eat Rrite
 
-Marketing site and online consultation booking for **Eat Rrite** — holistic nutrition coaching (Hyderabad & Dehradun, online consultations).
+PHP marketing site and booking system for Eat Rrite — holistic nutrition coaching (Hyderabad & Dehradun, online consultations).
 
----
+## Tech stack
 
-## Current tech stack
+- PHP 8 + HTML includes (no framework)
+- MySQL (Hostinger) via PDO
+- Custom CSS (`assets/css/`) and small vanilla JS
+- Razorpay for the consultation confirmation fee
+- Google Apps Script for Google Meet / Calendar
+- PHPMailer + SMTP for confirmation emails
 
-| Layer | Technology | Used for |
-| --- | --- | --- |
-| Public website | PHP includes + HTML sections + custom CSS/JS | Pages: home, about, programs, pricing, contact, appointment |
-| Styling / UX | Custom CSS (`assets/css/style.css`), Font Awesome, GSAP (CDN) | Layout, animations, responsive UI |
-| Appointment booking | PHP APIs under `appointment-form/` + browser JS | Slot picker, Razorpay payment, thank-you / Meet polling |
-| Payments | Razorpay (server-side orders + signature verify) | Consultation confirmation fee |
-| Booking storage (live) | **Google Sheets via Google Apps Script** | Appointments list, booked slots, disabled slots |
-| Local booking state | `appointment-form/storage/bookings.json` + `holds.json` | Payment finalize state + temporary slot holds during checkout |
-| Weekly schedule | `appointment-form/config.php` → `slot_schedule` | Hours / Friday off (no Sheets) |
-| Google Meet | Apps Script → Google Calendar API (`hangoutsMeet`) | Meet link created when booking is finalized |
-| Email | PHPMailer (`email/`) + SMTP secrets | Customer + admin booking confirmation emails |
-| Admin calendar | PHP under `admin-dashboard/` | Month/day calendar, hide/show slots, view bookings |
-| Secrets | `includes/secrets.php` (gitignored) | Razorpay keys, Apps Script URL/secret, SMTP, admin password |
+There is a leftover Next.js app under `eatrrite-new/`. Production and local PHP work from this repo root, not that folder.
 
-There is **no application database** today. Sheets + local JSON are the system of record for bookings.
+## Main features
 
----
+- Public pages: home, about, programs, pricing, blog, contact, cohort, snackbar
+- Paid appointment booking with slot holds
+- Post-payment transformation questionnaire
+- Google Meet generation after the questionnaire
+- Admin calendar, hide/show slots, cancel booking
 
-## Important URLs (local)
-
-With `php -S localhost:8080` from the project root:
-
-| Page | URL |
-| --- | --- |
-| Home | http://localhost:8080/ |
-| Book appointment | http://localhost:8080/appointment.php |
-| Admin calendar | http://localhost:8080/admin-dashboard/appointments-calendar/ |
-| Admin login | http://localhost:8080/admin-dashboard/login.php |
-
-Admin password is `admin_dashboard_password` in `includes/secrets.php`.
-
----
-
-## Folder map
+## Project structure
 
 ```
-eatrrite-new/
-├── index.php, about.php, programs.php, pricing.php, contact.php, appointment.php
-├── includes/                 # site config, secrets, header/footer
-├── sections/                 # marketing page sections
-├── assets/                   # public CSS/JS/images
-├── appointment-form/
-│   ├── config.php            # secrets + booking settings + weekly schedule
-│   ├── bootstrap.php
-│   ├── api/                  # slots, create-order, verify, finalize (public URLs)
-│   ├── assets/               # appointment CSS/JS (public URLs)
-│   ├── views/                # form, calendar modal, success panel
-│   ├── src/                  # PHP domain services
-│   ├── storage/              # bookings.json + holds.json only (gitignored)
-│   └── scripts/google-apps-script/
-├── admin-dashboard/
-│   ├── bootstrap.php, auth.php, login.php, logout.php
-│   ├── layout-start.php, layout-end.php
-│   ├── src/                  # AppointmentFeed, CalendarPresenter
-│   └── appointments-calendar/  # public admin UI URL + assets/components
-└── email/                    # PHPMailer + templates
+/
+├── index.php, about.php, programs.php, appointment.php
+├── appointment-confirmed.php     # questionnaire + Meet
+├── constants/                    # page copy, questionnaire questions
+├── sections/                     # marketing sections
+├── includes/                     # config, header/footer, PDO, repositories
+├── appointment-form/             # booking APIs, views, JS
+├── admin/                        # consultation calendar
+├── cohort-form/, snackbar-form/
+├── email/                        # PHPMailer templates
+└── sql/                          # MySQL schema + questionnaire migration
 ```
 
----
+## Appointment flow
 
-## Why booking & admin feel slow (current architecture)
+1. Customer picks a service, details, and slot on `/appointment`.
+2. PHP creates a Razorpay order and holds the slot.
+3. After payment verify, the row is saved as `confirmed` with an empty Meet link. The customer is emailed the questionnaire URL immediately.
+4. Browser redirects to `/appointment-confirmed?appointmentId=…`. If that appointment already has answers, the form is skipped and the Meet link is shown.
+5. Customer completes the questionnaire once. Answers are stored by `appointment_id`.
+6. PHP calls Apps Script to create the Meet link, saves it on the same appointment, emails the Meet link to the customer, and emails admin.
 
-Slowness is **not** mainly from PHP page rendering or CSS. Booking/admin still talk to Google for **booked slots / disabled slots / Meet**, but **weekly hours and Friday-off now live in PHP config** (`appointment-form/config.php` → `slot_schedule`) so the appointment page and admin schedule text no longer wait on Sheets to render.
+Slot occupancy treats `confirmed`, `verified`, `finalizing`, and `completed` as taken. Consultant blocks are 45 minutes (30-minute meeting + 15-minute prep).
 
-### 1. Book Appointment (opening the slot picker)
+## Payment flow
 
-Page HTML (fee note / hours text) uses **local `slot_schedule` in config.php** — no Google.
+- `create-order.php` validates the booking, holds the slot, creates a Razorpay order.
+- Checkout runs in the browser.
+- `verify-payment.php` checks the Razorpay signature and inserts the appointment.
+- Payment success does **not** create a Meet link.
 
-When the user opens the calendar modal, the browser calls `appointment-form/api/slots.php` → `AppointmentService::availability()`. That path still:
+## Questionnaire flow
 
-1. Loads **disabled slots** via Apps Script (cached ~30 s) when building availability.
-2. Loads **booked appointments** from Apps Script (`list` → Sheet).
-3. Builds available times in PHP from the local weekly schedule.
+- Questions live in `constants/questionnaire*.php`.
+- UI is a stepped form: 4/12 appointment summary, 8/12 questions.
+- `submit-questionnaire.php` validates required answers and writes `questionnaire_answers`.
+- Multi-select answers are stored as a JSON array in the `answer` text column.
+- `appointments.questionnaire_completed` is set to `1`.
+- The appointment email/name already stored on the appointment remain the source of truth.
+- If the form stays unfilled, a cron emails reminders at 1h, 3h, 6h, 12h, 24h, 30h and 36h after payment. Reminders stop as soon as the form is submitted.
 
-Each Apps Script call is an HTTPS round trip that:
+On Hostinger, run every 15 minutes:
 
-- Cold-starts the script runtime.
-- Often **302-redirects** (Apps Script web apps do this).
-- Reads Spreadsheet data.
+```
+php /home/USER/domains/YOUR-DOMAIN/public_html/appointment-form/cron/questionnaire-reminders.php
+```
 
-Timeout is set up to **120 seconds** for those requests. Cold or slow Google responses feel like “the site is hanging.”
+or hit `appointment-form/cron/questionnaire-reminders.php?key=YOUR_CRON_SECRET`. Set `public_base_url` in `includes/db.local.php` so CLI emails use the live questionnaire link. SQL: `sql/reminders.mysql.sql`.
 
-### 2. Admin dashboard (`/admin-dashboard/appointments-calendar/`)
+## Google Meet generation
 
-On load, PHP calls `AppointmentFeed::all()` → Apps Script `list` → full appointments from the Sheet.
+- Triggered only after the questionnaire is saved.
+- `generate-meet.php` → `AppointmentCheckout::generateMeet()` → `AppointmentFinalize` → Apps Script.
+- Meet URL is written to `appointments.meet_link`.
+- Existing confirmation emails then go out with the appointment details and Meet link.
 
-There is only a **60-second local JSON cache**. Cache miss = wait for Google again. Navigating month/day still depends on that feed.
+## Admin flow
 
-### 3. Google Meet link generation (thank-you page)
+- `/admin` redirects to `/admin/appointments-calendar/`.
+- Login uses `admin_password` from `includes/db.local.php` (empty password opens the dashboard on local).
+- Calendar month/day views, hide/show slot, cancel booking are unchanged.
 
-After Razorpay success:
+## Database overview
 
-1. Payment verify is relatively fast (Razorpay API only).
-2. Finalize calls Apps Script `book`, which:
-   - Writes a row to the Sheet.
-   - Creates a **Google Calendar event with a Meet conference**.
-3. Then PHP sends confirmation emails (SMTP).
-4. The thank-you page **polls** `finalize-booking.php` every few seconds until Meet is ready (UI already warns this can take a couple of minutes).
+Live tables (see `sql/schema.mysql.sql`):
 
-Meet is slow because Calendar + Meet conference creation is a heavy Google API path, wrapped inside Apps Script (extra latency + cold starts), not because the marketing site is heavy.
+- `appointments` — bookings, payment ids, `questionnaire_completed`, `questionnaire_reminders_sent`, `meet_link`
+- `questionnaire_answers` — one row per question, keyed by `appointment_id`
+- `holds` — temporary slot holds during checkout
+- `disabled_slots` — admin-hidden slots
+- `snackbar_orders`, `cohort_applications`
 
-### Summary
+On an existing database that already has `appointments`, run `sql/questionnaire.mysql.sql` then `sql/reminders.mysql.sql`.
 
-| Action | Main bottleneck |
+## Important APIs
+
+| URL | Role |
 | --- | --- |
-| Open booking slots | Google Apps Script + Sheets (list booked / config / disabled) |
-| Admin calendar load | Same Apps Script `list` of all appointments |
-| Meet link after pay | Apps Script → Calendar Meet creation (+ email after) |
+| `appointment-form/api/slots.php` | Available times |
+| `appointment-form/api/create-order.php` | Razorpay order + hold |
+| `appointment-form/api/verify-payment.php` | Signature check + confirmed row |
+| `appointment-form/api/submit-questionnaire.php` | Save answers |
+| `appointment-form/api/generate-meet.php` | Meet + email |
+| `appointment-form/api/finalize-booking.php` | Legacy finalize (now requires questionnaire) |
 
-Local PHP + static assets are secondary.
+## Local setup
 
----
+1. Copy `includes/db.local.example.php` → `includes/db.local.php` and fill Hostinger MySQL, Razorpay, Apps Script, and SMTP values.
+2. Allow your public IP under Hostinger → Remote MySQL. Local `host` is the Hostinger hostname, not `localhost`.
+3. Import `sql/schema.mysql.sql` (new DB) or `sql/questionnaire.mysql.sql` plus `sql/reminders.mysql.sql` (existing DB).
+4. From the repo root: `php -S localhost:8080`
+5. Open http://localhost:8080/appointment.php and http://localhost:8080/admin
 
-## Ecommerce + customer database — recommended next stack
-
-Sheets + PHP + Apps Script is fine for a simple booking MVP. It does **not** scale well for ecommerce catalogues, orders, inventory, customer accounts, or fast admin UX.
-
-### Recommended direction (seamless site + shop + customers + bookings)
-
-| Concern | Recommendation |
-| --- | --- |
-| App / API | **Next.js** (storefront + admin UI) **or** Next.js storefront + **Laravel / NestJS** API |
-| Database | **PostgreSQL** (customers, products, orders, appointments) |
-| Cache / queues | **Redis** (session/cache) + background jobs for Meet/email |
-| Ecommerce | **Medusa**, **Saleor**, or **Shopify** (headless) if you want commerce faster than building from scratch |
-| Payments | Keep **Razorpay** (India-friendly) |
-| Appointments | Store slots/bookings in Postgres; create Meet via **Google Calendar API** from your server (or **Cal.com**) — **drop Sheets / Apps Script from the hot path** |
-| Auth | Proper admin + optional customer accounts (Auth.js / Laravel Sanctum / Clerk, etc.) |
-| Hosting | Vercel/Cloudflare (frontend) + managed Postgres (Neon/Supabase/RDS) + worker for emails/Meet |
-
-### Why this is better
-
-- Sub-second admin/booking reads from Postgres instead of multi-second Sheet round trips.
-- Real customer + order history for ecommerce and CRM.
-- Meet/email move to **async jobs** so payment thank-you stays fast.
-- One coherent stack for marketing, shop, and consultations.
-
-### Migration suggestion (high level)
-
-1. Introduce Postgres + API; mirror new bookings to DB.
-2. Point slot availability + admin calendar at the DB.
-3. Keep Razorpay; move Meet creation to a queue worker.
-4. Add ecommerce (Medusa/Shopify/custom) sharing the same customer table.
-5. Retire Google Sheets as the live source of truth (optional archive only).
-
----
-
-## Setup notes
-
-1. Copy `includes/secrets.example.php` → `includes/secrets.php` and fill values.
-2. Deploy Apps Script from `appointment-form/scripts/google-apps-script/` and set `apps_script_url` / secret.
-3. Run locally: `php -S localhost:8080` from the repo root.
-4. Do not commit `includes/secrets.php` or live `appointment-form/storage/bookings.json` / `holds.json`.
-
----
-
-## Status note
-
-This README documents the **current** PHP + Sheets architecture and the known latency sources. A full stack change for ecommerce should treat the appointment layer as the first subsystem to replace (DB + Calendar API), then add catalogue/checkout on the same backend.
+Do not commit `includes/db.local.php`, `includes/secrets.php`, or live credentials.

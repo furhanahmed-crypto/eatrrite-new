@@ -1,0 +1,116 @@
+.sb-check-card {
+  border: 2px solid var(--color-accent);
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 18px 50px rgba(229, 184, 88, 0.16);
+}
+.sb-check-card__title {
+  margin-bottom: 16px;
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: 20px;
+}
+.sb-check-form { display: grid; gap: 14px; }
+.sb-check-grid { display: grid; gap: 14px; }
+@media (min-width: 560px) { .sb-check-grid { grid-template-columns: 1fr 1fr; } }
+.sb-check-field { display: grid; gap: 6px; }
+.sb-check-field > span {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+.sb-check-field input,
+.sb-check-field textarea {
+  width: 100%;
+  border: 1px solid rgba(229, 184, 88, 0.4);
+  border-radius: 12px;
+  background: #fffdf8;
+  padding: 10px 14px;
+  color: var(--color-primary);
+  font: inherit;
+}
+.sb-check-field textarea { min-height: 96px; resize: vertical; }
+.sb-check-qty {
+  display: flex;
+  width: 7.5rem;
+  height: 40px;
+  overflow: hidden;
+  border: 1px solid rgba(229, 184, 88, 0.45);
+  border-radius: 6px;
+  background: #fff;
+}
+.sb-check-qty button {
+  width: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+.sb-check-qty input {
+  width: 56px;
+  border: 0;
+  border-left: 1px solid rgba(229, 184, 88, 0.35);
+  border-right: 1px solid rgba(229, 184, 88, 0.35);
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+  padding: 0;
+}
+.sb-check-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(229, 184, 88, 0.3);
+}
+.sb-check-total span {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.sb-check-total strong {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+}
+.sb-check-pay {
+  height: 48px;
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background: var(--color-accent);
+  color: var(--color-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sb-thanks { max-width: 42rem; }
+.sb-thanks__card {
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 40px 24px;
+  box-shadow: var(--shadow);
+}
+.sb-thanks__mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 24px;
+}
+.sb-thanks h1 { color: var(--color-primary); }
+.sb-thanks__note { margin: 24px 0; color: var(--color-muted); font-size: 14px; }
+.sb-thanks__note a { color: var(--color-primary); text-decoration: underline; }
+.er-alert { border-radius: 12px; background: #fdecee; color: #842029; padding: 12px 14px; }

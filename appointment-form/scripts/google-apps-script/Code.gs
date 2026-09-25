@@ -5,7 +5,7 @@
  * Services: Google Calendar API
  * Deploy: Web app → Execute as Me → Anyone
  *
- * Actions: list | list_disabled_slots | set_disabled_slot | book | cancel
+ * Actions: create_meet | list | list_disabled_slots | set_disabled_slot | book | cancel
  */
 
 var HEADERS = [
@@ -26,6 +26,13 @@ function doPost(e) {
     assertSecret_(payload.secret);
 
     var action = payload.action;
+    if (action === "create_meet") {
+      return json_({
+        ok: true,
+        meet_link: createMeet_(payload),
+        booked_at: Utilities.formatDate(new Date(), "Asia/Kolkata", "yyyy-MM-dd HH:mm:ss"),
+      });
+    }
     if (action === "list") {
       return json_({ ok: true, booked: listBooked_(payload) });
     }

@@ -1,7 +1,7 @@
-<h2 style="margin:0 0 12px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;color:#014e4e;">Your appointment is confirmed</h2>
+<h2 style="margin:0 0 12px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;color:#014e4e;">Your Google Meet link is ready</h2>
 <p style="margin:0 0 22px;font-size:15px;line-height:1.65;color:#595b62;">
     Hello <?php echo htmlspecialchars((string) $data['name'], ENT_QUOTES, 'UTF-8'); ?>,
-    thank you for booking with Eat Rrite. Your consultation has been confirmed and payment received.
+    thank you for completing the questionnaire. Your consultation details and Google Meet link are below.
 </p>
 
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f1f7f4;border:1px solid rgba(1,78,78,0.12);border-radius:14px;">

@@ -42,6 +42,13 @@ function appointment_json_fail(Throwable $e, int $status = 500): void
         ? $raw
         : 'A technical issue occurred. Please retry.';
 
+    if ($e instanceof PDOException) {
+        $denied = str_contains($raw, '1045') || stripos($raw, 'Access denied') !== false;
+        $public = $denied
+            ? 'MySQL rejected the username or password. Copy user, password, and database name from Hostinger → Databases (they are often prefixed). Remote MySQL is already reachable.'
+            : 'Cannot reach MySQL. On your Mac, host in includes/db.local.php must be the Hostinger hostname (not localhost), and your public IP must be allowed under Remote MySQL.';
+    }
+
     appointment_json_error($public, $status);
 }
 
@@ -82,6 +89,21 @@ function appointment_require_post(): void
 function appointment_public_path(string $relative): string
 {
     return 'appointment-form/' . ltrim($relative, '/');
+}
+
+function appointment_public_url(string $path): string
+{
+    $configured = trim((string) (appointment_config()['public_base_url'] ?? ''));
+    $base = $configured;
+    if ($base === '') {
+        $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['SERVER_PORT'] ?? '') === '443')
+            || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+        $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $base = ($https ? 'https://' : 'http://') . $host;
+    }
+
+    return rtrim($base, '/') . '/' . ltrim($path, '/');
 }
 
 function appointment_thank_you_url(): string

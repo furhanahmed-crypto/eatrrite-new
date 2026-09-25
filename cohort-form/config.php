@@ -2,52 +2,16 @@
 
 declare(strict_types=1);
 
-/**
- * Cohort applications — fees and Razorpay settings.
- */
+require_once dirname(__DIR__) . '/includes/secrets-loader.php';
 
 function cohort_secrets(): array
 {
-    static $secrets = null;
-    if ($secrets !== null) {
-        return $secrets;
-    }
-
-    $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'secrets.php';
-    if (!is_readable($path)) {
-        throw new RuntimeException(
-            'Missing includes/secrets.php. Copy includes/secrets.example.php and fill Razorpay keys.'
-        );
-    }
-
-    $loaded = require $path;
-    if (!is_array($loaded)) {
-        throw new RuntimeException('includes/secrets.php must return an array.');
-    }
-
-    $secrets = $loaded;
-    return $secrets;
+    return app_secrets();
 }
 
 function cohort_secret(string $key, ?string $default = null): string
 {
-    $secrets = cohort_secrets();
-    if (array_key_exists($key, $secrets) && $secrets[$key] !== null && $secrets[$key] !== '') {
-        return (string) $secrets[$key];
-    }
-    if ($default !== null) {
-        return $default;
-    }
-    throw new RuntimeException('Missing required secret: ' . $key);
-}
-
-function cohort_storage_path(string $file = ''): string
-{
-    $dir = __DIR__ . DIRECTORY_SEPARATOR . 'storage';
-    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
-        throw new RuntimeException('Unable to create cohort-form/storage.');
-    }
-    return $file === '' ? $dir : $dir . DIRECTORY_SEPARATOR . ltrim($file, '/\\');
+    return app_secret($key, $default);
 }
 
 function cohort_config(): array
@@ -80,6 +44,5 @@ function cohort_now(): DateTimeImmutable
 
 function cohort_month(?DateTimeImmutable $now = null): string
 {
-    $now ??= cohort_now();
-    return $now->format('Y-m');
+    return ($now ?? cohort_now())->format('Y-m');
 }

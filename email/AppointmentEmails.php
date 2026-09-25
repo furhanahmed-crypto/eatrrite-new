@@ -12,7 +12,8 @@ require_once __DIR__ . '/PHPMailer/SMTP.php';
 /**
  * All appointment booking emails live in this file.
  *
- * - send_paid_booking_emails()  → admin + customer (after Razorpay payment)
+ * - send_customer_questionnaire_email() → customer only, after payment (questionnaire link)
+ * - send_paid_booking_emails()  → admin + customer Meet email after questionnaire
  * - send_admin_booking_email()  → team only (legacy forms on program pages)
  */
 function appointment_mail_settings(): array
@@ -125,12 +126,32 @@ function send_admin_booking_email(array $booking): void
     );
 }
 
+function send_customer_questionnaire_email(array $booking): void
+{
+    appointment_send_email(
+        $booking['email'],
+        $booking['name'],
+        'Complete your Eat Rrite questionnaire',
+        appointment_render_email('customer-questionnaire', $booking)
+    );
+}
+
+function send_customer_questionnaire_reminder_email(array $booking): void
+{
+    appointment_send_email(
+        $booking['email'],
+        $booking['name'],
+        'Reminder: complete your Eat Rrite questionnaire',
+        appointment_render_email('customer-questionnaire-reminder', $booking)
+    );
+}
+
 function send_customer_booking_email(array $booking): void
 {
     appointment_send_email(
         $booking['email'],
         $booking['name'],
-        'Your Eat Rrite appointment is confirmed',
+        'Your Eat Rrite Google Meet link is ready',
         appointment_render_email('customer-booking', $booking)
     );
 }

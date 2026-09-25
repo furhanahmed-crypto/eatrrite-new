@@ -1,10 +1,10 @@
 <?php
 
 /**
- * EXAMPLE ONLY — copy to secrets.php on the server and fill in real values.
- * secrets.php is gitignored and must never be committed.
+ * EXAMPLE ONLY — prefer includes/db.local.php for Hostinger.
+ * secrets.php is still supported and merged under db.local.php.
  *
- *   cp includes/secrets.example.php includes/secrets.php
+ *   cp includes/db.local.example.php includes/db.local.php
  */
 return [
     'razorpay_key_id' => '',
@@ -18,6 +18,9 @@ return [
     'apps_script_secret' => '',
 
     'admin_dashboard_password' => '',
+    'admin_password' => '',
+    'public_base_url' => 'https://red-ferret-338197.hostingersite.com',
+    'cron_secret' => '',
 
     'mail' => [
         'host' => 'smtp.gmail.com',

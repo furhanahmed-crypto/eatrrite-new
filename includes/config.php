@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * Public site settings. Secrets and MySQL live in includes/db.local.php
+ * (gitignored). Copy db.local.example.php on the server.
+ */
 $site = [
     'name' => 'Eat Rrite',
     'tagline' => 'Holistic Nutrition Coaching in Hyderabad & Dehradun',
@@ -16,7 +21,9 @@ $site = [
     'linkedin' => 'https://www.linkedin.com/company/eat-rrite/',
     'twitter' => 'https://twitter.com/19muktapatil',
     'results_disclaimer' => 'Individual results vary based on starting health, adherence and medical history.',
+    'amount_rupees' => 800,
 ];
 
+require_once __DIR__ . '/paths.php';
 require_once __DIR__ . '/programs-data.php';
 ?>

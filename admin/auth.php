@@ -43,12 +43,12 @@ function admin_dashboard_require(): void
 
 function admin_dashboard_current_url(): string
 {
-    $uri = (string) ($_SERVER['REQUEST_URI'] ?? '/admin-dashboard/appointments-calendar/');
+    $uri = (string) ($_SERVER['REQUEST_URI'] ?? '/admin/appointments-calendar/');
 
-    return $uri !== '' ? $uri : '/admin-dashboard/appointments-calendar/';
+    return $uri !== '' ? $uri : '/admin/appointments-calendar/';
 }
 
 function admin_dashboard_logout_url(): string
 {
-    return '/admin-dashboard/logout.php';
+    return '/admin/logout.php';
 }

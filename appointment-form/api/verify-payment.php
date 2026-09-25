@@ -11,7 +11,10 @@ try {
     $input = appointment_json_input();
     $result = appointment_service()->verifyPayment($input);
     appointment_store_verified_booking($input, $result);
-    $result['redirect'] = appointment_thank_you_url();
+    $id = (string) ($result['appointment_id'] ?? '');
+    $result['redirect'] = $id !== ''
+        ? 'appointment-confirmed.php?appointmentId=' . rawurlencode($id)
+        : 'appointment-confirmed.php';
     appointment_json_ok($result);
 } catch (InvalidArgumentException $e) {
     appointment_json_fail($e, 400);

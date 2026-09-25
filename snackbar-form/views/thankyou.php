@@ -6,28 +6,31 @@ require_once __DIR__ . '/../bootstrap.php';
 
 $payload = snackbar_verified_order();
 $order = is_array($payload['verified'] ?? null) ? $payload['verified'] : null;
+$pageTitle = 'Thank you';
+$pageDescription = 'Your Eat Rrite Snackbar order is confirmed.';
+$currentPage = 'snackbar';
+$bannerTitle = 'Thank you';
+$bannerCrumb = 'Snackbar';
+$extraCss = ['snackbar-form/assets/snackbar-form.css'];
+include dirname(__DIR__, 2) . '/includes/header.php';
+include dirname(__DIR__, 2) . '/sections/page-banner.php';
+$qty = (int) ($order['quantity'] ?? 0);
+$amount = number_format((int) ($order['amount_rupees'] ?? 0));
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Thank you | Eat Rrite Snackbar</title>
-  <link rel="stylesheet" href="assets/snackbar.css">
-</head>
-<body class="er-snackbar">
-  <main class="er-wrap">
-    <div class="er-thanks">
-      <?php if ($order): ?>
-        <h1>Thank you, <?php echo htmlspecialchars((string) $order['name'], ENT_QUOTES, 'UTF-8'); ?></h1>
-        <p>Your payment is confirmed. We will ship <?php echo (int) $order['quantity']; ?> Snackbar<?php echo (int) $order['quantity'] === 1 ? '' : 's'; ?> to your address.</p>
-        <p><strong>₹<?php echo number_format((int) ($order['amount_rupees'] ?? 0)); ?></strong> paid.</p>
-      <?php else: ?>
-        <h1>Thank you</h1>
-        <p>No recent Snackbar order was found on this device.</p>
-      <?php endif; ?>
-      <p><a href="index.php">Buy another bar</a></p>
+<section class="section section-cream">
+    <div class="container sb-thanks">
+        <div class="sb-thanks__card">
+            <div class="sb-thanks__mark" aria-hidden="true">✓</div>
+            <?php if ($order): ?>
+                <h1>Thank you, <?php echo htmlspecialchars((string) $order['name']); ?></h1>
+                <p>Payment received for <?php echo $qty; ?> Snackbar<?php echo $qty === 1 ? '' : 's'; ?> (₹<?php echo $amount; ?>). We will ship to the address you shared.</p>
+            <?php else: ?>
+                <h1>Thank you</h1>
+                <p>No recent Snackbar order was found on this device.</p>
+            <?php endif; ?>
+            <p class="sb-thanks__note">Questions? Write to <a href="<?php echo htmlspecialchars($site['email_href']); ?>"><?php echo htmlspecialchars($site['email']); ?></a>.</p>
+            <a class="btn btn-primary" href="<?php echo htmlspecialchars(er_href('snackbar.php')); ?>">Back to Snackbar</a>
+        </div>
     </div>
-  </main>
-</body>
-</html>
+</section>
+<?php include dirname(__DIR__, 2) . '/includes/footer.php'; ?>

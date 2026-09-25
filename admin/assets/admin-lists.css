@@ -1,0 +1,55 @@
+.er-admin-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 48px 16px;
+}
+.er-admin-login__card {
+  width: min(400px, 100%);
+  background: #fff;
+  border: 1px solid var(--er-border);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 18px 50px rgba(1, 78, 78, 0.06);
+}
+.er-admin-login h1 { font-size: 28px; margin-bottom: 8px; }
+.er-admin-login__copy { margin: 0 0 20px; color: var(--er-soft); font-size: 14px; }
+.er-admin-login label { display: grid; gap: 6px; font-size: 14px; color: var(--er-ink); }
+.er-admin-login input {
+  height: 44px;
+  border: 1px solid var(--er-border);
+  border-radius: 8px;
+  padding: 0 12px;
+  font: inherit;
+}
+.er-admin-login button {
+  width: 100%;
+  margin-top: 16px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--er-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.er-confirm[hidden] { display: none; }
+.er-confirm__backdrop {
+  position: fixed; inset: 0; background: rgba(17, 20, 22, 0.35); z-index: 60;
+}
+.er-confirm__panel {
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(420px, calc(100vw - 32px)); background: #fff; z-index: 61;
+  border-radius: 16px; padding: 24px; box-shadow: 0 18px 50px rgba(1, 78, 78, 0.12);
+}
+.er-confirm__panel h2 { font-size: 20px; margin-bottom: 8px; }
+.er-confirm__panel p { margin: 0 0 20px; font-size: 14px; color: var(--er-soft); }
+.er-confirm__actions { display: flex; justify-content: flex-end; gap: 8px; }
+.er-confirm__actions button {
+  height: 36px; padding: 0 14px; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer;
+}
+.er-confirm__actions [data-er-confirm-cancel] { border: 1px solid var(--er-border); background: #fff; }
+.er-confirm__actions [data-er-confirm-ok] { border: 0; background: var(--er-primary); color: #fff; }
+.er-confirm__actions [data-er-confirm-ok].is-danger { background: #fdecee; color: var(--er-danger); }

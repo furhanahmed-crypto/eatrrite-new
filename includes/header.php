@@ -2,6 +2,8 @@
 require_once __DIR__ . '/config.php';
 $pageTitle = $pageTitle ?? 'Eat Rrite - Nutritionist, Holistic Health and Wellness';
 $currentPage = $currentPage ?? 'home';
+$extraCss = $extraCss ?? [];
+$bodyClass = trim((string) ($bodyClass ?? ''));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,14 +12,19 @@ $currentPage = $currentPage ?? 'home';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($pageDescription ?? 'Eat Rrite is a nutrition and holistic wellness platform offering personalised diet programs, yoga, and lifestyle guidance.'); ?>">
-    <link rel="icon" href="assets/images/favicon.ico">
+    <link rel="icon" href="<?php echo htmlspecialchars(er_href('assets/images/favicon.ico')); ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(er_href('assets/css/style.css')); ?>?v=<?php echo (int) @filemtime(__DIR__ . '/../assets/css/style.css'); ?>">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(er_href('assets/css/pages.css')); ?>?v=<?php echo (int) @filemtime(__DIR__ . '/../assets/css/pages.css'); ?>">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(er_href('assets/css/match.css')); ?>?v=<?php echo (int) @filemtime(__DIR__ . '/../assets/css/match.css'); ?>">
+    <?php foreach ($extraCss as $href): ?>
+        <link rel="stylesheet" href="<?php echo htmlspecialchars(er_href($href)); ?>">
+    <?php endforeach; ?>
 </head>
-<body>
+<body<?php echo $bodyClass !== '' ? ' class="' . htmlspecialchars($bodyClass) . '"' : ''; ?>>
     <div class="topbar">
         <div class="container topbar-inner">
             <span><i class="fa-regular fa-clock"></i> <?php echo htmlspecialchars($site['hours']); ?></span>
@@ -30,18 +37,18 @@ $currentPage = $currentPage ?? 'home';
 
     <header class="site-header">
         <div class="container header-inner">
-            <a class="logo" href="index.php">
-                <img src="assets/images/logo/logo-horizontal.png" alt="Eat Rrite">
+            <a class="logo" href="<?php echo htmlspecialchars(er_href('index.php')); ?>">
+                <img src="<?php echo htmlspecialchars(er_href('assets/images/logo/logo-horizontal.png')); ?>" alt="Eat Rrite">
             </a>
             <button class="nav-toggle" type="button" aria-label="Open menu">☰</button>
             <nav class="site-nav">
-                <a href="index.php" class="<?php echo $currentPage === 'home' ? 'is-active' : ''; ?>">Home</a>
-                <a href="about.php" class="<?php echo $currentPage === 'about' ? 'is-active' : ''; ?>">About</a>
-                <a href="programs.php" class="<?php echo $currentPage === 'programs' ? 'is-active' : ''; ?>">Programs</a>
-                <a href="pricing.php" class="<?php echo $currentPage === 'pricing' ? 'is-active' : ''; ?>">Pricing</a>
-                <a href="index.php#blog">Blog</a>
-                <a href="contact.php" class="<?php echo $currentPage === 'contact' ? 'is-active' : ''; ?>">Contact</a>
-                <a class="btn btn-primary" href="appointment.php">Book Appointment</a>
+                <a href="<?php echo htmlspecialchars(er_href('index.php')); ?>" class="<?php echo $currentPage === 'home' ? 'is-active' : ''; ?>">Home</a>
+                <a href="<?php echo htmlspecialchars(er_href('about.php')); ?>" class="<?php echo $currentPage === 'about' ? 'is-active' : ''; ?>">About</a>
+                <a href="<?php echo htmlspecialchars(er_href('programs.php')); ?>" class="<?php echo $currentPage === 'programs' ? 'is-active' : ''; ?>">Programs</a>
+                <a href="<?php echo htmlspecialchars(er_href('pricing.php')); ?>" class="<?php echo $currentPage === 'pricing' ? 'is-active' : ''; ?>">Pricing</a>
+                <a href="<?php echo htmlspecialchars(er_href('blog.php')); ?>" class="<?php echo $currentPage === 'blog' ? 'is-active' : ''; ?>">Blog</a>
+                <a href="<?php echo htmlspecialchars(er_href('contact.php')); ?>" class="<?php echo $currentPage === 'contact' ? 'is-active' : ''; ?>">Contact</a>
+                <a class="btn btn-primary" href="<?php echo htmlspecialchars(er_href('appointment.php')); ?>">Book Appointment</a>
             </nav>
         </div>
     </header>

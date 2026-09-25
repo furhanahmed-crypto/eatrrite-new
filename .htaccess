@@ -1,0 +1,23 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteRule ^snackbar$ snackbar.php [L]
+RewriteRule ^snackbar/checkout$ snackbar-form/index.php [L]
+RewriteRule ^snackbar/thank-you$ snackbar-form/thank-you.php [L]
+RewriteRule ^cohort$ cohort.php [L]
+RewriteRule ^cohort/apply$ cohort-form/apply.php [L]
+RewriteRule ^cohort/thank-you$ cohort-form/thank-you.php [L]
+RewriteRule ^about$ about.php [L]
+RewriteRule ^programs$ programs.php [L]
+RewriteRule ^programs/([a-z0-9-]+)$ program.php?slug=$1 [L,QSA]
+RewriteRule ^pricing$ pricing.php [L]
+RewriteRule ^contact$ contact.php [L]
+RewriteRule ^blog$ blog.php [L]
+RewriteRule ^appointment$ appointment.php [L]
+RewriteRule ^appointment-confirmed$ appointment-confirmed.php [L,QSA]
+RewriteRule ^appointment/thank-you$ appointment-thank-you.php [L]
+
+RewriteRule ^admin-dashboard(?:/(.*))?$ /admin/$1 [R=301,L]
+RewriteRule ^admin$ /admin/appointments-calendar/ [R=302,L]
+RewriteRule ^admin/$ /admin/appointments-calendar/ [R=302,L]
+RewriteRule ^admin/appointments$ /admin/appointments-calendar/ [R=301,L]

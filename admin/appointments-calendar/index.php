@@ -6,14 +6,9 @@ require_once dirname(__DIR__) . '/bootstrap.php';
 
 admin_dashboard_require();
 
-$requestedView = (string) ($_GET['view'] ?? '');
-$view = in_array($requestedView, ['month', 'day'], true) ? $requestedView : 'month';
-
-// Schedule comes from PHP config. Only day view needs Google disabled-slots for hide/show UI.
-$config = appointment_runtime_config($view === 'day');
+$config = appointment_runtime_config(true);
 $slots = new SlotService($config);
-$sheet = new GoogleAppsScriptClient($config);
-$feed = new AppointmentFeed($slots, $sheet);
+$feed = new AppointmentFeed($slots, new BookingStore());
 
 $today = $slots->today()->setTime(0, 0, 0);
 $dateParam = trim((string) ($_GET['date'] ?? ''));
@@ -23,60 +18,32 @@ try {
     $selected = $today;
 }
 
-$canonicalDate = $selected->format('Y-m-d');
-if ($requestedView !== $view || $dateParam !== $canonicalDate) {
-    header('Location: /admin-dashboard/appointments-calendar/?' . http_build_query([
-        'view' => $view,
-        'date' => $canonicalDate,
-    ]), true, 302);
-    exit;
+$monthParam = trim((string) ($_GET['month'] ?? ''));
+try {
+    $month = $monthParam !== ''
+        ? $slots->parseDate($monthParam . '-01')
+        : $selected->modify('first day of this month');
+} catch (InvalidArgumentException) {
+    $month = $selected->modify('first day of this month');
 }
+$month = $month->setTime(0, 0, 0);
 
-$month = $selected->modify('first day of this month')->setTime(0, 0, 0);
 $error = '';
 $appointments = [];
-
 try {
-    if (!$sheet->isConfigured()) {
-        $error = 'Google Sheet is not configured, so bookings cannot be loaded yet.';
-    } else {
-        $appointments = $feed->all();
-    }
+    $appointments = $feed->all();
 } catch (Throwable $e) {
-    $error = $e->getMessage();
+    $error = 'A technical issue occurred. Please retry.';
 }
 
 $byDate = CalendarPresenter::groupByDate($appointments);
 $monthCells = CalendarPresenter::monthCells($month, $selected, $today, $byDate);
-$dayEvents = $byDate[$selected->format('Y-m-d')] ?? [];
-$dayLayout = CalendarPresenter::dayLayout($dayEvents, $slots, $selected);
-$dayWindows = CalendarPresenter::windowsFor($slots, $selected);
-
-$counts = [];
-foreach ($appointments as $row) {
-    $service = (string) ($row['service'] ?: 'Other');
-    if (!isset($counts[$service])) {
-        $counts[$service] = ['label' => $service, 'count' => 0, 'color' => $row['color']];
-    }
-    $counts[$service]['count']++;
-}
-uasort($counts, static fn (array $a, array $b): int => $b['count'] <=> $a['count']);
-
+$dayRows = CalendarPresenter::dayRows($byDate[$selected->format('Y-m-d')] ?? [], $slots, $selected);
 $prevMonth = $month->modify('-1 month');
 $nextMonth = $month->modify('+1 month');
-$prevDay = $selected->modify('-1 day');
-$nextDay = $selected->modify('+1 day');
 
-$query = static function (string $nextView, DateTimeImmutable $date): string {
-    return '?' . http_build_query([
-        'view' => $nextView,
-        'date' => $date->format('Y-m-d'),
-    ]);
-};
-
-$title = 'Appointments calendar';
-$assetBase = '/admin-dashboard/appointments-calendar/assets';
-$showLogout = admin_dashboard_password() !== '';
+$title = 'Consultations';
+$assetBase = '/admin/appointments-calendar/assets';
 
 require dirname(__DIR__) . '/layout-start.php';
 require __DIR__ . '/components/shell.php';

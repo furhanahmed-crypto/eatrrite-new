@@ -1,0 +1,252 @@
+.er-q-page {
+    display: grid;
+    gap: 28px;
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .er-q-page {
+        grid-template-columns: 4fr 8fr;
+        gap: 40px;
+    }
+}
+
+.er-q-summary,
+.er-q-card {
+    background: #fff;
+    border: 1px solid var(--color-border, #e6ebe6);
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: var(--shadow, 0 12px 32px rgba(1, 78, 78, 0.06));
+}
+
+.er-q-summary h1 {
+    margin: 10px 0 12px;
+    color: var(--color-primary, #014e4e);
+    font-size: clamp(28px, 4vw, 40px);
+}
+
+.er-q-summary > p {
+    color: var(--color-text, #4a524e);
+    margin-bottom: 22px;
+}
+
+.er-q-summary dl {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+}
+
+.er-q-summary dl div {
+    padding: 12px 0 0;
+    border-top: 1px solid #eef2eb;
+}
+
+.er-q-summary dt {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #819291;
+}
+
+.er-q-summary dd {
+    margin: 4px 0 0;
+    color: #014e4e;
+    font-weight: 600;
+}
+
+.er-q-kicker,
+.er-q-note,
+.er-q-group {
+    font-size: 13px;
+    color: #819291;
+}
+
+.er-q-lead {
+    color: #014e4e;
+    font-weight: 500;
+}
+
+.er-q-progress {
+    display: grid;
+    gap: 10px;
+    margin: 22px 0 18px;
+}
+
+.er-q-progress__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #014e4e;
+}
+
+.er-q-progress__row {
+    position: relative;
+    height: 28px;
+    display: flex;
+    align-items: center;
+}
+
+.er-q-progress__track {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    height: 8px;
+    border-radius: 999px;
+    background: #eef2eb;
+    overflow: hidden;
+}
+
+.er-q-progress__track span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: #014e4e;
+    transition: width 0.25s ease;
+}
+
+.er-q-dots {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.er-q-dots li {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    background: #eef2eb;
+    color: #819291;
+}
+
+.er-q-dots li.is-done {
+    background: #e5fad1;
+    color: #014e4e;
+}
+
+.er-q-dots li.is-current {
+    background: #014e4e;
+    color: #fff;
+}
+
+.er-q-step {
+    margin: 0 0 18px;
+    padding: 0;
+    border: 0;
+}
+
+.er-q-step legend {
+    margin-bottom: 14px;
+    color: #014e4e;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.er-q-input,
+.er-q-follow textarea {
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: #f7fbf3;
+    padding: 14px;
+    font: inherit;
+    color: #014e4e;
+}
+
+.er-q-input:focus,
+.er-q-follow textarea:focus {
+    outline: none;
+    border-color: #014e4e;
+    box-shadow: 0 0 0 3px rgba(1, 78, 78, 0.16);
+}
+
+.er-q-choice {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #f7fbf3;
+    cursor: pointer;
+}
+
+.er-q-choice:has(input:checked) {
+    background: #e5fad1;
+    box-shadow: inset 0 0 0 1px #014e4e;
+}
+
+.er-q-group {
+    margin: 16px 0 8px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.er-q-follow {
+    display: grid;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.er-q-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.er-q-done {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 12px 8px 4px;
+}
+
+.er-q-done[hidden] {
+    display: none;
+}
+
+.er-q-done h2,
+.er-q-closing,
+.er-q-done .er-success__hint {
+    max-width: 28em;
+}
+
+.er-q-done h2 {
+    color: #014e4e;
+    margin: 12px 0;
+}
+
+.er-q-closing {
+    color: #4a524e;
+}
+
+@media (max-width: 640px) {
+    .er-q-summary,
+    .er-q-card {
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .er-q-nav {
+        flex-wrap: wrap;
+    }
+
+    .er-q-nav .er-btn-primary,
+    .er-q-nav .er-btn-ghost {
+        flex: 1;
+    }
+}

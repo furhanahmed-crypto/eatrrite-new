@@ -2,4 +2,5 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/views/landing.php';
+header('Location: ../cohort.php', true, 302);
+exit;

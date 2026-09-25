@@ -1,17 +1,19 @@
 <?php
-$pageTitle = 'Contact Eat Rrite | Book a Nutrition Consultation';
-$pageDescription = 'Get in touch with Eat Rrite to book your nutrition consultation — serving clients online across Hyderabad, Dehradun and beyond.';
+$pageTitle = 'Contact Eat Rrite';
+$pageDescription = 'Get in touch with Eat Rrite to book your nutrition consultation.';
 $currentPage = 'contact';
 $bannerTitle = 'Contact Us';
+$inner = require __DIR__ . '/constants/inner.php';
+$copy = $inner['contact'];
 include __DIR__ . '/includes/header.php';
 include __DIR__ . '/sections/page-banner.php';
 ?>
 <section class="section">
     <div class="container contact-grid">
-        <div class="card">
-            <span class="pill-label"><span class="pill-dot"></span> Get In Touch</span>
-            <h1 class="section-title">Let's Start With a Conversation</h1>
-            <p>Eat Rrite works with clients entirely online, so wherever you're based, you can book a consultation with Mukta directly.</p>
+        <article class="card">
+            <span class="pill-label"><span class="pill-dot"></span> <?php echo htmlspecialchars($copy['pill']); ?></span>
+            <h2 class="section-title"><?php echo htmlspecialchars($copy['title']); ?></h2>
+            <p><?php echo htmlspecialchars($copy['text']); ?></p>
             <p><strong>Phone / WhatsApp</strong><br>
                 <a href="<?php echo htmlspecialchars($site['phone_href']); ?>"><?php echo htmlspecialchars($site['phone']); ?></a>
             </p>
@@ -23,20 +25,20 @@ include __DIR__ . '/sections/page-banner.php';
                 <span class="muted"><?php echo htmlspecialchars($site['locations_note']); ?></span>
             </p>
             <p><strong>Hours</strong><br><?php echo htmlspecialchars($site['hours']); ?></p>
-        </div>
-        <div class="card">
-            <h3>Book or enquire</h3>
-            <p>Share your name, phone, city and program of interest — we'll take it from there.</p>
+        </article>
+        <article class="card">
+            <h3><?php echo htmlspecialchars($copy['enquireTitle']); ?></h3>
+            <p><?php echo htmlspecialchars($copy['enquireText']); ?></p>
             <div class="contact-actions">
-                <a class="btn btn-accent" href="appointment.php">Get Consultation</a>
+                <a class="btn btn-accent" href="<?php echo htmlspecialchars(er_href('appointment.php')); ?>">Get Consultation</a>
                 <a class="btn btn-primary" href="<?php echo htmlspecialchars($site['whatsapp']); ?>" target="_blank" rel="noopener">Message on WhatsApp</a>
             </div>
-            <ul class="check-list contact-program-list">
+            <ul class="contact-program-list">
                 <?php foreach ($programsLive as $program): ?>
-                    <li><i class="fa-solid fa-check"></i> <?php echo htmlspecialchars($program['short']); ?></li>
+                    <li>✓ <?php echo htmlspecialchars($program['short']); ?></li>
                 <?php endforeach; ?>
             </ul>
-        </div>
+        </article>
     </div>
 </section>
 <?php include __DIR__ . '/includes/footer.php'; ?>

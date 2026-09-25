@@ -1,35 +1,17 @@
+<?php $hero = $home['hero']; ?>
 <section class="hero-slider">
-    <div class="hero-slide active" style="background-image: url('assets/images/hero/carousel-1.png');"></div>
-    <div class="hero-slide" style="background-image: url('assets/images/hero/carousel-2.png');"></div>
+    <?php foreach ($hero['slides'] as $i => $slide): ?>
+        <div class="hero-slide<?php echo $i === 0 ? ' active' : ''; ?>" style="background-image: url('<?php echo htmlspecialchars(er_href($slide)); ?>');"></div>
+    <?php endforeach; ?>
     <div class="hero-overlay"></div>
-    <div class="hero-shape hero-shape--1"></div>
-    <div class="hero-shape hero-shape--2"></div>
     <div class="container">
         <div class="hero-content">
-            <span class="pill-label pill-label--hero"><span class="pill-dot"></span> Holistic Nutrition Coaching</span>
-            <h1 class="hero-title split-title">Lose Weight Without Losing Your Dal-Chawal.</h1>
-            <p class="hero-text">Real nutrition isn't about starvation or fear — it's about learning how to Eat Rrite. Science-backed, rooted in the food you already love, and built to last longer than 30 days.</p>
+            <span class="pill-label pill-label--hero"><span class="pill-dot"></span> <?php echo htmlspecialchars($hero['pill']); ?></span>
+            <h1 class="hero-title split-title"><?php echo htmlspecialchars($hero['title']); ?></h1>
+            <p class="hero-text"><?php echo htmlspecialchars($hero['text']); ?></p>
             <div class="hero-actions">
-                <a class="btn btn-accent" href="appointment.php">Get Consultation</a>
-                <a class="btn btn-outline-light" href="programs.php">View Our Programs</a>
-            </div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <strong>8</strong>
-                    <span>Years of Practice</span>
-                </div>
-                <div class="hero-stat">
-                    <strong>500+</strong>
-                    <span>Lives Transformed</span>
-                </div>
-                <div class="hero-stat">
-                    <strong>4.8★</strong>
-                    <span>Google Rating</span>
-                </div>
-                <a class="hero-stat hero-stat--link" href="#testimonials">
-                    <strong>Stories</strong>
-                    <span>Real Client Stories</span>
-                </a>
+                <a class="btn btn-accent" href="<?php echo htmlspecialchars(er_href($hero['primaryCta']['href'])); ?>"><?php echo htmlspecialchars($hero['primaryCta']['label']); ?></a>
+                <a class="btn btn-outline-light" href="<?php echo htmlspecialchars(er_href($hero['secondaryCta']['href'])); ?>"><?php echo htmlspecialchars($hero['secondaryCta']['label']); ?></a>
             </div>
         </div>
     </div>

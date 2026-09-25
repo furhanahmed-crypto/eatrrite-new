@@ -438,6 +438,32 @@
     cursor: default;
 }
 
-body.er-modal-open {
+body.er-modal-open,
+body.er-booking-open {
     overflow: hidden;
+}
+
+.er-booking-modal {
+    z-index: 10040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.er-booking-modal[hidden] {
+    display: none;
+}
+
+.er-booking-modal__dialog {
+    width: min(520px, 100%);
+    margin: 0;
+    max-height: calc(100vh - 32px);
+}
+
+.er-booking-modal__note {
+    margin: 0 0 16px;
+    color: #595b62;
+    font-size: 14px;
+    line-height: 1.5;
 }
