@@ -4,7 +4,7 @@ $mark = static function (string $kind): array {
     return match ($kind) {
         'yes' => ['icon' => 'fa-check', 'class' => 'co-mark--yes', 'label' => 'Yes'],
         'no' => ['icon' => 'fa-xmark', 'class' => 'co-mark--no', 'label' => 'No'],
-        'warn' => ['icon' => 'fa-triangle-exclamation', 'clas   s' => 'co-mark--warn', 'label' => 'Limited'],
+        'warn' => ['icon' => 'fa-triangle-exclamation', 'class' => 'co-mark--warn', 'label' => 'Limited'],
         default => ['icon' => 'fa-minus', 'class' => 'co-mark--dash', 'label' => 'Not comparable'],
     };
 };
