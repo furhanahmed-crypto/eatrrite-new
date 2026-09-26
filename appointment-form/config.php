@@ -52,9 +52,24 @@ function appointment_config(): array
             'Nutrition for Gut Health',
             'Female Hormone Health Diet Program',
         ],
-        'cohort_service' => 'Consultation — to be recommended',
+        'cohort_service' => 'Consultation — program recommended on the call',
         'slot_schedule' => appointment_schedule_settings(),
     ];
 
     return $config;
+}
+
+function appointment_service_label(string $service): string
+{
+    $current = trim((string) (appointment_config()['cohort_service'] ?? ''));
+    $legacy = [
+        'Consultation — to be recommended',
+        'Consultation - to be recommended',
+        'Consultation – to be recommended',
+    ];
+    if ($current !== '' && in_array($service, $legacy, true)) {
+        return $current;
+    }
+
+    return $service;
 }

@@ -50,7 +50,7 @@ final class AppointmentFeed
         }
 
         $name = (string) ($row['name'] ?? '');
-        $service = (string) ($row['service'] ?? '');
+        $service = appointment_service_label((string) ($row['service'] ?? ''));
 
         return [
             'id' => $date . '|' . $time . '|' . md5($name . ($row['phone'] ?? '') . $service),

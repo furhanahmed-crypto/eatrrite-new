@@ -13,7 +13,7 @@ final class AppointmentValidator
     {
         $name = trim((string) ($input['name'] ?? ''));
         $email = strtolower(trim((string) ($input['email'] ?? '')));
-        $service = trim((string) ($input['programname'] ?? $input['service'] ?? ''));
+        $service = appointment_service_label(trim((string) ($input['programname'] ?? $input['service'] ?? '')));
         $phone = preg_replace('/\D+/', '', (string) ($input['mobilenumber'] ?? $input['phone'] ?? '')) ?? '';
         $date = trim((string) ($input['date'] ?? ''));
         $time = trim((string) ($input['time'] ?? ''));

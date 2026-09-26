@@ -91,6 +91,7 @@
 @media (min-width: 800px) { .co-steps { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .co-steps { grid-template-columns: repeat(4, 1fr); } }
 
+.about-mission { background: #fff; }
 .about-mission__card,
 .sb-card {
   background: #fff;
@@ -99,7 +100,71 @@
   padding: 24px;
   box-shadow: var(--shadow);
 }
+.about-mission__card {
+  background: var(--color-cream);
+}
 .about-mission__card p { white-space: pre-line; }
+
+.about-doctors__intro { max-width: 56ch; margin-bottom: 32px; }
+.about-doctors__card {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid rgba(229, 184, 88, 0.45);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+@media (min-width: 800px) {
+  .about-doctors__card { grid-template-columns: 220px 1fr; gap: 32px; padding: 32px; }
+}
+.about-doctors__photo {
+  width: min(220px, 70%);
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  aspect-ratio: 4 / 5;
+}
+@media (min-width: 800px) {
+  .about-doctors__photo { width: 220px; margin: 0; }
+}
+.about-doctors__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+.about-doctors__role {
+  margin: 0 0 6px;
+  color: var(--color-muted);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.about-doctors__copy h3 { margin: 0 0 20px; }
+.about-doctors__meta {
+  display: grid;
+  gap: 12px 24px;
+  margin: 0;
+}
+@media (min-width: 600px) {
+  .about-doctors__meta { grid-template-columns: 1fr 1fr; }
+}
+.about-doctors__meta div { margin: 0; }
+.about-doctors__meta dt {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.about-doctors__meta dd {
+  margin: 4px 0 0;
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: 18px;
+}
 
 .sb-hero { padding: 64px 0; background: linear-gradient(180deg, #fff8e8 0%, #f8f5f0 100%); }
 .sb-hero h1,

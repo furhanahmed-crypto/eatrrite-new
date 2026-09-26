@@ -12,7 +12,7 @@ $apiBase = appointment_public_path('api');
 $amountRupees = (int) $config['amount_rupees'];
 $meetingMinutes = $slotService->customerMeetingMinutes();
 $hideService = !empty($hideService);
-$cohortService = (string) ($config['cohort_service'] ?? 'Consultation — to be recommended');
+$cohortService = (string) ($config['cohort_service'] ?? 'Consultation — program recommended on the call');
 $assetVersion = max(
     (int) filemtime(__DIR__ . '/../assets/appointment.js'),
     (int) filemtime(__DIR__ . '/../assets/appointment.css')
