@@ -35,7 +35,7 @@ $labels = [
             >
                 <span><?php echo (int) $cell['day']; ?></span>
                 <?php if ($cell['count'] > 0): ?>
-                    <small><?php echo (int) $cell['count']; ?> booked</small>
+                    <small><?php echo (int) $cell['count']; ?></small>
                 <?php endif; ?>
             </a>
         <?php endforeach; ?>

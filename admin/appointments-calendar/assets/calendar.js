@@ -16,6 +16,39 @@
     const meetEl = drawer.querySelector('[data-er-drawer-meet]');
     const answersEl = drawer.querySelector('[data-er-drawer-answers]');
 
+    function formatDate(iso) {
+        const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+        if (!match) {
+            return iso || '—';
+        }
+        const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+        return date.toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        });
+    }
+
+    function answerNode(text) {
+        const parts = String(text).split(/,\s*/).filter(Boolean);
+        const asChips = parts.length > 1 && parts.every(function (part) { return part.length <= 56; });
+        if (!asChips) {
+            const paragraph = document.createElement('p');
+            paragraph.className = 'er-cal-qa__a';
+            paragraph.textContent = text;
+            return paragraph;
+        }
+        const list = document.createElement('ul');
+        list.className = 'er-cal-qa__chips';
+        parts.forEach(function (part) {
+            const item = document.createElement('li');
+            item.textContent = part;
+            list.appendChild(item);
+        });
+        return list;
+    }
+
     function closeDrawer() {
         drawer.hidden = true;
         document.body.style.overflow = '';
@@ -24,7 +57,7 @@
     function openDrawer(data) {
         nameEl.textContent = data.name || 'Client';
         serviceEl.textContent = data.service || 'Consultation';
-        dateEl.textContent = data.date || '—';
+        dateEl.textContent = formatDate(data.date);
         timeEl.textContent = data.display_meeting || data.display_time || data.time || '—';
         phoneEl.textContent = data.phone || '—';
         if (emailEl) {
@@ -38,26 +71,32 @@
             const answers = Array.isArray(data.questionnaire) ? data.questionnaire : [];
             if (!answers.length) {
                 const empty = document.createElement('p');
+                empty.className = 'er-cal-qa__empty';
                 empty.textContent = 'Not submitted yet.';
                 answersEl.appendChild(empty);
             } else {
                 answers.forEach(function (item) {
-                    const row = document.createElement('p');
-                    const label = document.createElement('span');
+                    const card = document.createElement('article');
+                    card.className = 'er-cal-qa';
+                    const label = document.createElement('p');
+                    label.className = 'er-cal-qa__q';
                     label.textContent = item.label || '';
-                    const value = document.createElement('strong');
-                    value.textContent = item.answer || '—';
-                    row.appendChild(label);
-                    row.appendChild(document.createElement('br'));
-                    row.appendChild(value);
-                    answersEl.appendChild(row);
+                    card.appendChild(label);
+                    card.appendChild(answerNode(item.answer || '—'));
+                    answersEl.appendChild(card);
                 });
             }
         }
         if (data.meet_link) {
-            meetEl.innerHTML = '<a href="' + data.meet_link + '" target="_blank" rel="noopener">' + data.meet_link + '</a>';
+            const link = document.createElement('a');
+            link.className = 'er-cal-meet';
+            link.href = data.meet_link;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            link.textContent = 'Open Google Meet';
+            meetEl.replaceChildren(link);
         } else {
-            meetEl.textContent = 'Meet link not stored on this row.';
+            meetEl.textContent = 'Meet link not stored yet.';
         }
         drawer.hidden = false;
         document.body.style.overflow = 'hidden';

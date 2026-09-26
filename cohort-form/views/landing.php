@@ -23,7 +23,7 @@ $monthly = number_format((int) $config['monthly_rupees']);
   <header class="er-hero">
     <p class="er-pill er-pill-light">10 spots · Women's hormonal health &amp; lifestyle reversal</p>
     <h1>Reverse Your Lifestyle Disease &amp; Hormonal Imbalance — With a Plan Built Around You</h1>
-    <p>For women dealing with PCOS, thyroid imbalance, stubborn weight, or early lifestyle disease who are ready to work on the root cause — guided personally by nutritionist Mukta Patil.</p>
+    <p>For women dealing with perimenopause/PMOS, thyroid imbalance, stubborn weight, or early lifestyle disease who are ready to work on the root cause — guided personally by nutritionist Mukta Patil.</p>
     <p class="er-actions">
       <a class="er-btn er-btn-gold" href="apply.php">Apply for this month's cohort</a>
       <a class="er-btn er-btn-ghost" href="#how-it-works">See how it works</a>
@@ -55,15 +55,14 @@ $monthly = number_format((int) $config['monthly_rupees']);
           <p class="er-pill">Is this you?</p>
           <h2>This cohort is built for women who recognise themselves here</h2>
           <div class="er-chips">
-            <span>Irregular or missed periods</span>
-            <span>PCOS / PCOD diagnosis</span>
-            <span>Thyroid imbalance</span>
             <span>Stubborn weight gain</span>
             <span>Constant fatigue, low energy</span>
-            <span>Hair fall or adult acne</span>
             <span>Sugar cravings you can't control</span>
+            <span>Hair fall or adult acne</span>
             <span>Disturbed sleep or mood swings</span>
+            <span>Thyroid imbalance</span>
             <span>Pre-diabetes, diabetes, or high BP</span>
+            <span>Irregular or missed periods</span>
           </div>
         </div>
       </section>

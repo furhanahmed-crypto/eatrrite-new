@@ -6,7 +6,7 @@
             <h2 class="section-title split-title" id="co-fit-title"><?php echo htmlspecialchars($fit['title']); ?></h2>
             <p class="section-lead section-lead--center"><?php echo htmlspecialchars($fit['lead']); ?></p>
         </div>
-        <div class="why-grid why-grid--five co-swipe" data-co-swipe>
+        <div class="co-fit-grid co-swipe" data-co-swipe>
             <?php foreach ($fit['items'] as $i => $item): ?>
                 <article class="feature-card">
                     <div class="feature-card__icon"><i class="fa-solid <?php echo htmlspecialchars($item['icon']); ?>"></i></div>

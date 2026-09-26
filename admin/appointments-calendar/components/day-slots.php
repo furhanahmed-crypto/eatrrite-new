@@ -1,11 +1,11 @@
 <section class="er-cal-day" aria-labelledby="er-cal-day-title">
-    <h2 id="er-cal-day-title">Day · <?php echo htmlspecialchars($selected->format('Y-m-d')); ?></h2>
+    <h2 id="er-cal-day-title"><?php echo htmlspecialchars($selected->format('l, j F')); ?></h2>
     <?php if ($dayRows === []): ?>
         <p class="er-cal-empty">No slots this day.</p>
     <?php endif; ?>
     <div class="er-cal-slots">
         <?php foreach ($dayRows as $row): ?>
-            <div class="er-cal-slot">
+            <div class="er-cal-slot<?php echo $row['kind'] === 'booking' ? ' is-booked' : ($row['kind'] === 'disabled' ? ' is-hidden' : ''); ?>">
                 <div>
                     <p class="er-cal-slot__time"><?php echo htmlspecialchars((string) $row['display_time']); ?></p>
                     <?php if ($row['kind'] === 'booking'): ?>

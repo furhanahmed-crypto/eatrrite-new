@@ -7,7 +7,6 @@
             <p><?php echo htmlspecialchars($hero['text']); ?></p>
             <div class="sb-actions">
                 <a class="btn btn-accent" href="<?php echo htmlspecialchars($hero['primary']['href']); ?>" data-er-open-booking><?php echo htmlspecialchars($hero['primary']['label']); ?></a>
-                <a class="btn btn-outline-gold" href="<?php echo htmlspecialchars($hero['secondary']['href']); ?>"><?php echo htmlspecialchars($hero['secondary']['label']); ?></a>
             </div>
             <ul class="co-stats">
                 <?php foreach ($hero['stats'] as $stat): ?>

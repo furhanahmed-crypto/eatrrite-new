@@ -7,15 +7,18 @@
             <p class="section-lead section-lead--center"><?php echo htmlspecialchars($videos['lead']); ?></p>
         </div>
         <div class="programs-grid co-swipe" data-co-swipe>
-            <?php for ($i = 0; $i < (int) $videos['count']; $i++): ?>
-                <article class="card program-card">
-                    <div class="img-wrap co-media-slot co-media-slot--video" aria-hidden="true">
-                        <span class="co-play"><i class="fa-solid fa-play"></i></span>
+            <?php foreach ($videos['items'] as $video): ?>
+                <article class="card program-card co-video-card">
+                    <div class="co-video">
+                        <video
+                            src="<?php echo htmlspecialchars(er_href($video['src'])); ?>"
+                            controls
+                            playsinline
+                            preload="metadata"
+                            title="<?php echo htmlspecialchars($video['title']); ?>"></video>
                     </div>
-                    <h3><?php echo htmlspecialchars($videos['label']); ?></h3>
-                    <p>Video coming soon, shared with the client’s consent.</p>
                 </article>
-            <?php endfor; ?>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
