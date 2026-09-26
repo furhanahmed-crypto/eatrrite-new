@@ -10,7 +10,7 @@ $cta = $cohort['cta'];
             <h2 class="section-title split-title" id="co-get-title"><?php echo htmlspecialchars($get['title']); ?></h2>
             <p class="section-lead section-lead--center"><?php echo htmlspecialchars($get['lead']); ?></p>
         </div>
-        <div class="why-grid why-grid--five">
+        <div class="why-grid why-grid--five co-swipe" data-co-swipe>
             <?php foreach ($get['items'] as $item): ?>
                 <article class="feature-card">
                     <div class="feature-card__icon"><i class="fa-solid <?php echo htmlspecialchars($item['icon']); ?>"></i></div>

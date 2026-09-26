@@ -6,7 +6,7 @@
             <h2 class="section-title split-title" id="co-videos-title"><?php echo htmlspecialchars($videos['title']); ?></h2>
             <p class="section-lead section-lead--center"><?php echo htmlspecialchars($videos['lead']); ?></p>
         </div>
-        <div class="programs-grid">
+        <div class="programs-grid co-swipe" data-co-swipe>
             <?php for ($i = 0; $i < (int) $videos['count']; $i++): ?>
                 <article class="card program-card">
                     <div class="img-wrap co-media-slot co-media-slot--video" aria-hidden="true">

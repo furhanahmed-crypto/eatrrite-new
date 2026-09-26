@@ -15,10 +15,8 @@ include __DIR__ . '/sections/cohort-problem.php';
 include __DIR__ . '/sections/cohort-compare.php';
 include __DIR__ . '/sections/cohort-guide.php';
 include __DIR__ . '/sections/cohort-consult.php';
-if (!empty($cohort['results']['ready']) || !empty($cohort['videos']['ready'])) {
-    include __DIR__ . '/sections/cohort-results.php';
-    include __DIR__ . '/sections/cohort-videos.php';
-}
+include __DIR__ . '/sections/cohort-results.php';
+include __DIR__ . '/sections/cohort-videos.php';
 include __DIR__ . '/sections/cohort-investment.php';
 include __DIR__ . '/sections/cohort-faq.php';
 include __DIR__ . '/sections/cohort-cta.php';

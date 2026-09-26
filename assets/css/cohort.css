@@ -241,7 +241,9 @@
     min-height: 0;
   }
   .co-page .co-swipe .feature-card,
-  .co-page .co-swipe .feature-card:hover {
+  .co-page .co-swipe .feature-card:hover,
+  .co-page .co-swipe .program-card,
+  .co-page .co-swipe .program-card:hover {
     transform: none;
     box-shadow: none;
     background: #fff;
@@ -249,13 +251,15 @@
     flex-direction: column;
     justify-content: center;
   }
+  .co-page .programs-grid.co-swipe {
+    margin-top: 16px;
+  }
 
   .co-swipe__dots {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin-top: 12px;
-    background: #fff;
   }
   .co-swipe__dots button {
     width: 8px;
