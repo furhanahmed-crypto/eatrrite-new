@@ -19,10 +19,10 @@ return [
     'user' => 'eatrrite',
     'pass' => '',
     'charset' => 'utf8mb4',
-    'debug' => true,
+    'debug' => false,
 
     'admin_password' => '',
-    'public_base_url' => 'https://red-ferret-338197.hostingersite.com',
+    'public_base_url' => 'https://www.eatrrite.com',
     'cron_secret' => '',
 
     'razorpay_key_id' => '',

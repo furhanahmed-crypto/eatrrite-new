@@ -19,7 +19,7 @@ return [
 
     'admin_dashboard_password' => '',
     'admin_password' => '',
-    'public_base_url' => 'https://red-ferret-338197.hostingersite.com',
+    'public_base_url' => 'https://www.eatrrite.com',
     'cron_secret' => '',
 
     'mail' => [
