@@ -25,8 +25,8 @@ return [
     'public_base_url' => 'https://www.eatrrite.com',
     'cron_secret' => '',
 
-    'razorpay_key_id' => '',
-    'razorpay_key_secret' => '',
+    'razorpay_key_id' => 'rzp_test_TUnFw6kYwfuSSM',
+    'razorpay_key_secret' => 'rmBSBNQEj6TbaXl5DPDBZJvW',
 
     'apps_script_url' => '',
     'apps_script_secret' => '',
